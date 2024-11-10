@@ -18,10 +18,9 @@ This website serves to help Milton Chow to better consolidate his notes from the
 But I got this, cmon!
 
 
+<img src="./github.webp" alt="Description of the image" width="50" length="50"/> 
+
 ### Github Action Workflow CI:
-
-<img src="./github.webp" alt="Description of the image" width="20" length="20"/> 
-
 ![THIS BADGE IS AWESOME](https://github.com/edamame852/the-docs/actions/workflows/deploy.yml/badge.svg)
 
 [Let's get started](#getting-started){: .btn .btn-blue .fs-5 .mb-4 .mb-md-0 .mr-2 }
