@@ -13,6 +13,9 @@ This website serves to help Milton Chow to better consolidate his notes from the
 > RIP Milton Chow, May 5, 2024 3:49am  
 {: .fs-6 .fw-300 }
 
+> CHANGELOG:
+> - Nov 09, 2024 morning Added PageCrypt
+
 > 其實都要寫幾多 Code ~ orz
 
 But I got this, cmon!

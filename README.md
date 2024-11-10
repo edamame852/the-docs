@@ -14,6 +14,11 @@
 
 https://user-images.githubusercontent.com/85418632/211225192-7e5d1116-2f4f-4305-bb9b-437fe47df071.mp4 -->
 
+## PageCrypt was used as static github page encrptions
+> It was inspired by [github-pages-jekyll-password-protection](https://github.com/evanbaldonado/github-pages-jekyll-password-protection)
+> Further enhanced with password read in from GITHUB_SECRETS instead of _protected_pages.txt
+
+
 ## Ruby (update from ruby 3.1.0p0 --> 3.3.1): Fixing Ruby complier issue
 > I pretty much gave up on using RVM and used asdf instead (RVM = manages Ruby Version, asdf = manages more than Ruby, could be python ...)
 > There are some conflicts with rvm & asdf, hence rvm was removed. Use `rvm implode` to remove all /rvm & `gem uninstall rvm` removing all rvm gems rubbies
