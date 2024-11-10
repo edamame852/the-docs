@@ -20,7 +20,7 @@ But I got this, cmon!
 
 ### Github Action Workflow CI:
 
-![Description of the image](./github.webp)
+<img src="./github.webp" alt="Description of the image" width="20" length="20"/>
 
 ![THIS BADGE IS AWESOME](https://github.com/edamame852/the-docs/actions/workflows/deploy.yml/badge.svg)
 
