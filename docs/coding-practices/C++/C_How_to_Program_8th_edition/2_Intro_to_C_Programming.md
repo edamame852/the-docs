@@ -125,9 +125,39 @@ Store var (destructive)-> call var (non-destructive)
 ```c++
 int num1;
 int num2;
-scanf("%d %d", &num1, num2); 
+scanf("%d %d", &num1, num2); // Modifying num1 and num2
 
 if (num1 == num2) {
-    printf("%d is equal to %d", num1, num2);
+    printf("%d is equal to %d", num1, num2); // reading num1 and num2
 }
 ```
+
+5. Reserved Keywords
+These words mean something special to the C complier.
+These cannot be used as identifiers (aka variable names)
+
+```c++
+auto, do, goto, if, short, _Imaginary, _Generic, for, char, default, union, type, while, volatile
+
+// More keywords added in C99 and C11 orz
+
+```
+# 2.7 Programming C securely
+
+## Programming practices to prevent external attacks
+1. Use `puts` instead of `printf` when printing strings
+
+```c++
+
+printf("Hello World \n") // NAH
+
+printf("%s","Hello World\n") // BETTER, eliminating security vulnerabilities
+
+puts("Hello World") // YAS, default already has \n at the end
+
+```
+
+Explanation: `printf` isn't insecure per se..but why ???? It didn't say wtf
+More info later...
+
+2. `printf_s` and `scanf_s` are introduced in C11 and will be used in Ch.3!!
