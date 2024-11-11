@@ -66,8 +66,8 @@ int main (void){
 
 2. `printf` is to print the value of the variable
 
-`%d` is know as the **decimal integer**, where the `%` is a **conversion specificier**
-`&` is the **address operator**
+`%d` is know as the **decimal integer**, where the `%` is a **conversion specifier**
+`&` is the **address operator** (if you misuse this, it could trigger execution time error/segmentation fault/access violation) = Meaning user has no access right to that variable. Will discussed in Ch.7
 
 e.g. 
 ```C++
@@ -79,4 +79,7 @@ int main (void){
 ## Good coding syntax tips
 1. use `main` instead of `Main` (lowercase for function name)
 2. Avoid starting strings w/ underscore `_` so it doesn't conflict with stan lib/compiler generated identifiers!
-3. Camel cases are preferred in C (snak_cases can be used too)
+3. Camel cases are preferred in C (snake_cases can be used too)
+
+# 2.4 Concept of memories
+1. 
