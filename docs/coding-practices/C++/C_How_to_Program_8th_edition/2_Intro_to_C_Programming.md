@@ -55,6 +55,10 @@ int main (void) { // One function must be "main" // int = return value is int //
 # 2.3 Adding 2 integers, a simple program
 
 1. To re-iterate some useful commands: `scanf` (To read in an integer)
+{:.note}
+> VERY IMPORTANT: `&var1` means the memory address of var1, since scanf needs to modify the actual variables so the exact location in memory MUST be known before hand
+> Reading it doesn't require this operator.
+> TLDR: `&` is for modifying/ destructive process, while it's not need for non-destructive ones
 
 e.g. 
 ```C++
@@ -89,6 +93,11 @@ Always (I think):
 Store var (destructive)-> call var (non-destructive)
 
 # 2.5 Arithmetics in C
+
+{:.warning}
+> Non-fatal errors: Program still runs to completion with incorrect outputs
+> Fatal errors: Divide by zero error, program crashes immediately
+
 1. Common operators
     - `%` reminder operator
     - `*` multiplication operator
@@ -97,4 +106,28 @@ Store var (destructive)-> call var (non-destructive)
 
 # 2.6 Relational and Equality Operators
 
-1. If-statements conditions
+1. If-statements conditions (Only has 2 conditions: true or false)
+    - Formed under equality operators and relational operators
+    - True value: Non-zero value (in C)
+    - false value: Zero value (in C)
+
+2. Syntax error for operators
+    - if you right `= =` instead of `==`
+
+3. Types of operators
+     - Relational
+     - Equality
+        - `=`
+        - `!=`
+
+4. Example of using if statements
+
+```c++
+int num1;
+int num2;
+scanf("%d %d", &num1, num2); 
+
+if (num1 == num2) {
+    printf("%d is equal to %d", num1, num2);
+}
+```
