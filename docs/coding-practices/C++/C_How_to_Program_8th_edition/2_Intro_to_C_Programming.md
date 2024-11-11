@@ -82,4 +82,19 @@ int main (void){
 3. Camel cases are preferred in C (snake_cases can be used too)
 
 # 2.4 Concept of memories
-1. 
+1. Destructive process: Replace old values, old value is completely wiped (e.g. store/ create var)
+2. Non-destructive process: read value from memory location (e.g. calling value)
+
+Always (I think):
+Store var (destructive)-> call var (non-destructive)
+
+# 2.5 Arithmetics in C
+1. Common operators
+    - `%` reminder operator
+    - `*` multiplication operator
+    - `=` Assignment Operator
+    - Associativity: evaluated from right to left or vice versa = rearranging () while not affecting final result
+
+# 2.6 Relational and Equality Operators
+
+1. If-statements conditions
