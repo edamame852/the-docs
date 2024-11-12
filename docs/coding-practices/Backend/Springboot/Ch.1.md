@@ -39,7 +39,25 @@ grand_parent: Coding Practices
 # 2. Springboot Architecture
 
 ## Layers
-1. Presentation Layer
-2. Data Access Layer
-3. Service Layer
-4. Integration Layer
+1. Presentation Layer (= Views/ Frontend side)
+2. Data Access Layer (= CRUD operations on DB)
+3. Service Layer (= Service class + use services from CRUD operations)
+4. Integration Layer (= Different web services + XML messaging system)
+
+## Classes
+1. View Class (Has view service)
+2. Utility Class (Has utility service)
+3. Validator Class (Has validator service)
+
+## Springboot flow
+![springboot](./springboot_flow.png)
+
+Points to note
+1. Springboot and Spring MVC have 99% the same architecture but Springboot doesn't need DAO/ DAOImpl classes
+2. Data Access Layer = Repository Class for designing CRUD
+
+Normal flow
+1. Client PUT/GET via https request
+2. Controller takes request and communicates w/ service logic
+3. 
+4. 
