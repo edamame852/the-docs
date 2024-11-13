@@ -89,3 +89,27 @@ public class ParentMultithreading {
 }
 
 ```
+
+# 2. Java OOP
+
+## Basic Concepts 
+1. Access modifiers for methods/data members/classes/ interfaces
+- private = accessible only within the class (not avaliable in non-nested class/interface)
+- default/ package-private = when no access modifier is listed 
+- protected = accessible only in subclass  (not avaliable in non-nested class/interface)
+- public = Accessible from any class
+
+Note: There is no private and protected class/ interface
+
+2. Class, Superclass (Parent), Interfaces
+- Interface is a comma-seperated list that is implemented by the class
+for exmaple:
+```java
+interface Animal {
+	void animalSound();
+	void sleep();
+}
+```
+
+## 4 major pillars: Abstraction, Encapsulation, Inheritance, Polymorphism
+
