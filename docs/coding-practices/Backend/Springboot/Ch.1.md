@@ -18,6 +18,7 @@ grand_parent: Coding Practices
 ## Pre-reqs: 
 1. Understand Java (i.e. classes, objects, inheritance, interfaces, and exception handling)
 2. Familiarity with build tools i.e. Maven/Gradle
+3. MVC is the model view controller
 
 ## History
 1. Spring is popular due to Spring MVC, letting user to create scalable web apps.
@@ -59,6 +60,6 @@ Points to note
 Normal flow
 1. Client PUT/GET via https request, turns JSON into object, does Auth
 2. Controller takes request and communicates w/ service logic if needed
-3. Business logic happens in service layer 
-4. 
+3. Business logic happens in service layer (performing logic on data)
+4. Logic = DB data is mapped through JPA with model or entity classes
 5. returns JSP page
