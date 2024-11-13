@@ -51,7 +51,7 @@ grand_parent: Coding Practices
 3. Validator Class (Has validator service)
 
 ## Springboot flow
-![springboot](./springboot_flow.png)
+![springboot](./springboot_flow_arch.gif)
 
 Points to note
 1. Springboot and Spring MVC have 99% the same architecture but Springboot doesn't need DAO/ DAOImpl classes
