@@ -13,5 +13,5 @@ grand_parent: Coding Practices
 
 ---
 
-# 1. SAMPLE
-## SUB-SECTION
+# 1. Multithreading in Java
+- allowing concurrent sub-program to run, each sub program is a thread
