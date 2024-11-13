@@ -1,5 +1,5 @@
 ---
-title: Ch.1
+title: Basics
 layout: default
 parent: Backend 
 grand_parent: Coding Practices
