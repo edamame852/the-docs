@@ -112,7 +112,22 @@ interface Animal {
 ```
 
 ## 4 major pillars: Abstraction, Encapsulation, Inheritance, Polymorphism
-- Abstraction
+- Abstraction: Hiding inner logic from users via using interfaces + abstract classes
+	- Abstract classes in Java = a class that cannot be instantiated by itself, must require sub-classed by another class
+	- Example:
+	```java
+
+	abstract class Shape { // abstract class
+		int color;
+		abstract void draw(); // abstract method
+	}
+	```
+ {:.warning}
+ > Some important points: 
+	> Instance of an abstract class cannot be created. But abstract classes can be inherited as a subclass by a class
+	> Not all abstract class has abstract methods
+	> final method and static methods are allowed in abstract classes
+	> Abstract class are faster than interface since there's no search feature before overriding other method, so abstract classes can be directly used
 - Encapsulation
 - Inheritance
 - Polymorphism
