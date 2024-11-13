@@ -20,9 +20,72 @@ grand_parent: Coding Practices
 ## Mutithreading example
 
 High level to achieve Threads in Java:
-Extending Thread Class + Implement Runnable Interface
+(1) Extending Thread Class OR (2) Implement Runnable Interface
+
+### Pros vs Cons and Differences
+1. Issue with inheritence 
+- Extending Thread Class: Cannot extend more than Thread class since Java doesn't have multi-inheritance
+- Runnable Interface: Can still extend other base ckasses
+
+2. Issue with built-in Java methods
+- Extending Thread Class: Has the built-in methods
+- Runnable Interface: Doesn't have methods like yield() and interrupt() 
+
+3. Sharing Thread objects
+- Extending Thread Class:  cannot share
+- Runnable Interface:Yes, Thread objects can be shared between different threads
+
 
 ### Extending Thread Class
 - create child class that extends from java.lang.Thread class
-- This child class will override the parent run() 
-- All thread live's begins in run()
+- Child class will override parent run() method
+- All threads live's begins in run()
+
+```java
+import java.lang.*;
+
+// Child Thread Class
+class ChildMultiThreading extends Thread {
+	public void run() {
+		try{"Thread"+Thread.currentThread().getId()+"is running"}
+		catch (Execption e) { System.out.println ("GG, Exception hit")}
+	}
+}
+// Parent main class
+public class ParentMultithreading {
+	public static void main(String[] args) {
+		int max = 10;
+		for (int i = 0; i < max; i++) {
+			ChildMultiThreading object = new ChildMultiThreading()
+			object.start()
+		}
+	}
+}
+
+```
+
+The output would be...Thread 15 is running, Thread 14 is running, Thread 11 is running ....
+Until it prints for 10 times
+
+## Creating Runnable Interface
+```java
+
+// Child Thread Class
+class ChildMultiThreading extends Runnable {
+	public void run() {
+		try{"Thread"+Thread.currentThread().getId()+"is running"}
+		catch (Execption e) { System.out.println ("GG, Exception hit")}
+	}
+}
+// Parent main class
+public class ParentMultithreading {
+	public static void main(String[] args) {
+		int max = 10;
+		for (int i = 0; i < max; i++) {
+			Thread object = new Thread(new ChildMultiThreading());
+			object.start()
+		}
+	}
+}
+
+```
