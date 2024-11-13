@@ -1,5 +1,5 @@
 ---
-title: Ch.1
+title: Springboot
 layout: default
 parent: Backend 
 grand_parent: Coding Practices
@@ -57,7 +57,8 @@ Points to note
 2. Data Access Layer = Repository Class for designing CRUD
 
 Normal flow
-1. Client PUT/GET via https request
-2. Controller takes request and communicates w/ service logic
-3. 
+1. Client PUT/GET via https request, turns JSON into object, does Auth
+2. Controller takes request and communicates w/ service logic if needed
+3. Business logic happens in service layer 
 4. 
+5. returns JSP page
