@@ -19,6 +19,7 @@ permalink: /docs/medical
 
 # Case 1: Well def stomach cancer, high grade displaccia -> nothing
 
+# Case 2: Infartion on placenta - purple Ca2+ patch, 6cm large tumor but only took 1 block.  
 
 # Current colleague
 1. Josh - HKU Med, 1st deg - Bio, volunteered to help type Path. report
@@ -32,7 +33,7 @@ permalink: /docs/medical
 9. Pensi - senior d person, in same room. Most yo, eat with mico-bi. Just finished spec exam
 10. Justin T - Josh's roomate, 29 years old (2 years above J.)
 11. Hannah - QM anthro transferred here
-12. Alice - New comer, worked in Tuen Mun Pedi 2 year, not very social with the group
+12. Alice - New comer, worked in Tuen Mun Pedi 2 year, not very social with the group. Vaso-vagoed during dissection
 13. Angela - Was pregnant, 0.5 < kid year old < 1 
 
 
