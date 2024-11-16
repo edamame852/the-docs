@@ -60,7 +60,7 @@ There are 2 translator programs:
 1. Computers can only understand it's own machine language restricted by hardware design (Machine dependent)
 2. Example:
 
-```C++
+```c++
 +130042774
 +1200274027
 ```

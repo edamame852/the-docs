@@ -26,7 +26,7 @@ grand_parent: Coding Practices
 
 Example
 
-```C++
+```c++
 // Comments = readability and documentations, ignored by compiler so no outputting machine-language obj code
 // We prefer this single-lined comment since shorter and less error prone
 
@@ -61,7 +61,7 @@ int main (void) { // One function must be "main" // int = return value is int //
 > TLDR: `&` is for modifying/ destructive process, while it's not need for non-destructive ones
 
 e.g. 
-```C++
+```c++
 int main (void){
     int integer1;
     scanf("%d", &integer1)
@@ -74,7 +74,7 @@ int main (void){
 `&` is the **address operator** (if you misuse this, it could trigger execution time error/segmentation fault/access violation) = Meaning user has no access right to that variable. Will discussed in Ch.7
 
 e.g. 
-```C++
+```c++
 int main (void){
     int sum; // variable definitions. Multiple vars be defined on the same line in 1 statement
     printf("%d", &sum)
