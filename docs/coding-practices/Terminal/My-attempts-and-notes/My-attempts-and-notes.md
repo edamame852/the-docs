@@ -34,3 +34,23 @@ Try `wget https://download.oracle.com/java/22/latest/jdk-22_linux-x64_bin.deb`
 5. Check with `java -version` taht your java version is now on 22.0.1!
 
 6. Please reun `mvn clean install -Dmaven.test.skip=true`
+
+## Using crontab to purge RAM and disk cache routinely (MacOS version)
+1. `sudo crontab -l` check what crontab is running
+2. `sudo crontab -e` and add the following lines
+3. 
+```bash
+## Check MacOS sudo crontab log with this command:
+## sudo log show --predicate 'process == "cron"' --info
+
+## Clear Disk Cache (sudo purge)
+* * * * * sudo purge
+
+## Cler RAM Cache (every hour)
+0 * * * * rm -rf ~/Lib/Caches/*
+```
+
+4. Extra: You can use this bash script to check the logs for running your crontabs
+```bash
+sudo log show --predicate 'process == "cron"' --info
+```

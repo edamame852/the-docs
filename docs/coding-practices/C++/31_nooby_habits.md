@@ -1,8 +1,10 @@
 ---
-title: 31 C++ Nooby Habits
+title: Nobby Habits (31 of them)
 layout: default
-parent: Coding Practices
+parent: C++
 has_children: true
+grand_parent: Coding Practices
+
 ---
 ## Table of contents
 {: .no_toc .text-delta }
