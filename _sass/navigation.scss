@@ -27,9 +27,7 @@
       @if $nav-list-expander-right {
         padding-right: $nav-list-item-height-sm;
         padding-left: $gutter-spacing-sm;
-      }
-
-      @else {
+      } @else {
         padding-right: $gutter-spacing-sm;
         padding-left: $nav-list-item-height-sm;
       }
@@ -41,15 +39,13 @@
         @if $nav-list-expander-right {
           padding-right: $nav-list-item-height;
           padding-left: $gutter-spacing;
-        }
-
-        @else {
+        } @else {
           padding-right: $gutter-spacing;
           padding-left: $nav-list-item-height;
         }
       }
 
-      &.external>svg {
+      &.external > svg {
         width: $sp-4;
         height: $sp-4;
         vertical-align: text-bottom;
@@ -62,10 +58,12 @@
 
       &:hover,
       &.active {
-        background-image: linear-gradient(-90deg,
-            rgba($feedback-color, 1) 0%,
-            rgba($feedback-color, 0.8) 80%,
-            rgba($feedback-color, 0) 100%);
+        background-image: linear-gradient(
+          -90deg,
+          rgba($feedback-color, 1) 0%,
+          rgba($feedback-color, 0.8) 80%,
+          rgba($feedback-color, 0) 100%
+        );
       }
     }
 
@@ -88,9 +86,11 @@
       }
 
       &:hover {
-        background-image: linear-gradient(-90deg,
-            rgba($feedback-color, 1) 0%,
-            rgba($feedback-color, 0.8) 100%);
+        background-image: linear-gradient(
+          -90deg,
+          rgba($feedback-color, 1) 0%,
+          rgba($feedback-color, 0.8) 100%
+        );
       }
 
       @if $nav-list-expander-right {
@@ -100,7 +100,7 @@
       }
     }
 
-    >.nav-list {
+    > .nav-list {
       display: none;
       padding-left: $sp-3;
       list-style: none;
@@ -119,17 +119,15 @@
     }
 
     &.active {
-      >.nav-list-expander svg {
+      > .nav-list-expander svg {
         @if $nav-list-expander-right {
           transform: rotate(-90deg);
-        }
-
-        @else {
+        } @else {
           transform: rotate(90deg);
         }
       }
 
-      >.nav-list {
+      > .nav-list {
         display: block;
       }
     }
@@ -156,18 +154,18 @@
 }
 
 .nav-list.nav-category-list {
-  >.nav-list-item {
+  > .nav-list-item {
     margin: 0;
 
-    >.nav-list {
+    > .nav-list {
       padding: 0;
 
-      >.nav-list-item {
-        >.nav-list-link {
+      > .nav-list-item {
+        > .nav-list-link {
           color: $link-color;
         }
 
-        >.nav-list-expander {
+        > .nav-list-expander {
           color: $link-color;
         }
       }
