@@ -2,7 +2,6 @@
 title: Coding interview (NeetCode)
 layout: default
 parent: Coding Practices
-has_children: true
 ---
 # Coding interview (NeetCode)
 {: .no_toc }

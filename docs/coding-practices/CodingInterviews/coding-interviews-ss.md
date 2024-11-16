@@ -2,7 +2,6 @@
 title: Coding interview (StrataScratch)
 layout: default
 parent: Coding Practices
-has_children: true
 ---
 # Coding interview (StrataScratch)
 {: .no_toc }

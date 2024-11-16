@@ -2,7 +2,6 @@
 title: Data Structures
 layout: default
 parent: Coding Practices
-has_children: true
 ---
 # Data Structures
 {: .no_toc }
