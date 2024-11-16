@@ -39,11 +39,17 @@ grand_parent: Coding Practices
 
 # 2. Springboot Architecture
 
-## Layers
-1. Presentation Layer (= Views/ Frontend side)
+## Layers (from functional perspective)
+1. Presentation Layer (= Views/ Frontend side/ UI and user interaction)
 2. Data Access Layer (= CRUD operations on DB)
 3. Service Layer (= Service class + use services from CRUD operations)
 4. Integration Layer (= Different web services + XML messaging system)
+
+## Layers (from logical perspective)
+1. Presentation Layer
+2. Business layer = Service Layer (= Business logic driven: OAuth, Validation)
+3. Persistance layer = Data Access Layer (= handles storage by translating business obj to DB rows)
+4. Database Layer (= Actual DB handling CRUD)
 
 ## Classes
 1. View Class (Has view service)
