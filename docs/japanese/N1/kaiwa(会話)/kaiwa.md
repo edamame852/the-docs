@@ -1,6 +1,6 @@
 ---
-title: kaiwa (会話)
+title: kaiwa
 layout: default
-parent: N1 - Basics
+parent: N1
 grandparent: japanese
 ---

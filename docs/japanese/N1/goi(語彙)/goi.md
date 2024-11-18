@@ -1,6 +1,6 @@
 ---
-title: goi (語彙)
+title: goi
 layout: default
-parent: N1 - Basics
+parent: N1
 grandparent: japanese
 ---

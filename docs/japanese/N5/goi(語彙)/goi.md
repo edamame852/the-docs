@@ -1,5 +1,5 @@
 ---
-title: goi (語彙)
+title: goi
 layout: default
 parent: N5
 grandparent: japanese

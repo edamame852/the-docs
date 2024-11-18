@@ -1,5 +1,5 @@
 ---
-title: N1 - Basics
+title: N1
 layout: default
 parent: japanese
 has_children: true
