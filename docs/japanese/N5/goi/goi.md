@@ -2,7 +2,7 @@
 title: goi
 layout: default
 parent: N5
-grandparent: japanese
+grand_parent: japanese
 ---
 # Book I
 ## Unit 1
