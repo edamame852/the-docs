@@ -57,7 +57,7 @@ Inputs always has a value
 - while passing function to useEffect, use useCallback to avoid infinite call back
 - or when passing function to component and don't want unnecessary rendering
 
-4. useState:  
+4. useState:  A way to remember values
 5. useRef:  
 
 ## How is useState and useRef different ?

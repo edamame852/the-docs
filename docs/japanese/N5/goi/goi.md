@@ -19,3 +19,24 @@ grand_parent: japanese
 2. Q: Are question marks allowed at the end of the sentence in Japanese?
 - Ans: Yes, but only in INFORMAL documents due to western influence
 
+## Unit 2
+1. 名詞(Noun) は 名詞(Noun) です
+2. 名詞(Noun) は イ形容詞/ナ形容詞 です 
+    - e.g. 夜市は賑やか
+    - e.g. 犬は寂しい
+
+3. 名詞(Noun) は 動詞(Verbs) です
+
+## Unit 3
+1. Affirmation:名詞(Noun) は 名詞(Noun) です
+2. Decline:名詞(Noun) は 名詞(Noun) ではありません
+3. Question:名詞(Noun) は 名詞(Noun) ですか
+    - To answer positively: はい、そうです
+    - To answer negatively: いいえ、違います
+
+## Unit 4: こそあど言葉
+1. ここ、その、あそこ、どこ = Location
+2. これ、それ、あれ、どれ = Object
+    - この、その、あの、どの　= Object (specified)
+3. 
+4. 
