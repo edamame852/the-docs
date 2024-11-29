@@ -57,8 +57,41 @@ Inputs always has a value
 - while passing function to useEffect, use useCallback to avoid infinite call back
 - or when passing function to component and don't want unnecessary rendering
 
-4. useState: SKIPPED
+
+4. useState:  A way to remember values
+```js
+funciton Counter() {
+    const [count, setCount] = useState(0); // Default is 0 or in same cases: null
+    return (
+        <div>
+            <p>You already clicked {count} times</p>
+            <button onClick={()=>setCount(count+1)}>
+                Click me bro
+            </button>
+        </div>
+    )
+} 
+```
+
 5. useRef: for connecting 3rd party lib function (i.e. MUI does useRef under the hood)
+
+## How are props used?
+pros high level: To pass data from 1 component to another 
+
+```js
+function Greetings(props){
+    return <h1>Hello my, {props.name}</h1>
+}
+
+function App(){
+    return (
+        <div>
+            <Greeting name='dude'>
+            <Greeting name='boi'>
+        </div>
+    )
+}
+```
 
 ## How is useState and useRef different ?
 
