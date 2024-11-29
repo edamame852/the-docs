@@ -57,7 +57,24 @@ Inputs always has a value
 - while passing function to useEffect, use useCallback to avoid infinite call back
 - or when passing function to component and don't want unnecessary rendering
 
-4. useState:  A way to remember values
-5. useRef:  
+4. useState: SKIPPED
+5. useRef: for connecting 3rd party lib function (i.e. MUI does useRef under the hood)
 
 ## How is useState and useRef different ?
+
+useRef: you can store values in it (i.e. count), it's non-reactive = it's non-render-able
+(Workaround: in a function, you can assign new value to ref and access in the next line)
+useState: you can store values as well, and it's reactive = have to wait for re-render
+
+## What's context and how it works?
+
+Context: Making the component to access the state from top-level component and all child component has access to = **prop drilling**
+
+## Pros and cons of prop drilling?
+pros: Child components has access to parent component states
+cons: Messy (too much embedded components, renaming = breaking the chain)
+
+## Where do we use Context?
+Context: for example, dark mode
+
+# State management
