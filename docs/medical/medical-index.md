@@ -10,6 +10,9 @@ permalink: /docs/medical
 2. ACP: Anatomical Cellular Pathology
 3. Whisk away: Shaun people away
 4. H&E : H stain (hematoxylin for nucleus, bluish-purple) + E stain (Eosin red ish for everything else)
+5. ZN dye: Ziehl-Neelsen, needs heat-fix by Bunsen burner, ZN is good for cells with high lipid on cell wall (i.e.waxy)
+    - acid -> nonacid-fast cell, turns methylene blue/malachite green = decoloration by Carbol Fuchsin!
+    - acid -> acid-fast cells =  resist decoloration by acids (i.e. acid fast = acid holding = acid resistant)
 5. Hiso Technician: For cutting sample (to embed into wax blob and stain, + alcohol)
 6. Cyto technician: Junior won't see, read easy pap smears
 7. Slide: under the microscope
@@ -44,6 +47,7 @@ Paraffin (wax) not oil -
 12. Alice - New comer, worked in Tuen Mun Pedi 2 year, not very social with the group. Vaso-vagoed during dissection
 13. Angela - +7-8 than Joanne, Was pregnant, 0.5 < kid year old < 1, was anesthesia
 14. Irene - did frozen section, was studying in Macau, now exchange in HK. 
+15. Lak Marie - came to HK Oct-Nov 2024 
 
 
 
