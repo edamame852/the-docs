@@ -15,6 +15,38 @@ grand_parent: Coding Practices
 {:toc}
 
 ---
+# Recursion
+
+## Mutiplication
+
+```python
+# Conventional
+def mul(x,y):
+    return x*y
+
+# Recursion
+def mul(x,y):
+    if y == 0:
+        return 0
+    return x + mul(x,y-1)
+```
+
+## Division
+```python
+# Conventional
+def division(x,y):
+    return x/y
+
+
+# Recursion
+def division(x,y):
+    if x < y:
+        return 0
+    else:
+        return 1 + division(x-y, y) #  1 + (13,2) = 2 + (11,2) = 3 + (9,2) = 4 + (7,2) = 5 + (5,2) = 6 + (3,2) = 7 + (1,2) 
+
+```
+
 # List
 ## List Comprehension
 
