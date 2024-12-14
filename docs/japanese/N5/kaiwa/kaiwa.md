@@ -34,6 +34,11 @@ using が is okay, since the stress is on the verb/ action
 - e.g. 経営画を**もっとしっかり**勉強した
 - e.g. if removed: 経営学が勉強したい = use が
 
+てみる+たい
+- e.g. いつかあの魚を食べてみたい
+ていく+たい
+- e.g. これからも英語の勉強を続けていきたい
+
 wow just wow
 - e.g. こんばんは夕食を家族と食べたい
 - e.g. こんばんは家族と夕食が食べたい
@@ -48,3 +53,6 @@ wow just wow
 
 7. を　= used as 通過点
 - e.g. いつか空を飛びたい
+- e.g. いつか空が飛びたい❌不自然
+
+8. 
