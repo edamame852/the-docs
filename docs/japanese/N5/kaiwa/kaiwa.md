@@ -30,8 +30,21 @@ grand_parent: japanese
 - e.g. 魚を釣りたいわけじゃなくて、魚を食べたいんです
 using が is okay, since the stress is on the verb/ action
 
-4. other elements before verb = use を
+4. other elements before verb (他の要素)= use を
 - e.g. 経営画を**もっとしっかり**勉強した
 - e.g. if removed: 経営学が勉強したい = use が
 
-5. 
+wow just wow
+- e.g. こんばんは夕食を家族と食べたい
+- e.g. こんばんは家族と夕食が食べたい
+
+5. if subject is human = を
+- e.g. 彼女が喜ばせたい✅
+- e.g. 彼女を喜ばせたい❌
+
+6. を = used as 起点
+- e.g. アメリカの大学を卒業したい✅
+- e.g. アメリカの大学が卒業したい❌
+
+7. を　= used as 通過点
+- e.g. いつか空を飛びたい
