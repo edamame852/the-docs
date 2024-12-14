@@ -35,13 +35,13 @@ using が is okay, since the stress is on the verb/ action
 - e.g. if removed: 経営学が勉強したい = use が
 
 - wow just wow, order MATTERS
-        - e.g. こんばんは夕食を家族と食べたい
-        - e.g. こんばんは家族と夕食が食べたい
+- e.g. こんばんは夕食を家族と食べたい
+- e.g. こんばんは家族と夕食が食べたい
 
 - てみる+たい
-    - e.g. いつかあの魚を食べてみたい
+ - e.g. いつかあの魚を食べてみたい
 - ていく+たい
-    - e.g. これからも英語の勉強を続けていきたい
+ - e.g. これからも英語の勉強を続けていきたい
 
     
 5. if subject is human = を
