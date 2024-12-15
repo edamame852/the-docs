@@ -17,6 +17,8 @@ grand_parent: japanese
 
 # ～が食べたい vs ～を食べたい (7 ways of telling which is which)
 
+## [Youtube Vid reference](https://www.youtube.com/watch?v=lNf3EOyiTGI)
+
 ## Specific to one topic
 - Not speicifc : を
 - Specific :が
