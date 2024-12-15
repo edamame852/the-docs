@@ -15,7 +15,7 @@ grand_parent: japanese
 
 ---
 
-# ～が食べたい vs ～を食べたい
+# ～が食べたい vs ～を食べたい (7 ways of telling which is which)
 
 ## Specific to one topic
 - Not speicifc : を
@@ -51,6 +51,6 @@ using が is okay, since the stress is on the verb/ action
 - e.g. アメリカの大学を卒業したい✅
 - e.g. アメリカの大学が卒業したい❌
 
-## を　= used as 通過点
+## を = used as 通過点
 - e.g. いつか空を飛びたい
 - e.g. いつか空が飛びたい❌不自然
