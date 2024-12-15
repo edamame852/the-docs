@@ -15,7 +15,7 @@ grand_parent: japanese
 
 ---
 
-# ～が食べたい vs ～を食べたい (7 ways of telling which is which)
+# ～が+Verb+たい vs ～を+Verb+たい (7 ways of telling which is which)
 
 ## [Youtube Vid reference](https://www.youtube.com/watch?v=lNf3EOyiTGI)
 
