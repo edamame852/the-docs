@@ -49,13 +49,20 @@ grand_parent: japanese
 
 3. 午前, 午後= before lunch,after lunch
 4. hour(s)
-- よじ✅
-- 
+- よじ✅　よんじ❌
+- しちじ✅　ななじ🤔
+- くじ✅　ぎゅじ❌
 
 Watch out for hour: 4,7,9 (front part is different from regular)
 {:.warning}
 
 5. min(s) 
+everyone else is ぷん
+- にふん✅　にぶん❌
+- よんぶん✅
+- ごふん✅　ごぶん❌
+- ななふん✅　ななぶん❌
+- きゅうふん✅　きゅうぶん❌
 
 Watch out for min: 2,5,7,9 (rear part is different)
 {:.warning}
