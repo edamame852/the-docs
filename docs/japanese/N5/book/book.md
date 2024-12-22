@@ -37,6 +37,5 @@ grand_parent: japanese
 ## Unit 4: こそあど言葉
 1. ここ、その、あそこ、どこ = Location
 2. これ、それ、あれ、どれ = Object
-    - この、その、あの、どの　= Object (specified)
-3. 
-4. 
+    - この、その、あの、どの　= Object (specified with noun)
+    - e.g. こそあど + の + 名詞(Noun) =  この犬
