@@ -1,5 +1,5 @@
 ---
-title: goi
+title: book
 layout: default
 parent: N5
 grand_parent: japanese

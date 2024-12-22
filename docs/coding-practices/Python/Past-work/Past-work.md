@@ -1,5 +1,5 @@
 ---
-title: My attempts and notes
+title: Past Work
 layout: default
 parent: Python 
 grand_parent: Coding Practices

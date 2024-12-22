@@ -92,7 +92,7 @@ do_something() # This returns the 1st print statment!
 #Explained: 
 ```
 
-# `@` decoraters in Python
+# Decorators `@` in Python
 
 ## `@timing` 
 
@@ -112,6 +112,5 @@ def timing(f):
         args[0]._logger.info(f"The {f.__name__} method took {time_took} seconds to generate ")
         return ret
     return wrap
-
-
 ```
+
