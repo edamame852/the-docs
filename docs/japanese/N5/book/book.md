@@ -52,4 +52,10 @@ grand_parent: japanese
 いちじ
 にじ
 
-5. min(s)
+Watch out for hour: 4,7,9 (front part is different from regular)
+{:.warning}
+
+5. min(s) 
+
+Watch out for min: 2,5,7,9 (rear part is different)
+{:.warning}
