@@ -53,7 +53,7 @@ grand_parent: japanese
 - しちじ✅　ななじ🤔
 - くじ✅　ぎゅじ❌
 
-Watch out for hour: 4,7,9 (front part is different from regular)
+- Watch out for hour: 4,7,9 (front part is different from regular)
 {:.warning}
 
 5. min(s) 
@@ -64,5 +64,5 @@ everyone else is ぷん
 - ななふん✅　ななぶん❌
 - きゅうふん✅　きゅうぶん❌
 
-Watch out for min: 2,5,7,9 (rear part is different)
+Watch out for min: 2,5,7,9 (rear part is different **ふん** instead of **ぶん** )
 {:.warning}
