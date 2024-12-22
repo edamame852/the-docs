@@ -39,3 +39,17 @@ grand_parent: japanese
 2. これ、それ、あれ、どれ = Object
     - この、その、あの、どの　= Object (specified with noun)
     - e.g. こそあど + の + 名詞(Noun) =  この犬
+
+## Unit 5: 時間の言い方
+1. 朝昼夜=morning, noon/afternoon, night
+2. what to say?
+- おはようございます
+- こんにちは
+- こんばんは
+
+3. 午前, 午後= before lunch,after lunch
+4. hour(s)
+いちじ
+にじ
+
+5. min(s)
