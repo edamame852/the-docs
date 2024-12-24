@@ -52,9 +52,7 @@ grand_parent: japanese
 - よじ✅　よんじ❌
 - しちじ✅　ななじ🤔
 - くじ✅　ぎゅじ❌
-
 - Watch out for hour: 4,7,9 (front part is different from regular)
-{:.warning}
 
 5. min(s) 
 everyone else is ぷん
@@ -65,4 +63,18 @@ everyone else is ぷん
 - きゅうふん✅　きゅうぶん❌
 - Watch out for min: 2,5,7,9 (rear part is different **ふん** instead of **ぶん** )
 
-6. 
+6. Common phases to express time (3 are being introduced here)
+
+7. How to ask what time is it.
+
+8. Expressing time in a range
+
+## Unit 6: 助詞 particles in Japanese
+
+1. A
+
+2. B
+
+3. 
+
+4. 
