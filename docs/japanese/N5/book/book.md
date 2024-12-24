@@ -63,8 +63,6 @@ everyone else is ぷん
 - ごふん✅　ごぶん❌
 - ななふん✅　ななぶん❌
 - きゅうふん✅　きゅうぶん❌
-
-Watch out for min: 2,5,7,9 (rear part is different **ふん** instead of **ぶん** )
-{:.warning}
+- Watch out for min: 2,5,7,9 (rear part is different **ふん** instead of **ぶん** )
 
 6. 
