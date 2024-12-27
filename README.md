@@ -28,7 +28,7 @@ I followed their [PR](https://github.com/vsoch/mkdocs-jekyll/commit/bcdae2d5b86f
 
 
 ## Ruby (update from ruby 3.1.0p0 --> 3.3.1): Fixing Ruby complier issue
-> I pretty much gave up on using RVM and used asdf instead (RVM = manages Ruby Version, asdf = manages more than Ruby, could be python ...)
+> I pretty much gave up on using RVM and used asdf instead (RVM = manages Ruby Version, asdf = manages more than Ruby, could be python ...) 
 > There are some conflicts with rvm & asdf, hence rvm was removed. Use `rvm implode` to remove all /rvm & `gem uninstall rvm` removing all rvm gems rubbies
 
 note: both rvm and asdf are depdencies managing tools 
