@@ -14,6 +14,8 @@ permalink: /docs/taiwanese
 
 ---
 
+{% include quiz.html file='example-quiz'%}
+
 # Vocabs
 
 ## Daily Conversation 
