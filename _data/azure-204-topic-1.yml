@@ -1,4 +1,4 @@
-title: AZ-204 quiz
+title: AZ-204 quiz - Topic 1 (37 Questions)
 randomized: false
 questions:
 
@@ -16,7 +16,7 @@ questions:
             correct: true
           - choice: From profile blade, modify usage location.
             correct: false
-      followup: NONE
+      followup: The "Redeploy" blade in the Azure portal can be used to redeploy a virtual machine to a different host. When you redeploy a virtual machine, it moves to a new host within the same Azure datacenter
 
     - type: "multiple-choice"
       question: "Q2 (Topic 1): <br/>
@@ -35,7 +35,7 @@ questions:
             correct: true
           - choice: Azure policy
             correct: false
-      followup: NONE
+      followup: "Key Vault + Access Policy. Using Key Vault we create a secret containing our Password: https://docs.microsoft.com/en-us/azure/key-vault/secrets/quick-create-portal."
 
     - type: "multiple-choice"
       question: "Q3 (Topic 1): <br/>
@@ -49,6 +49,7 @@ questions:
             correct: true
           - choice: Nah
             correct: false
+      followup: "The solution provided involves using kubectl, which is the Kubernetes command-line tool, to apply the YAML manifest file (myapp.yaml) for deploying the application. Since you're managing the AKS cluster from an Azure AD-joined device and have the Azure CLI installed, running kubectl apply -f myapp.yaml command will deploy the application to the AKS cluster. This is a common and valid method for deploying applications to Kubernetes clusters, including AKS. Therefore, option A is correct"
 
     - type: "multiple-choice"
       question: "Q4 (Topic 1): <br/>
@@ -62,7 +63,7 @@ questions:
             correct: false
           - choice: Nah
             correct: true
-
+      followup: "docker run -it microsoft/azure-cli:0.10.17 is no k8s command"
 
     - type: "multiple-choice"
       question: "Q5 (Topic 1): <br/>
@@ -157,4 +158,37 @@ questions:
       AzCopy is a command-line utility designed for copying data to and from Azure Storage <br/><br/>
       Azure Storage Explorer is a tool for managing Azure Storage resources, such as blobs, queues, and tables"
 
+    - type: "multiple-choice"
+      question: "Q10 (Topic 1): <br/>
+      You're making an e-commence web app <br/>
+      You wish to use Azure Key Vault to ensure that the sign-ins to the e-commerce web app are secured with <br/>
+      Azure App Service Auth and AAD (Azure Active Directory) <br/>
+      What should you do on the e-commerence web app?"
+      items:
+          - choice: Run az keyvault secret set command
+            correct: false
+          - choice: Enable Azure AD Connect
+            correct: false
+          - choice: Enable Managed Service Identity (MSI)
+            correct: true
+          - choice: Create Azure AD service principal
+            correct: false
+      followup: "\"
+
+    - type: "multiple-choice"
+      question: "Q11 (Topic 1): <br/>
+      You're making an e-commence web app <br/>
+      You wish to use Azure Key Vault to ensure that the sign-ins to the e-commerce web app are secured with <br/>
+      Azure App Service Auth and AAD (Azure Active Directory) <br/>
+      What should you do on the e-commerence web app?"
+      items:
+          - choice: Run az keyvault secret set command
+            correct: false
+          - choice: Enable Azure AD Connect
+            correct: false
+          - choice: Enable Managed Service Identity (MSI)
+            correct: true
+          - choice: Create Azure AD service principal
+            correct: false
+      followup: "\"
 
