@@ -4,8 +4,29 @@
     <p>{% for choice in include.item.items %}{% if choice.correct == true %}<span class="correct-{{ include.count }}">{%
             endif %}{{ forloop.index }}. {{ choice.choice }}{% if choice.correct == true %}</span>{% endif %}<br>{%
         endfor %}</p>
-</div><button class="btn btn-success"
-    onclick='$(".correct-{{ include.count }}").css("font-weight", 700).addClass("correct-answer");$(".correct-more-{{ include.count }}").css("display", "inline")'>Show
-    Answer</button>
+</div><button class="btn btn-success" onclick='toggleAnswer({{ include.count }})'> Show Answer / Hide Answer</button>
+{% if include.item.followup %}<p class="well correct-more-{{ include.count }}" style="display:none">{{
+    include.item.followup }}</p>{% endif %}
+
+<script>
+    function toggleAnswer(count) {
+        var correctElements = document.querySelectorAll('.correct-' + count);
+        var followupElement = document.querySelector('.correct-more-' + count);
+        correctElements.forEach(function (element) {
+            if (element.style.fontWeight === '700') {
+                element.style.fontWeight = 'normal';
+                element.classList.remove('correct-answer');
+            } else {
+                element.style.fontWeight = '700';
+                element.classList.add('correct-answer');
+            }
+        });
+        if (followupElement.style.display === 'inline') {
+            followupElement.style.display = 'none';
+        } else {
+            followupElement.style.display = 'inline';
+        }
+    }
+</script>
 {% if include.item.followup %}<p class="well correct-more-{{ include.count }}" style="display:none">{{
     include.item.followup }}</p>{% endif %}

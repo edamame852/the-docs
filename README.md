@@ -19,9 +19,6 @@ https://user-images.githubusercontent.com/85418632/211225192-7e5d1116-2f4f-4305-
 Heavily inspired by [mkdocs-jekyll](https://github.com/vsoch/mkdocs-jekyll) please check them out
 I followed their [PR](https://github.com/vsoch/mkdocs-jekyll/commit/bcdae2d5b86f436441ff9ec273662445d49b78c9) to implement my quiz feature :D Thanks again!
 
-## PageCrypt was used as well for static page encrptions
-
-
 ## PageCrypt was used as static github page encrptions
 > It was inspired by [github-pages-jekyll-password-protection](https://github.com/evanbaldonado/github-pages-jekyll-password-protection)
 > Further enhanced with password read in from GITHUB_SECRETS instead of _protected_pages.txt

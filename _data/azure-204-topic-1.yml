@@ -1,0 +1,160 @@
+title: AZ-204 quiz
+randomized: false
+questions:
+
+    - type: "multiple-choice"
+      question: "Q1 (Topic 1): <br/>
+      There's 2 Hyper-V VMs: Host1 and Host2. <br/>
+      Host 1 has Azure VM named VM1, which is deployed via custom Azure resource manager template. <br/>
+      To migrate VM1 to Host 2, what should you do?"
+      items:
+          - choice: From Update management blade, click enable.
+            correct: false
+          - choice: From overview blade, move VM1 to another subscription.
+            correct: false
+          - choice: From redeploy blade, click redeploy.
+            correct: true
+          - choice: From profile blade, modify usage location.
+            correct: false
+      followup: NONE
+
+    - type: "multiple-choice"
+      question: "Q2 (Topic 1): <br/>
+      You downloaded an Azure Resource Manager template to deploy multiple VMS. <br/>
+      The template is based on a current deployed VM, which must be adapted so it can reference an admin password. <br/>
+      What do you need to <b>create</b> to make sure that the admin password is not stored in the template as plain text?
+      Pick 2 or 3 options."
+      items:
+          - choice: Azure Key Vault
+            correct: true
+          - choice: Azure Storage Account
+            correct: false
+          - choice: Azure AD (Actrive Directory) Identify Protection
+            correct: false
+          - choice: Access policy
+            correct: true
+          - choice: Azure policy
+            correct: false
+      followup: NONE
+
+    - type: "multiple-choice"
+      question: "Q3 (Topic 1): <br/>
+      You have an AKS (Azure k8s Service) Cluster that is managed by an AD joined device. <br/>
+      The cluster is located in a resource group. <br/>
+      Devs made a MyApp and it's packaged into a container image. <br/>
+      We need to deploy the yml (manifest) file to the AKS cluster. <br/>
+      Is `kubectl apply -f myapp.yml` good enough to deploy?"
+      items:
+          - choice: Yeah
+            correct: true
+          - choice: Nah
+            correct: false
+
+    - type: "multiple-choice"
+      question: "Q4 (Topic 1): <br/>
+      You have an AKS (Azure k8s Service) Cluster that is managed by an AD joined device. <br/>
+      The cluster is located in a resource group. <br/>
+      Devs made a MyApp and it's packaged into a container image. <br/>
+      We need to deploy the yml (manifest) file to the AKS cluster. <br/>
+      Is installing a docker client on the device + running `docker run -it microsoft/azure-cli:0.10.17` good enough to deploy?"
+      items:
+          - choice: Yeah
+            correct: false
+          - choice: Nah
+            correct: true
+
+
+    - type: "multiple-choice"
+      question: "Q5 (Topic 1): <br/>
+      Your company has web app called WebApp1, through using WebJobs SDK, you triggered the App Service background task that auto invokes a funtion (within the code).<br/>
+      The function triggered only when new data is received in queue. <br/>
+      You are preparing to configure the service processes a queue data item. <br/>
+      What service should you use?"
+      items:
+          - choice: Logic Apps
+            correct: false
+          - choice: WebJobs
+            correct: true
+          - choice: Flow
+            correct: false
+          - choice: Functions
+            correct: false
+
+    - type: "multiple-choice"
+      question: "Q6 (Topic 1): <br/>
+      Your company has Azure Subscriptions<br/>
+      You need to deploy multiple Azure VMs to subscption using ARM (Aszure Resource Manager) templates <br/>
+      All VMs will be included in a single avaliablitiy set <br/>
+      Need to ensure that the ARM template allows as many VMs as possible to stay up/ remain accessible during down time (e.g. maintences/ fabric failure) <br/>
+      What value should platformFaultDomainCount be configured into?"
+      items:
+          - choice: 10
+            correct: false
+          - choice: 30
+            correct: false
+          - choice: Min
+            correct: false
+          - choice: Max
+            correct: true
+
+    - type: "multiple-choice"
+      question: "Q7 (Topic 1): <br/>
+      Your company has Azure Subscriptions<br/>
+      You need to deploy multiple Azure VMs to subscption using ARM (Aszure Resource Manager) templates <br/>
+      All VMs will be included in a single avaliablitiy set <br/>
+      Need to ensure that the ARM template allows as many VMs as possible to stay up/ remain accessible during down time (e.g. maintences/ fabric failure) <br/>
+      What value should platformUpdateDomainCount be configured into?"
+      items:
+          - choice: 10
+            correct: false
+          - choice: 20
+            correct: true
+          - choice: 30
+            correct: false
+          - choice: 40
+            correct: false
+      followup: Maximum number of update domains you can configure is 20. This is a limit set by Azure. Default is 5.
+
+    
+    - type: "multiple-choice"
+      question: "Q8 (Topic 1): <br/>
+      You are creating an Azure Cosmos DB account that uses SQL API <br/>
+      Data is injected to this account daily from a web app <br/>
+      You need to keep the compute cost down and ensure email noti is sent when data is sent from those IoT devices  <br/>
+      Your approach? Deploy a function app. <br/>
+      Which of the following services should you use to configure that function app ?"
+      items:
+          - choice: Azure Cosmos DB
+            correct: false
+          - choice: SendGrid action
+            correct: false
+          - choice: Consumption plan
+            correct: true
+          - choice: Azure Event Hubs bindings
+            correct: false
+          - choice: SendGrid binding
+            correct: true
+      followup: None
+
+    - type: "multiple-choice"
+      question: "Q9 (Topic 1): <br/>
+      Determine the following statement: <br/>
+      Your company has on-premise deployment of MongoDB <br/>
+      A migration from MongoDB to Azure Cosmos DB account is required. <br/>
+      You decide to inlcude Data Management Gateway tool in your migration plan, <br/>
+      If you think it's good enough, choose No change required, otherwise, choose the correct option."
+      items:
+          - choice: No change required
+            correct: false
+          - choice: mongorestore
+            correct: true
+          - choice: Azure Storage Explorer
+            correct: false
+          - choice: Azcopy
+            correct: false
+      followup: "\
+      mongorestore is a tool provided by MongoDB that can be used to restore data from a MongoDB database dump. It is suitable for migrating data <br/><br/>
+      AzCopy is a command-line utility designed for copying data to and from Azure Storage <br/><br/>
+      Azure Storage Explorer is a tool for managing Azure Storage resources, such as blobs, queues, and tables"
+
+
