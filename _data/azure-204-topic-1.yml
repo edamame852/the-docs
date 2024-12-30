@@ -174,19 +174,60 @@ questions:
             correct: false
       followup: "MSI tb explained"
 
-     - type: "multiple-choice"
+    - type: "multiple-choice"
       question: "Q11 (Topic 1): <br/>
-      You're making an e-commence web app <br/>
-      You wish to use Azure Key Vault to ensure that the sign-ins to the e-commerce web app are secured with <br/>
-      Azure App Service Auth and AAD (Azure Active Directory) <br/>
-      What should you do on the e-commerence web app?"
+      Evaluate the following statement <br/>
+      Your Azure AD (Azure Active Directory Azure) tenant has an Azure subscrption linked to it <br/>
+      Your in-team dev has created a mobiule app that gets Azure AD access tokens using OAuth2 implicit grant type <br/>
+      The mobile app MUST be registered under Azure AD <br/>
+      You require a redirect URI from the dev for registeration process <br/>
+      What do you need next? If none, choose No change required."
       items:
-          - choice: Run az keyvault secret set command
-            correct: false
-          - choice: Enable Azure AD Connect
-            correct: false
-          - choice: Enable Managed Service Identity (MSI)
+          - choice: No change required
             correct: true
-          - choice: Create Azure AD service principal
+          - choice: a secret
+            correct: false
+          - choice: a login hint
+            correct: false
+          - choice: a client ID
             correct: false
       followup: "None"
+
+    - type: "multiple-choice"
+      question: "Q12 (Topic 1): <br/>
+      You're creating an Azure key vault using PowerShell. <br/>
+      Objects that are deleted from the key vault must be kept for 90 days <br/>
+      Pick 2 parameters that is required to meet the 90 days requirement."
+      items:
+          - choice: EnabledForDeployment
+            correct: false
+          - choice: EnabledPurgeProtection
+            correct: true
+          - choice: EnabledForTemplateDeployment
+            correct: false
+          - choice: EnabledSoftDelete
+            correct: true
+      followup: "Purge protection adds an additional layer of security by preventing the permanent deletion (purging) of soft deleted objects until the purge protection period has expired \
+      + enable soft delete on a key vault, any deleted objects (keys, secrets, certificates) are retained in a soft deleted state for a specified retention period.\
+      This retention period is typically 90 days by default, During this period, the objects can be recovered if needed. This feature is crucial for preventing accidental deletions and ensuring that deleted objects are not immediately lost"
+
+
+    - type: "multiple-choice"
+      question: "Q13 (Topic 1): <br/>
+      You have an Azure AD tenant <br/>
+      You wish to implement multi-factor auth by using a conditional access policy <br/>
+      THe conditional access policy must be applied to all users when they login to the Azure portal <br/>
+      Which 3 settings should you configure"
+      items:
+          - choice: Assignments - Users and groups
+            correct: true
+          - choice: Assignments - Cloud apps
+            correct: true
+          - choice: Assignments - Conditions
+            correct: false
+          - choice: Access controls - Grant
+            correct: true
+          - choice: Access controls - Session
+            correct: false
+      followup: "Conditional access policy must be applied to all users and groups. When users access the azure portal (a cloud app) = Microsoft Azure Management\
+      Access controls - Grant: Require multi-factor authentication"
