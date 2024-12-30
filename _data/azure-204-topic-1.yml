@@ -156,38 +156,3 @@ questions:
       followup: "mongorestore is a tool provided by MongoDB that can be used to restore data from a MongoDB database dump. It is suitable for migrating data <br/><br/>
       AzCopy is a command-line utility designed for copying data to and from Azure Storage <br/><br/>
       Azure Storage Explorer is a tool for managing Azure Storage resources, such as blobs, queues, and tables"
-
-    - type: "multiple-choice"
-      question: "Q10 (Topic 1): <br/>
-      You're making an e-commence web app <br/>
-      You wish to use Azure Key Vault to ensure that the sign-ins to the e-commerce web app are secured with <br/>
-      Azure App Service Auth and AAD (Azure Active Directory) <br/>
-      What should you do on the e-commerence web app?"
-      items:
-          - choice: Run az keyvault secret set command
-            correct: false
-          - choice: Enable Azure AD Connect
-            correct: false
-          - choice: Enable Managed Service Identity (MSI)
-            correct: true
-          - choice: Create Azure AD service principal
-            correct: false
-      followup: "\"
-
-    - type: "multiple-choice"
-      question: "Q11 (Topic 1): <br/>
-      You're making an e-commence web app <br/>
-      You wish to use Azure Key Vault to ensure that the sign-ins to the e-commerce web app are secured with <br/>
-      Azure App Service Auth and AAD (Azure Active Directory) <br/>
-      What should you do on the e-commerence web app?"
-      items:
-          - choice: Run az keyvault secret set command
-            correct: false
-          - choice: Enable Azure AD Connect
-            correct: false
-          - choice: Enable Managed Service Identity (MSI)
-            correct: true
-          - choice: Create Azure AD service principal
-            correct: false
-      followup: "\"
-
