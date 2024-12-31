@@ -215,7 +215,7 @@ questions:
     - type: "multiple-choice"
       question: "Q13 (Topic 1): <br/>
       You have an Azure AD tenant <br/>
-      You wish to implement multi-factor auth by using a conditional access policy <br/>
+      You wish to implement multi-factor auth through using a conditional access policy <br/>
       THe conditional access policy must be applied to all users when they login to the Azure portal <br/>
       Which 3 settings should you configure"
       items:
