@@ -14,10 +14,10 @@ parent: Coding Practices
 
 ---
 
-# Algos and Data Structs for noobs
+# Algos and Data Structs for noobs (尼特程式碼.io)
 
 ## Arrays
-### Static Arrays
+### Static Arrays (15 mins)
 
 Static typed languages: Java, C++, C# (meaning the arrays will need allocated size and type when the array is created)
 {:.note }
@@ -63,4 +63,10 @@ soft delete = setting the end of array to 0/null/-1. Not really deleting but ove
 
 5. Deleting the i-th array
 
-### Dyanamics Arrays
+### Dynamics Arrays (16 mins)
+
+1. All arrays in Python are default to be **dynamic**
+    - Example: 
+        ```python
+         
+        ```

@@ -25,7 +25,7 @@ parent: Coding Practices
 Goal: Return k : int, the idx that will slice the original input up to a certain output
 
 ```python
-#Initally my list is : 
+#Initially my list is : 
 [0, 0, 1, 1, 1, 2, 2, 3, 3, 4]
 [0, 1, 1, 1, 1, 2, 2, 3, 3, 4]
 [0, 1, 2, 1, 1, 2, 2, 3, 3, 4]
