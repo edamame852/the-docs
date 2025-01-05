@@ -26,9 +26,9 @@ I followed their [PR](https://github.com/vsoch/mkdocs-jekyll/commit/bcdae2d5b86f
 
 ## Ruby (update from ruby 3.1.0p0 --> 3.3.1): Fixing Ruby compiler issue
 > I pretty much gave up on using RVM and used asdf instead (RVM = manages Ruby Version, asdf = manages more than Ruby, could be python ...) 
-> There are some conflicts with rvm & asdf, hence rvm was removed. Use `rvm implode` to remove all /rvm & `gem uninstall rvm` removing all rvm gems rubbies
+> There are some conflicts with rvm & asdf, hence rvm was removed. Use `rvm implode` to remove all /rvm & `gem uninstall rvm` removing all rvm gems rubies
 
-note: both rvm and asdf are depdencies managing tools 
+note: both rvm and asdf are dependencies managing tools 
 
 ### Reference  from (https://gorails.com/setup/ubuntu/24.04)
 
@@ -36,6 +36,11 @@ note: both rvm and asdf are depdencies managing tools
 
 ```bash 
 sudo apt-get update && sudo apt-get install git-core zlib1g-dev build-essential libssl-dev && libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev  && libcurl4-openssl-dev software-properties-common libffi-dev 
+```
+
+For MacOS using homebrew:
+```bash
+brew update && brew install git zlib openssl readline libyaml sqlite libxml2 libxslt curl libffi
 ```
 
 2. Install Ruby version manager : ASDF <br/>
@@ -47,7 +52,7 @@ echo '. "$HOME/.asdf/asdf.sh"' >> ~/.bashrc
 echo '. "$HOME/.asdf/completions/asdf.bash"' >> ~/.bashrc
 echo 'legacy_version_file = yes' >> ~/.asdfrc
 echo 'export EDITOR="code --wait"' >> ~/.bashrc
-exec $SHELL
+exec $SHELL # MacOS: source ~/.bashrc or source ~/.bashrc
 ```
 
 3. Install ASDF plugin

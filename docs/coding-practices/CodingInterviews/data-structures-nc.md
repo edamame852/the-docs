@@ -68,5 +68,9 @@ soft delete = setting the end of array to 0/null/-1. Not really deleting but ove
 1. All arrays in Python are default to be **dynamic**
     - Example: 
         ```python
-         
+        array_example = [] 
         ```
+        ```Java
+        List<Integer> myArr = new ArrayList <Integer>(); 
+        ```
+2. 
