@@ -28,3 +28,6 @@ node_modules
 *.gem
 .bundle
 .ruby-version
+
+# Don't include tmux client logs
+tmux-*.log

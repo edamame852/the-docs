@@ -70,7 +70,8 @@ soft delete = setting the end of array to 0/null/-1. Not really deleting but ove
         ```python
         array_example = [] 
         ```
-        ```Java
+
+        ```java
         List<Integer> myArr = new ArrayList <Integer>(); 
         ```
 2. 

@@ -18,21 +18,25 @@ parent: Coding Practices
 
 ## Algorithms and Data Structures for Beginners
 ### Lesson 2 - LeetCode Questions
-1. Easy - Remove Duplicates From Sorted Array <a href=https://leetcode.com/problems/remove-duplicates-from-sorted-array/description>(Q.26) </a>
+1. Easy - Remove Duplicates From Sorted Array <a href=https://leetcode.com/problems/remove-duplicates-from-sorted-array/description> (Q.26) </a>
 - original input: `[0,0,1,1,1,2,2,3,3,4]`
 - excepted output: `[0,1,2,3,4]`
 
 Goal: Return k : int, the idx that will slice the original input up to a certain output
+Method of solving: in-place replacing repeated elements
 
+Step-by-step walkthrough:
 ```python
 #Initially my list is : 
 [0, 0, 1, 1, 1, 2, 2, 3, 3, 4]
+
 [0, 1, 1, 1, 1, 2, 2, 3, 3, 4]
 [0, 1, 2, 1, 1, 2, 2, 3, 3, 4]
 [0, 1, 2, 3, 1, 2, 2, 3, 3, 4]
 [0, 1, 2, 3, 4, 2, 2, 3, 3, 4]
 
-My terminating idx is : 5
+#My terminating idx is : 5 
+#(Since I only need [0,1,2,3,4] : when k = 5, it's our cut-off)
 [0, 1, 2, 3, 4, 2, 2, 3, 3, 4]
 
 ```
@@ -43,14 +47,16 @@ Note: This algo will fail if the list is sorted non-increasingly
 class Solution:
     def removeDuplicates(self, nums: List[int]) -> int:
         
-        # Initialize two pointers.
-        ptr1 = 0  # Slow pointer
-        for ptr2 in range(1, len(nums)):  # Fast pointer
-            if nums[ptr2-1] != nums[ptr2]: # Increment i only if a new unique element is found.
-            # else keep looping
-                ptr1 += 1
+        # Initialize two pointers: slow + fast
+        ptr1 = 0  # Slow pointer (starts at idx 0)
+        for ptr2 in range(1, len(nums)):  # Fast pointer (starts at idx 1)
+            if nums[ptr2-1] != nums[ptr2]: # Increment slow pointer only if a NEW UNIQUE ELEMENT is found. (Always checks adjacent elements)
+            # else, do nothing but keep looping
+                ptr1 += 1 # Increment slow pointer
                 # Move the unique element next to the last unique element found.
-                nums[ptr1] = nums[ptr2]
+                nums[ptr1] = nums[ptr2] # replace 
+
+        # Take-away: Slow pointer always points to the latest unique element
         
         # Return the length of the array consisting of unique elements only.
         # Since i is an index, add 1 to represent the count.
@@ -58,7 +64,7 @@ class Solution:
         
 
 ```
-2. Easy - Remove elements From Array given val<a href=https://leetcode.com/problems/remove-element>(Q.27) </a>
+2. Easy - Remove elements From Array given val <a href=https://leetcode.com/problems/remove-element> (Q.27) </a>
 - original input: `[0,1,2,2,3,0,4,2]`
 - val: `2`  
 - excepted output: `[0,1,3,0,4]`
