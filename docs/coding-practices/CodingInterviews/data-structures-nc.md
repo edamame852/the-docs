@@ -136,9 +136,33 @@ O(n): Inserting/ popping the middle
 ## Stacks
 
 - Actually, dynamic arrays satisfies the condition of a stack
+- They commonly has 3 different operations: pop, push, peek (All O(1) operations)
 
-### Push O(1)
+### High level overview:
+- push 1, push 2, push 3, pop 3, pop 2, pop 1
+- Last element pushed = first one popped
+- AKA: Last In First Out (LIFO)
+    - Use case: Reverse a sequence
 
-### Pop O(1)
+### Coding Question: Valid Parentheses
 
-### Peek/Top O(1)
+Given string s, check whether the open bracket is closed accordingly (same type and same order), return true is yes, false if no
+
+O(n) solution
+
+```python
+
+stack = [] # List is a stack
+HashMap = { ")" : "(", "]" : "[", "}" : "{" }
+
+for char in s:
+    if char in HashMap: # If it's a closing bracket
+        if stack and stack[-1] == HashMap[char]: # Make sure stack is NON-empty (cannot add closing bracket to an empty stack) + value at top of stack is matching OPENING bracket
+            stack.pop()
+        else:
+            return False # if stack is empty / not matching set of bracket
+    else:
+        stack.append(char) # Append as much as the opening bracket as u want
+
+
+```
