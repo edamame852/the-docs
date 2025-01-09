@@ -128,3 +128,17 @@ Creating new array: O(n) operation, n is the size of mem allocated. Old elements
 
 We don't care about constants in Big-O representation, after the intersection point it's always going to be under the heavier operation. Ergo the expensive operation, which CPU is designed to solve
 {:.note }
+
+To Recap: O(1) read/write i-element, pop/ append at the end
+O(n): Inserting/ popping the middle
+{:.note }
+
+## Stacks
+
+- Actually, dynamic arrays satisfies the condition of a stack
+
+### Push O(1)
+
+### Pop O(1)
+
+### Peek/Top O(1)
