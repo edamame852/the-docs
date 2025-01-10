@@ -163,6 +163,21 @@ for char in s:
             return False # if stack is empty / not matching set of bracket
     else: # For opening brackets
         stack.append(char) # Append as much as the opening bracket as u want
-
-
 ```
+
+## Linked Lists
+
+### Basics
+- Linked lists is made up of 1 thing: List node (or node)
+- This node object encapsulates 2 ideas:
+    - value (i.e. int, char, another object)
+    - next (a pointer) (i.e. the next list node in the linked list)
+        - if next = `null` then the node has no next node
+
+- Example : Linked list in action, storing in memory
+    - 1. Created 3 nodes, red, blue, green (i.e. ListNode1, ListNode2, ListNode3)
+    - 2. Connect them by pointers
+    - 3. Set ListNode1.next = ListNode2
+    - When we talk about pointers = references to object
+    - 4. Note they are stored randomly in memory (the 3 colors)
+    - 5. 
