@@ -161,7 +161,7 @@ for char in s:
             stack.pop()
         else:
             return False # if stack is empty / not matching set of bracket
-    else:
+    else: # For opening brackets
         stack.append(char) # Append as much as the opening bracket as u want
 
 
