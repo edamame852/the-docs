@@ -175,9 +175,9 @@ for char in s:
         - if next = `null` then the node has no next node
 
 - Example : Linked list in action, storing in memory
-    - 1. Created 3 nodes, red, blue, green (i.e. ListNode1, ListNode2, ListNode3)
-    - 2. Connect them by pointers
-    - 3. Set ListNode1.next = ListNode2
+    - Step 1: Created 3 nodes, red, blue, green (i.e. ListNode1, ListNode2, ListNode3)
+    - Step 2: Connect them by pointers
+    - Step 3: Set ListNode1.next = ListNode2
     - When we talk about pointers = references to object
-    - 4. Note they are stored randomly in memory (the 3 colors)
-    - 5. 
+    - Step 4: Note they are stored randomly in memory (the 3 colors)
+    - Step 5:  
