@@ -1,7 +1,6 @@
 title: AZ-204 quiz - Topic 1 (37 Questions)
 randomized: false
 questions:
-
     - type: "multiple-choice"
       question: "Q1 (Topic 1): <br/>
       There's 2 Hyper-V VMs: Host1 and Host2. <br/>
