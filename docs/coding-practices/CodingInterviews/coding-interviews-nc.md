@@ -92,28 +92,31 @@ class Solution:
         return L_idx
 ```
 
-## Question from companies
+## Question from Citadel
 
 1. Find Maximum sub-array
 
 Answer: using Kadane's algorithim
 
 ```python
+# Step 1 : Define 2 input params
 def max_sub_array(arr:list, target:int):
-    max_sum = float('-inf')
-    current_sum, start, end, temp = 0,0,0,0
+    # Step 1: Initialize 5 base cases 
+    max_sum = float('-inf') # Negative inifinity so all future sums will be larger!
+    current_sum, start, end, pointer = 0,0,0,0
 
+    # Step 2: Setup for-loop, iterate through arr
     for i in range(len(arr)):
         current_sum += arr[i]
 
         if max_sum < current_sum: # What we want
             max_sum = current_sum
-            start = temp
+            start = pointer
             end = i
         
-        if current_sum <= 0: # resets
+        if current_sum <= 0: # resets when sub-array is less than or equal to 0
             current_sum = 0
-            temp = i+1 # increment next var
+            pointer = i+1 # increment next var
         
     if max_sum > target:
         return arr[start:end+1]
