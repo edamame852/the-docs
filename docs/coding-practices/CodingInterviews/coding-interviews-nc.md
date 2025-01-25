@@ -91,3 +91,40 @@ class Solution:
                 L_idx += 1
         return L_idx
 ```
+
+## Question from companies
+
+1. Find Maximum sub-array
+
+Answer: using Kadane's algorithim
+
+```python
+def max_sub_array(arr:list, target:int):
+    max_sum = float('-inf')
+    current_sum, start, end, temp = 0,0,0,0
+
+    for i in range(len(arr)):
+        current_sum += arr[i]
+
+        if max_sum < current_sum: # What we want
+            max_sum = current_sum
+            start = temp
+            end = i
+        
+        if current_sum <= 0: # resets
+            current_sum = 0
+            temp = i+1 # increment next var
+        
+    if max_sum > target:
+        return arr[start:end+1]
+    
+    else:
+        return []
+
+```
+
+2. Greping from txt file
+
+```bash
+cat data.txt | grep 'dir=buy' | awk -F ';' '{split($1,a,"T"); qty[a[1]]+=$4;} END{for (i in qty) print i, qty[i]}'
+```
