@@ -20,10 +20,10 @@ grand_parent: japanese
 ## [Youtube Vid reference](https://www.youtube.com/watch?v=lNf3EOyiTGI)
 
 ## Specific to one topic
-- Not speicifc : を
+- Not specific : を
 - Specific :が
-- e.g. 音楽を聞きたい
-- e.g. ベートーベンが聞きたい
+- e.g. 音楽を聞きたい (General: Music)
+- e.g. ベートーベンが聞きたい (Non-general: Beahothan Music)
 
 ## For Contrasting/ Stressing = Use が
 - e.g. 肉じゃなくて、魚が食べたい
@@ -56,3 +56,16 @@ using が is okay, since the stress is on the verb/ action
 ## を = used as 通過点
 - e.g. いつか空を飛びたい
 - e.g. いつか空が飛びたい❌不自然
+
+# 2. 「は」VS.「が」的差別 (10 ways of telling which is which)
+
+## [Youtube Vid reference](https://www.youtube.com/watch?v=8bezFH30na4)
+
+## 新資訊 VS. 舊資訊 (New info vs Old info)
+- New information: が **New**
+- Old information: は **Old**
+- e.g. 
+
+## 重點的位置 (The most vital info)
+- 重點 + が + ... ()
+- は + 重點 + ... ()
