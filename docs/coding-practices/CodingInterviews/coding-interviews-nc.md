@@ -102,7 +102,7 @@ Answer: using Kadane's algorithim
 # Step 1 : Define 2 input params
 def max_sub_array(arr:list, target:int):
     # Step 1: Initialize 5 base cases 
-    max_sum = float('-inf') # Negative inifinity so all future sums will be larger!
+    max_sum = float('-inf') # Negative inifinity so all future sums will be larger! 
     current_sum, start, end, pointer = 0,0,0,0
 
     # Step 2: Setup for-loop, iterate through arr
@@ -126,8 +126,61 @@ def max_sub_array(arr:list, target:int):
 
 ```
 
-2. Greping from txt file
+2. Greping from txt file with lines of input (e.g. ... )
+
+Question: Given a 
 
 ```bash
 cat data.txt | grep 'dir=buy' | awk -F ';' '{split($1,a,"T"); qty[a[1]]+=$4;} END{for (i in qty) print i, qty[i]}'
 ```
+
+3. Anagram of strings
+Question: Write a function that takes in 2 strings (s1 and s2). Returns true if they are anagrams, else false.
+Hint: Anagrams are words/phrase that are rearranged from original letters exactly ONCE (i.e. tame vs mate)
+
+Solution 1: Simplest Approach
+
+```python
+def is_anagram(s1:str, s2:str) -> bool:
+    return sorted(s1) == sorted(s2)
+
+#Test Cases:
+print(is_anagram("listen","silent") == True)
+print(is_anagram("triangle","integral") == True) 
+print(is_anagram("apple","pale") == False) 
+```
+
+Solution 2: Solve with Hash Map (first add then deduct)
+
+```python
+def is_anagram(s1:str, s2:str) -> bool:
+    if len(s1) != len(s2):
+        return False
+
+    # Count characters in s1
+    for char in s1:
+        if char in char_count:
+            char_count[char] += 1
+        else:
+            char_count[char] = 1
+
+    # Subtract the count for each character in s2
+    for char in s2:
+        if char in char_count:
+            char_count[char] -= 1
+            if char_count[char] == 0:
+                del char_count[char]
+        else:
+            return False
+
+    # If the dictionary is empty, the strings are anagrams
+    return len(char_count) == 0
+
+
+#Test Cases:
+print(is_anagram("listen","silent") == True)
+print(is_anagram("triangle","integral") == True) 
+print(is_anagram("apple","pale") == False) 
+```
+
+3. Anagram min swap
