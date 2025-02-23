@@ -184,3 +184,34 @@ print(is_anagram("apple","pale") == False)
 ```
 
 3. Anagram min swap
+Question: Write a function with 2 input strings, return the min number of char position swap required from s2 to become s1
+
+```python
+
+def anagram_min_swap(s1:str, s2:str) -> bool:
+    if len(s1) != len(s2):
+        raise SyntaxError
+
+    s1 = list(s1)
+    s2 = list(s2)
+    swaps = 0
+
+    for i in range(len(s1)):
+        if s1[i] != s2[i]:
+            # Find the index in s2 where s1[i] is located
+            j = i
+            while j < len(s2) and s2[j] != s1[i]:
+                j += 1
+
+            # Swap characters in s2 to match s1[i]
+            while j > i:
+                s2[j], s2[j - 1] = s2[j - 1], s2[j]
+                swaps += 1
+                j -= 1
+
+    return swaps
+
+print(anagram_min_swap("listen","silent")==3)
+print(anagram_min_swap("triangle","integral")==5)
+
+```
