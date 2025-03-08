@@ -151,6 +151,12 @@ High level idea:
 - ending 1: try -> except -> finally
 - ending 2: try -> else -> finally
 
+# Python methods()
+
+## .sort() vs sorted()
+- `sorted(my_list)`: creates new list, can be use on any objects
+- `my_list.sort()`: in-place modifying original list, can only be use on list
+
 # Recursion in Python
 
 ## Mutiplication (but recursion)

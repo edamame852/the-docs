@@ -161,6 +161,21 @@ commands=
 
 ```
 
+# Refactoring Python Structures
+
+High level file structure
+```
+pyproject.toml
+tox.ini
+main.py
+src/ ------
+         |
+         ------
+test/ ------
+         |
+         ------
+```
+
 # Python tips 
 
 ## Finding prime numbers in a list (slow vs quick) [@b001](https://www.youtube.com/shorts/g9fIWtSexLs)

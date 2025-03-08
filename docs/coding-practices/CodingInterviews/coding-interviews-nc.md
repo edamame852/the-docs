@@ -134,6 +134,7 @@ Question: Given a
 cat data.txt | grep 'dir=buy' | awk -F ';' '{split($1,a,"T"); qty[a[1]]+=$4;} END{for (i in qty) print i, qty[i]}'
 ```
 
+
 3. Anagram of strings
 Question: Write a function that takes in 2 strings (s1 and s2). Returns true if they are anagrams, else false.
 Hint: Anagrams are words/phrase that are rearranged from original letters exactly ONCE (i.e. tame vs mate)
