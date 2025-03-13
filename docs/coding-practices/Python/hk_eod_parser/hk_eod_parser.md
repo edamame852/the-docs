@@ -18,5 +18,6 @@ grand_parent: Coding Practices
 1. `__main__.py`
 
 ```python
+import argparse
 
 ```
