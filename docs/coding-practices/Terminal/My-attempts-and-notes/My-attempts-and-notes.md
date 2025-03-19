@@ -1,5 +1,5 @@
 ---
-title: My attempts and notes
+title: crontab and ubuntu
 layout: default
 parent: Terminal 
 grand_parent: Coding Practices
