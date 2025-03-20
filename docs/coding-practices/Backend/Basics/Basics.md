@@ -12,6 +12,7 @@ grand_parent: Coding Practices
 {:toc}
 
 ---
+# Basics
 
 # 1. Multithreading in Java
 - allowing concurrent sub-program to run, each sub program is a thread
