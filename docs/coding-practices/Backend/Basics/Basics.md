@@ -21,9 +21,67 @@ grand_parent: Coding Practices
 - Java is platform independent (can be compiled & executed on dif platforms)
 
 ### 2 different Java data types
-- Primitive Type: 
-- Reference Type: 
+- Primitive Type = int, long, byte, short, floating-point value (float & double), logical values = booleans, chars
+- Reference Type = reference to object/ reference to values (e.g. arrays)
+	- Good example of reference type = String
 
+```java
+String myString = new String ('Hello World')
+// Instance of the class will create the object and it contains a set of chars called Hello World
+
+```
+
+### Declaring variables 
+Must do 2 things: Declare `type` & `name` (aka `identifier`)
+
+Terminologies:
+- Declaration = setting up variable without values
+- Assignment/ initialing = assigning values to variables 
+
+```java
+int a; // defaults to 0 for int
+double b; // defaults to 0.0 for double
+```
+
+You can also init variables during declaration.
+```java
+double c = 100.69; 
+/*
+identifier here is "c"
+with value of "100.69"
+of type "double"
+*/
+```
+
+### Semi-colon Syntax
+- To terminate a statement `;`
+
+### Valid identifier in Java
+- Could only contain alphanumerical, underscore and dollar-sign and infinitely long !
+- Must start with letter, underscore, dollar sign
+- Cannot be reserved keywords nor `true`, `false`, `null` values
+- Java keywords = reserved words in Java (These cannot be used as identifiers)
+	- `public`
+	- `static`
+	- `class`
+	- `main`
+
+
+### chars vs string
+- chars is single-quote ``IamAChar`` or `c`
+- strings are double quotes `"IamAString"`
+
+### Arrays in Java
+To instantiate an array in java `type[] identifier = new type[length]`. type here can be both reference/ primitive
+
+```java
+
+int[] myArray = new int[69];
+myArray[0] = "a"
+myArray[1] = "b"
+
+int lengthOfMyArray = myArray.length; // Calling .length method
+```
 
 
 # 1. Multithreading in Java
