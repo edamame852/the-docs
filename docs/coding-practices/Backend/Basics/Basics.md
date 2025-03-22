@@ -12,7 +12,19 @@ grand_parent: Coding Practices
 {:toc}
 
 ---
-# Basics
+# Basics - Get Started with Java
+
+## Java basic syntax
+
+### Background
+- Java is statically typed, oop language
+- Java is platform independent (can be compiled & executed on dif platforms)
+
+### 2 different Java data types
+- Primitive Type: 
+- Reference Type: 
+
+
 
 # 1. Multithreading in Java
 - allowing concurrent sub-program to run, each sub program is a thread
