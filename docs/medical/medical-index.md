@@ -16,21 +16,24 @@ permalink: /docs/medical
 5. Hiso Technician: For cutting sample (to embed into wax blob and stain, + alcohol)
 6. Cyto technician: Junior won't see, read easy pap smears
 7. Slide: under the microscope
-.
+8. 
+
 # Cyto. vs Hiso.
 - Histo. is more tissue arch, blob -> cut; Cyto. is more burst of cells (ie. blood drawn)
 
 # Case 1: Well def stomach cancer, high grade dysplasia -> nothing
 
-# Case 2: Infarction (=blockage) on placenta - purple Ca2+ patch, 6cm large tumor but only took 1 block.
+# Case 2: Infarction (=blockage) on placenta - purple Ca2+ patch, 6cm large tumor but only took 1 block (of sample).
 
 # Indian Ink vs Marker
 Indian ink (blue af) - pre-dissect
 Marker - pos-dissect
 
 # Paraffin section vs frozen section
-Frozen - lost of detail but quick af. N2 (l), happens when patient is open on the table (intra-operative decision)
-Paraffin (wax) not oil - 
+Frozen - lost of detail but quick af. N2(l), happens when patient is open on the table (intra-operative decision)
+Paraffin (wax) not oil - More long term solution
+
+# 
 
 # Current colleague
 1. Josh - HKU Med, 1st deg - Bio, volunteered to help type Path. report
@@ -47,7 +50,7 @@ Paraffin (wax) not oil -
 12. Alice - New comer, worked in Tuen Mun Pedi 2 year, not very social with the group. Vaso-vagoed during dissection
 13. Angela - +7-8 than Joanne, Was pregnant, 0.5 < kid year old < 1, was anesthesia
 14. Irene - did frozen section, was studying in Macau, now exchange in HK. 
-15. Lak Marie - came to HK Oct-Nov 2024 
+15. Lak Mari - Sri Lankan, came to HK Oct-Nov 2024 
 
 
 
