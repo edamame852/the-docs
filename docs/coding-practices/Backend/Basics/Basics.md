@@ -65,6 +65,8 @@ of type "double"
 	- `static`
 	- `class`
 	- `main`
+	- `new`
+	- `instanceof`
 
 
 ### chars vs string
@@ -83,6 +85,13 @@ myArray[1] = "b"
 int lengthOfMyArray = myArray.length; // Calling .length method
 ```
 
+### Java Operators
+- Assignment Operator `=`
+- Arithmetic Operators `+` `-` `*` `/` `%`
+- Logical operators `||` `&&` `!` (e.g. `if ( a%2 != 0 || a&2 == 0)`)
+- Comparison Operators 
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
 
 # 1. Multithreading in Java
 - allowing concurrent sub-program to run, each sub program is a thread
