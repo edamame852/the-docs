@@ -129,6 +129,35 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 
+[tool.poetry.group.format]
+optional = true
+
+[tool.poetry.group.format.dependencies]
+black = "^24.3.0"
+pyproject-flake8 = "^6.1"
+
+[tool.black]
+line-length = 160
+target-version = ["py39"]
+
+[tool.flake8]
+max-line-length = 16000
+extend-ignore = ["E203"]
+exclude = [".venv*/",".tox/"]
+
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.group.test.dependencies]
+psutil = "^5.9.7"
+pytest = "^8.0.0"
+pydantic = "^2.6.4"
+pydantic-settings = "^2.2.1"
+
+[tool.poetry-dynamic-versioning]
+enable = true
+pattern = "default-unprefixed"
+
 
 ```
 
@@ -168,6 +197,49 @@ def create_logger(default_district_log_starter:str, log_custom_name:str,log_cust
           logger.setLevel(logging.ERROR)
      
      return logger
+
+```
+
+7. upload.json
+
+```json
+
+{
+     "files" : [
+          {
+               "pattern":"dist/hk_eod_parser-(*).tar.gz",
+               "target": "pypi-releases-redist-xxxxxxxx-1234-5678-91011-09xxxxxx/hk_eod_parser/{1}/"
+
+          },
+          {
+               "pattern":"dist/hk_eod_parser-(*)-*-*-*.whl" ,
+               "target": "pypi-releases-redist-xxxxxxxx-1234-5678-91011-09xxxxxx/hk_eod_parser/{1}/"
+          }
+     ]
+}
+
+```
+
+8. Jenkinsfile.asia
+
+```groovy
+#!/usr/bin/env groovy
+
+@Library('jenkins-libs') _
+
+pipline{
+     agent{}
+     options{}
+     stages{
+          stage("Checkout"){
+               steps{
+                    script{
+                         utils.checkout_project()
+                    }
+               }
+          }
+     }
+}
 
 
 ```
