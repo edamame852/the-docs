@@ -25,6 +25,15 @@ permalink: /docs/medical
 
 # Case 2: Infarction (=blockage) on placenta - purple Ca2+ patch, 6cm large tumor but only took 1 block (of sample).
 
+# Case 3: Plasma Cell = B lymphocyte final cell differential
+## Found in Endometrium (internal uterine lining), limited significance for blocking pregnancy
+= Chronic endometriosis
+## Prescribe anti-inflammatory medication
+
+# Case 4: 
+
+
+
 # Indian Ink vs Marker
 Indian ink (blue af) - pre-dissect
 Marker - pos-dissect
@@ -51,6 +60,7 @@ Paraffin (wax) not oil - More long term solution
 13. Angela - +7-8 than Joanne, Was pregnant, 0.5 < kid year old < 1, was anesthesia
 14. Irene - did frozen section, was studying in Macau, now exchange in HK. 
 15. Lak Mari - Sri Lankan, came to HK Oct-Nov 2024 
+16. Dr.Yu - over 60, work until May 2025, current p.t.
 
 
 
