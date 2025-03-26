@@ -22,7 +22,84 @@ has_children: true
 8. .gitignore
 9. .groovylintrc.json
 10. Jenkinsfile.asia
+
+```groovy
+#!/usr/bin/env groovy
+
+@Library('jenkins-libs') _
+
+project_name = utils.get_project_name()
+
+void check_format() {
+     utils.with_jfrog_credentials{
+          sh("tox run -c ${project_name} -e check_format ")
+     }
+}
+
+pipeline {
+     agent {node {label 'dev07'}}
+
+     options {
+          buildDiscarder(logRotator(numToKeepStr: '20'))
+          skipDefaultCheckout()
+          ansiColor('xterm')
+          timestamps()
+     }
+
+     stages {
+          stage("Checkout") {
+               steps {
+                    script {
+                         utils.checkout_project()
+                    }
+               }
+          }
+          stage("Style") {
+               steps {
+                    check_format()
+               }
+          }
+     }
+}
+
+```
+
 11. Jenkinsfile.admin
+```groovy
+#!/usr/bin/env groovy
+
+@Library('jenkins-libs') _
+
+project_name = utils.get_project_name()
+
+void run_tox(String name, String parameters='') {
+     utils.with_jfrog_credentials{
+          utils.with_vault_credentials('terraform') {
+               utils.with_jfrog_credentials {
+                    sh("""tox run -c ${project_name} -re ${name} ${(parameters ? "-- $parameters" : '')}""")
+               }
+          }
+     }
+}
+
+void reconnect() {
+     withCredentials ([usernamePassword(
+          credentialsId: 'jenkins-admin-account',
+          usernameVariable: 'JENKINS_USERNAME',
+          passwordVariable: 'JENKINS_PASSWORD'
+     )]) {
+          sh("""tox run -c ${project_name} -re reconnect """)
+     }
+}
+
+
+pipeline {
+     agent {node {label 'dev07'}}
+
+}
+
+```
+
 12. README.md
 13. pyproject.toml
 14. requirements-jfrog.txt
@@ -139,7 +216,7 @@ commands =
      reconnect_build_agents {posargs}
 ```
 
-19. with_secrets.py
+# 19. with_secrets.py
 
 ```python
 #!/usr/bin/env python3
@@ -170,6 +247,55 @@ class VaultClient:
      def __exit__(self, exc_type, exc_value, traceback):
           self.logout()
 
+     def login(self):
+          role_id = self.unwrap("WRAPPED_ROLE_ID_TOKEN", "role_id")
+          if role_id:
+               secret_id = self.unwrap("WRAPPED_SECRET_ID_TOKEN", "secret_id")
+               if secret_id:
+                    self.client.auth.approle.login(role_id=role_id, secret_id=secret_id)
+                    return
+          self.user_login()
+     
+     def user_login(self):
+          token = os.getenv("VAULT_TOKEN")
+          username=os.getenv("USERNAME")
+          password=os.getenv("PASSWORD")
 
+          if token:
+               self.client.token = token
+          elif username and password:
+               self.client.auth.ldap.login(username=username, password=password)
+     
+     def logout(self):
+          if self.client_is_authenticated():
+               self.client.logout()
+          
+     def unwrap(self,token_name,key):
+          token = os.getenv(token_name)
+     
+          if not token:
+               print(f"Could not get token name's value {token_name} as an env variable")
+               return None
+          try:
+               self.client.token = token
+               unwrap_response = self.client.sys.unwrap()
+               return unwrap_response["data"][key]
+          except hvac.exceptions.Forbidden:
+               print(f"Could not get {key} from {token_name} env variables")
+               return None
+          
+     def get_secrets(self, keys):
+          all_secrets = {}
+          if self.client.is_authenticated():
+               for key in keys.split(",")
+                    secrets = self.client.secrets.kv.read_secret_version(path=key, mount_point="kv", raise_on_deleted_version=True)["data"]["data"]
+          return all_secrets
+     
+
+with ValutClient() as client:
+     secrets = client.get_secrets(sys.argv[1]) #2nd param = keys
+env = os.environ.copy()
+env.update(secrets)
+subprocess.run(sys.argv[2:], check=True, env=env)
 
 ```
