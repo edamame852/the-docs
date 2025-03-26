@@ -11,8 +11,8 @@ permalink: /docs/medical
 3. Whisk away: Shaun people away
 4. H&E : H stain (hematoxylin for nucleus, bluish-purple) + E stain (Eosin red ish for everything else)
 5. ZN dye: Ziehl-Neelsen, needs heat-fix by Bunsen burner, ZN is good for cells with high lipid on cell wall (i.e.waxy)
-    - acid -> nonacid-fast cell, turns methylene blue/malachite green = decoloration by Carbol Fuchsin!
-    - acid -> acid-fast cells =  resist decoloration by acids (i.e. acid fast = acid holding = acid resistant)
+    - acid -> nonacid-fast cell, turns methylene blue/malachite green = de-coloration by Carbol Fuchsin!
+    - acid -> acid-fast cells =  resist de-coloration by acids (i.e. acid fast = acid holding = acid resistant)
 5. Hiso Technician: For cutting sample (to embed into wax blob and stain, + alcohol)
 6. Cyto technician: Junior won't see, read easy pap smears
 7. Slide: under the microscope
@@ -33,7 +33,6 @@ permalink: /docs/medical
 # Case 4: 
 
 
-
 # Indian Ink vs Marker
 Indian ink (blue af) - pre-dissect
 Marker - pos-dissect
@@ -41,8 +40,6 @@ Marker - pos-dissect
 # Paraffin section vs frozen section
 Frozen - lost of detail but quick af. N2(l), happens when patient is open on the table (intra-operative decision)
 Paraffin (wax) not oil - More long term solution
-
-# 
 
 # Current colleague
 1. Josh - HKU Med, 1st deg - Bio, volunteered to help type Path. report
@@ -56,7 +53,7 @@ Paraffin (wax) not oil - More long term solution
 9. Pensi - senior d person, in same room. Most yo, eat with mico-bi. Just finished spec exam
 10. Justin T - Josh's roommate, 29 years old (2 years above J.)
 11. Hannah - QM anthro transferred here
-12. Alice - New comer, worked in Tuen Mun Pedi 2 year, not very social with the group. Vaso-vagoed during dissection
+12. Alice - New comer, worked in Tuen Mun Pedi 2 yrs, not very social with the group. Vaso-vagoed during dissection
 13. Angela - +7-8 than Joanne, Was pregnant, 0.5 < kid year old < 1, was anesthesia
 14. Irene - did frozen section, was studying in Macau, now exchange in HK. 
 15. Lak Mari - Sri Lankan, came to HK Oct-Nov 2024 

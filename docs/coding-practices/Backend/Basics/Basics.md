@@ -92,6 +92,8 @@ int lengthOfMyArray = myArray.length; // Calling .length method
 - Comparison Operators 
 
 -------------------------------------------------------------------------------------------------------------------------------------------------
+# 0. Java 8 to Java 17 Migration (reference [link](https://www.baeldung.com/java-migrate-8-to-17))
+
 
 # 1. Multithreading in Java
 - allowing concurrent sub-program to run, each sub program is a thread
@@ -226,3 +228,4 @@ interface Animal {
 2. JDBC Driver manager: loading drivers for DB connection
 3. JDBC Test Suite: Testing JDBC driver CRUD operations
 4. JDBC-ODBC Bridge Drivers: Turning JDBC method call -> ODBC Function call (aka connect DB drivers to DB)
+
