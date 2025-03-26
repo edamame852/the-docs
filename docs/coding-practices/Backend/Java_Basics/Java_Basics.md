@@ -1,5 +1,5 @@
 ---
-title: Basics
+title: Java-Basics
 layout: default
 parent: Backend 
 grand_parent: Coding Practices
