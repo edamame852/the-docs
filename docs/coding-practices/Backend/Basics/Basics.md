@@ -93,6 +93,9 @@ int lengthOfMyArray = myArray.length; // Calling .length method
 
 -------------------------------------------------------------------------------------------------------------------------------------------------
 # 0. Java 8 to Java 17 Migration (reference [link](https://www.baeldung.com/java-migrate-8-to-17))
+- 1. Springboot version upgrade 2.x.x into 3.x.x
+- 2. String Objects decommission use of char[] and use byte[] for better memory performance
+- 3. 
 
 
 # 1. Multithreading in Java
