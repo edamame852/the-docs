@@ -72,6 +72,104 @@ passenv = NETRC
 deps =
      black[jupyter]
      isort[colors]
+commands = 
+     format: black . {posargs}
+     format: isort . {posargs}
+     check_format: black --check --diff --color . {posargs}
+     check_format: isort --check-only --diff --color . {posargs}
 
+[testenv:dev-{ame,asi,eur}, tst-{asi}, far-{asi}, pyinfra, lcl]
+deps = -r {tox_root}/requirements-pyinfra.txt
+changedir = pyinfra
+setenv=
+     PYINFRA_PROGRESS=off
+pass_env = SSH*
+          USER
+          NETRC
+          WRAPPED_ROLE_ID_TOKEN
+          VAULT_TOKEN
+          USERNAME
+          PASSSWORD
+          GIT_USERNAME
+          GIT_PASSWORD
+          JFROG_USER
+          JFROG_PASSWORD
+          JFROG_SERVER_ID
+allowlist_externals = 
+     ../with_secrets.py
+commands = 
+     pyinfra --version
+     dev-ame: ../with_secrets.py cloudplatform,s3,jfrog-dsp pyinfra -y inventories/dev.py dev_servers.py --limit dev_ame {posargs}
+     dev-asi: ../with_secrets.py cloudplatform,s3,jfrog-dsp pyinfra -y inventories/dev.py dev_servers.py --limit dev_asi {posargs}
+     dev-eur: ../with_secrets.py cloudplatform,s3,jfrog-dsp pyinfra -y inventories/dev.py dev_servers.py --limit dev_eur {posargs}
+     tst-asi: ../with_secrets.py cloudplatform,s3,jfrog-dsp pyinfra -y inventories/tst.py dev_servers.py --limit tst_asi {posargs}
+     far-asi: ../with_secrets.py cloudplatform,s3,jfrog-dsp pyinfra -y inventories/far.py dev_servers.py --limit far_asi {posargs}
+     lcl: ../with_secrets.py cloudplatform,s3,jfrog-dsp pyinfra -y inventories/lcl.py {posargs}
+     pyinfra: ../with_secrets.py cloudplatform,s3,jfrog-dsp pyinfra -y {posargs}
+
+[testenv:terraform-{init,plan,import,apply,output,destroy,replace}]
+deps = -r {tox_root}/requirements-terraform.txt
+changedir = terraform
+pass_env = SSH*
+          USER
+          NETRC
+          WRAPPED_ROLE_ID_TOKEN
+          VAULT_TOKEN
+          USERNAME
+          PASSSWORD
+allowlist_externals = 
+     ../with_secrets.py
+commands = 
+     terraform-init: ../with_secrets.py cloudplatform,s3 ./terraform_init.sh {posargs}
+     terraform-plan: ../with_secrets.py cloudplatform,s3 ./terraform_plan.sh {posargs}
+     terraform-import: ../with_secrets.py cloudplatform,s3 ./terraform_import.sh {posargs}
+     terraform-apply: ../with_secrets.py cloudplatform,s3 ./terraform_apply.sh {posargs}
+     terraform-output: ../with_secrets.py cloudplatform,s3 ./terraform_output.sh {posargs}
+     terraform-destroy: ../with_secrets.py cloudplatform,s3 ./terraform_destroy.sh {posargs}
+     terraform-replace: ../with_secrets.py cloudplatform,s3 ./replace_all_dev_servers.sh {posargs}
+
+[testenv:reconnect]
+deps = -r {tox_root}/requirements-reconnect.txt
+setenv=
+     SSL_CERT_FILE=/etc/pki/tls/certs/ca-bundle.crt
+passenv = 
+     JENKINS_USERNAME
+     JENKINS_PASSWORD
+commands = 
+     reconnect_build_agents {posargs}
 ```
 
+19. with_secrets.py
+
+```python
+#!/usr/bin/env python3
+
+import os
+import subprocess
+import sys
+
+import hvac 
+
+# Useful links
+'''
+https://www.hasi
+'''
+
+class VaultClient:
+     def __init__(self):
+          self.client = hvac.Client (
+          url = os.getenv("VAULT_ADDR","https://vault.cloud.company/"),
+          namespace=os.getenv("VAULT_NAMESPACE","myVault/ABC_TRIGRAM_5153_DEV_platform/"),
+          verify="/etc/pki/tls/certs/ca-bundle.crt",
+     )
+
+     def __enter__(self):
+          self.login()
+          return self
+
+     def __exit__(self, exc_type, exc_value, traceback):
+          self.logout()
+
+
+
+```
