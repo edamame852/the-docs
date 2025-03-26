@@ -6,7 +6,7 @@ grand_parent: Coding Practices
 has_children: true
 ---
 
-# File structure
+# 0. File structure
 1. .github/
      - workflows/
           - dependabot.yml
@@ -26,7 +26,20 @@ has_children: true
 12. README.md
 13. pyproject.toml
 14. requirements-jfrog.txt
+     - 
+     ```txt
+     hvac==2.3.0
+     ``` 
 15. requirements-pyinfra.txt
+     - 
+     ```txt
+     aiohttp[speedups]==3.11.14
+     black==25.1.0
+     hvac==2.3.0
+     pyinfra==3.2.0
+     packaging==24.2
+     gevent=
+     ```
 16. requirements-reconnect.txt
      - 
      ```txt
@@ -38,5 +51,27 @@ has_children: true
      gevent==24.11.1
      ```
 17. requirements-terraform.txt
+     - 
+     ```txt 
+     hvac==2.3.0
+     ```
 18. tox.ini
 19. with_secrets.py
+
+# 14-17 SKIPPED since it's already written out
+
+# 18. tox.ini
+
+```tox
+
+[tox]
+skipsdist = True
+
+[testenv:{format, check_format}]
+passenv = NETRC
+deps =
+     black[jupyter]
+     isort[colors]
+
+```
+
