@@ -7,25 +7,26 @@ has_children: true
 ---
 
 # 0. File structure
-1. .github/
+# 1. .github/
      - workflows/
           - dependabot.yml
      - CODEOWNERS
      - dependabot.yml
-2. .vscode/
-3. ansible/
-4. corvil/ (lots of conf inside)
-5. jira/
+# 2. .vscode/
+# 3. ansible/
+# 4. corvil/ (lots of conf inside)
+# 5. jira/
      - test.py
-6. pyinfra/
-7. terraform/
-8. .gitignore
+# 6. pyinfra/
+# 7. terraform/
+# 8. .gitignore
+
 ```gitignore
 # Ansible
 *.retry
 ```
 
-9. .groovylintrc.json
+# 9. .groovylintrc.json
 ```json
 {
      "extends" : "recommended",
@@ -45,7 +46,7 @@ has_children: true
 ```
 
 
-10. Jenkinsfile.asia
+# 10. Jenkinsfile.asia
 
 ```groovy
 #!/usr/bin/env groovy
@@ -88,7 +89,7 @@ pipeline {
 
 ```
 
-11. Jenkinsfile.admin
+# 11. Jenkinsfile.admin
 
 ```groovy
 #!/usr/bin/env groovy
@@ -194,14 +195,24 @@ pipeline {
 }
 ```
 
-12. README.md
-13. pyproject.toml
-14. requirements-jfrog.txt
+# 12. README.md
+
+```markdown
+
+```
+
+# 13. pyproject.toml
+
+```toml
+
+```
+
+# 14. requirements-jfrog.txt
      - 
      ```txt
      hvac==2.3.0
      ``` 
-15. requirements-pyinfra.txt
+# 15. requirements-pyinfra.txt
      - 
      ```txt
      aiohttp[speedups]==3.11.14
@@ -211,7 +222,7 @@ pipeline {
      packaging==24.2
      gevent=
      ```
-16. requirements-reconnect.txt
+# 16. requirements-reconnect.txt
      - 
      ```txt
      aiohttp[speedups]==3.11.14
@@ -221,13 +232,11 @@ pipeline {
      packaging==24.2
      gevent==24.11.1
      ```
-17. requirements-terraform.txt
+# 17. requirements-terraform.txt
      - 
      ```txt 
      hvac==2.3.0
      ```
-18. tox.ini
-19. with_secrets.py
 
 # 14-17 SKIPPED since it's already written out
 
