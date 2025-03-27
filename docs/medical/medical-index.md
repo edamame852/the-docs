@@ -19,7 +19,8 @@ permalink: /docs/medical
 8. 
 
 # Cyto. vs Hiso.
-- Histo. is more tissue arch, blob -> cut; Cyto. is more burst of cells (ie. blood drawn)
+- Histo. is more tissue arch, blob -> cut
+- Cyto. is more burst of cells (ie. blood drawn)
 
 # Case 1: Well def stomach cancer, high grade dysplasia -> nothing
 
@@ -30,19 +31,28 @@ permalink: /docs/medical
 = Chronic endometriosis
 ## Prescribe anti-inflammatory medication
 
-# Case 4: 
+# Case 4: Trisomy 18
+- shit cardiovascular system
+- baby of 14 weeks (Gestation) (non-still born since not 22/24 weeks old = age of viability)
+- Usually refer to : Dead B
+- Heart need prof to see, mid May fam back for visit
+
+# Whole dissection
+Sample arrive -> Paraffin -> formalin fixing -> cut by MO -> get piece -> color outer later in Indian ink (outer layer) -> place into 3*2*0.5 cassette -> technician work (machine process, gap into wax/paraffin block, trim down, dip H&E stain, add cover slip) -> see cancer -> marker mark 
 
 
 # Indian Ink vs Marker
-Indian ink (blue af) - pre-dissect
-Marker - pos-dissect
+Indian ink (blue af) (just paint) - pre-dissect
+Permanent Marker - post-dissect
+
 
 # Paraffin section vs frozen section
-Frozen - lost of detail but quick af. N2(l), happens when patient is open on the table (intra-operative decision)
-Paraffin (wax) not oil - More long term solution
+- Frozen - lost of detail but quick af. N2(l), happens when patient is open on the table (intra-operative decision)
+- Paraffin (wax) not oil - More long term solution
+- In the event of mis-frozen section, unfrozen then paraffin sample, the stain resolution will also decrease
 
 # Current colleague
-1. Josh - HKU Med, 1st deg - Bio, volunteered to help type Path. report
+1. Josh - HKU Med, 1st deg - Bio, volunteered to help type Path. report, Added on IG (200 cases that day)
 2. Kevin - from Mainland, PhD (30+), ex-surgeon ~3 years
 3. Gary - dai lo that buys lunch. Mostly in N. hospital
 4. To Ka Fai - senior, prof, grin taunt Joanne, likes coming back Sun

@@ -20,7 +20,31 @@ has_children: true
 6. pyinfra/
 7. terraform/
 8. .gitignore
+```gitignore
+# Ansible
+*.retry
+```
+
 9. .groovylintrc.json
+```json
+{
+     "extends" : "recommended",
+     "rules" : {
+          "DuplicateStringLiteral" : {
+               "enabled" : false 
+          },
+          "LineLength": {
+               "enabled" : false
+          },
+          "NestedBlockDepth" : {
+               "enabled" : false
+          }
+     }
+}
+
+```
+
+
 10. Jenkinsfile.asia
 
 ```groovy
@@ -65,6 +89,7 @@ pipeline {
 ```
 
 11. Jenkinsfile.admin
+
 ```groovy
 #!/usr/bin/env groovy
 
@@ -96,8 +121,77 @@ void reconnect() {
 pipeline {
      agent {node {label 'dev07'}}
 
-}
+     options {
+          buildDiscarder(logRotator(numToKeepStr: '20'))
+          skipDefaultCheckout()
+          disableConcurrentBuild(abortPrevious: false)
+          ansiColor('xterm')
+          timestamps()
+     }
 
+     parameters {
+          booleanParam(name: 'TerraformApply', defaultValue: false, description: 'Apply terraform state and possible recreation of infra.')
+     }
+
+     triggers {
+          cron('TZ=Asia/Hong_Kong\nH H(0-1) * * 1')
+     }
+
+
+     stages {
+          stage("Checkout") {
+               steps {
+                    script {
+                         utils.checkout_project()
+                    }
+               }
+          }
+          stage ("Init terraform state"){
+               steps {
+                    run_tox('terraform-init', 'applications/dev_servers -reconfigure -upgrade')
+               }
+          }
+
+          stage('creating dev servers') {
+               when {
+                    anyOf{
+                         triggeredBy 'TimerTrigger'
+                         expression {return params.TerraformApply}
+                    }
+               }
+               steps {
+                    retry(3){
+                         run_tox('terraform-apply', 'applications/dev_servers')
+                    }
+                    reconnect()
+               }
+          }
+
+          stage("Install tools") {
+               failFast false
+               parallel {
+                    stage('dev-ame') {
+                         steps {run_tox('dev-ame')}
+                    }
+                    stage('dev-asi') {
+                         steps {run_tox('dev-asi')}
+                    }
+                    stage('dev-eur') {
+                         steps {run_tox('dev-eur')}
+                    }
+                    stage('tst-asi') {
+                         steps {
+                              warnError('Deployment failed on tst-asi'){
+                                   run_tox('dev-asi')
+                              }
+                         }
+                    }
+                    // I'm not sure why far-asi is omitted here
+               }
+          }
+     }
+
+}
 ```
 
 12. README.md
