@@ -8,11 +8,14 @@ has_children: true
 
 # 0. File structure
 # 1. .github/
-     - workflows/
-          - dependabot.yml
-     - CODEOWNERS
+- workflows/
      - dependabot.yml
+- CODEOWNERS
+- dependabot.yml
+
 # 2. .vscode/
+
+
 # 3. ansible/
 # 4. corvil/ (lots of conf inside)
 # 5. jira/
@@ -21,12 +24,15 @@ has_children: true
 # 7. terraform/
 # 8. .gitignore
 
+- 
 ```gitignore
 # Ansible
 *.retry
 ```
 
 # 9. .groovylintrc.json
+
+- 
 ```json
 {
      "extends" : "recommended",
@@ -48,6 +54,7 @@ has_children: true
 
 # 10. Jenkinsfile.asia
 
+- 
 ```groovy
 #!/usr/bin/env groovy
 
@@ -91,6 +98,7 @@ pipeline {
 
 # 11. Jenkinsfile.admin
 
+- 
 ```groovy
 #!/usr/bin/env groovy
 
@@ -198,40 +206,56 @@ pipeline {
 # 12. README.md
 
 ```markdown
+[![Build Status](https://....world.company/buildStatus/icon?style=flat-square&job=...)](https://.../job/xxx_admin/job/infra)
 
 ```
 
 # 13. pyproject.toml
 
+- 
+
 ```toml
+[tool.black]
+line-length = 200
+target-version = ["py311"]
+preview = true
+
+[tool.flake8]
+max-line-length = 200
+extend-ignore = "E203,"
+
+[tool.isort]
+profile = "black"
 
 ```
 
 # 14. requirements-jfrog.txt
-     - 
-     ```txt
-     hvac==2.3.0
-     ``` 
+- 
+```txt
+hvac==2.3.0
+``` 
 # 15. requirements-pyinfra.txt
-     - 
-     ```txt
-     aiohttp[speedups]==3.11.14
-     black==25.1.0
-     hvac==2.3.0
-     pyinfra==3.2.0
-     packaging==24.2
-     gevent=
-     ```
+- 
+```txt
+aiohttp[speedups]==3.11.14
+black==25.1.0
+hvac==2.3.0
+pyinfra==3.2.0
+packaging==24.2
+gevent=
+```
 # 16. requirements-reconnect.txt
-     - 
-     ```txt
-     aiohttp[speedups]==3.11.14
-     black==25.1.0
-     hvac==2.3.0
-     pyinfra==3.2.0
-     packaging==24.2
-     gevent==24.11.1
-     ```
+- 
+```txt
+aiohttp[speedups]==3.11.14
+black==25.1.0
+hvac==2.3.0
+pyinfra==3.2.0
+packaging==24.2
+gevent==24.11.1
+rtma_infra==25.13
+```
+- Actually they removed everything except rtma_infra
 # 17. requirements-terraform.txt
      - 
      ```txt 
@@ -321,6 +345,7 @@ commands =
 
 # 19. with_secrets.py
 
+- 
 ```python
 #!/usr/bin/env python3
 
