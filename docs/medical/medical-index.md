@@ -37,7 +37,30 @@ permalink: /docs/medical
 - Usually refer to : Dead B
 - Heart need prof to see, mid May fam back for visit
 
-# Whole dissection
+# Case 5: Lung, large tumor (not adenocarcinoma/ squamous carcinoma), This is small-cell carcinoma (endocrine shit) (neo-endocrine - nuero related)
+- Consulted Amy, Dr. Yu, another consultant
+- very high grade = chur cancer (an epithelial)
+- chemical therapy, not operable 
+- 40's men
+- Caused neo-endocrine = which is neuro-related
+
+- Types of epithelial
+    - Shape
+        - simple (=1 layer) cubital
+        - simple cumuli (=long rectangle)
+        - psuedo stratify (= )
+        - stratify (=n-layer)
+        - ...
+
+- Extra:
+    - adenocarcinoma: more middle aged women, usually non-smoker, could be related to cooking oil
+    - squamous (鱗狀) carcinoma: smokers
+    - epithelial: gland/ squamous (mainly 2 types)
+        - cervix has both gland (= endo)/squamous (= outer)
+        - Intestine: gland
+        - tongue's histology: gland
+
+# Whole dissection flow
 Sample arrive -> Paraffin -> formalin fixing -> cut by MO -> get piece -> color outer later in Indian ink (outer layer) -> place into 3*2*0.5 cassette -> technician work (machine process, gap into wax/paraffin block, trim down, dip H&E stain, add cover slip) -> see cancer -> marker mark 
 
 
@@ -68,6 +91,7 @@ Permanent Marker - post-dissect
 14. Irene - did frozen section, was studying in Macau, now exchange in HK. 
 15. Lak Mari - Sri Lankan, came to HK Oct-Nov 2024 
 16. Dr.Yu - over 60, work until May 2025, current p.t.
+17. Jonathan - a let-go surgeon (contract w/ surg expired), have kids (40+), suspected 03' grad. 
 
 
 
