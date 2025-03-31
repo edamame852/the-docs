@@ -13,13 +13,156 @@ has_children: true
 - CODEOWNERS
 - dependabot.yml
 
+```yml
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    # open-pull-requests-limit: 1
+    schedule:
+      interval: "daily"
+    registries:
+      - sgithub
+#     groups:
+#       actions:
+#         patterns:
+#           -"*"
+  - package-ecosystem: "pip"
+    directory: "/"
+    # open-pull-request-limit: 1
+    insecure-external-code-execution: allow
+    schedule:
+      interval: "daily"
+    registries:
+      - pypi
+      - sgithub
+    #     groups:
+    #       python:
+    #         patterns:
+    #           -"*"
+
+    registries:
+      sgithub:
+        type
+```
+
 # 2. .vscode/
+- settings.json (only 1 file under this dir)
+- 
+```
+{
+     "[python]":{
+          "editor.codeActionOnSave: {
+               "source.organizeImports": "explicit"
+          },
+          "editor.defaultFormatter": "ms-python.black-formatter",
+          "editor.formatOnSave": true
+     },
+     "black-formatter.cmd":"${fileDirName}",
+     "explorer.excludeGitIgnore": true,
+     "files.eol" : "\n",
+     "files.insertFinalNewline": true,
+     "files.trimFinalNewlines": true,
+     "files.trimTrailingWhitespace": true,
+     "isort.args" : [
+          "--profile",
+          "black"
+     ],
+     "search.useParentIgnoreFiles": true,
+}
+
+
+```
 
 
 # 3. ansible/
+- Only 1 file, and that is called `cloud-user.yml`
+- content:
+
+```yml
+- hosts: all
+  tasks:
+    - name: Make cloud-user admin
+      copy:
+          content: "cloud-user ALL=(ALL) NOPASSWD: ALL"
+          dest: "/etc/sudoers.d/cloud-user-sudo"
+          owner: root
+          group: root
+          mode: 0440
+          validate: 'sh -c "cat /etc/sudoers %s | visudo -cf-"'
+    - name: Make rtadmin admin
+      copy:
+        content: "rtadmin ALL=(ALL) NOPASSWD: ALL"
+        dest: "/etc/sudoers.d/rtadmin-sudo"
+        owner: root
+        group: root
+        mode: 0440
+        validate: 'sh -c "cat /etc/sudoers %s | visudo -cf-"'
+
+```
 # 4. corvil/ (lots of conf inside)
+- hkgcor.conf
+- labcor.conf
+- ...
+
+The content looks something like this
+
+```txt
+!! Configuration generated on: ... (ASIA/KST)
+!! Last configuration change: Tue ... (ASIA/KST)
+!! Corvil CNE Appliance software: Version 9.7.1 (9.7.1 ...)
+no session "Application and Network Analysis"
+.
+.
+.
+
+```
 # 5. jira/
-     - test.py
+- test.py (There's only 1 file)
+- 
+```python
+#!/usr/bin/env python3
+
+import os
+from jira import JIRA
+
+jira = JIRA(
+     server="https://itbox-jira.hk.world.company/jira",
+     basic_auth=(
+          os.getenv("JIRA_USERNAME"),
+          os.getenv("JIRA_PASSWORD"),
+     ),
+     validate=False,
+     max_retries=1,
+)
+
+devs = [
+     "omar.miller@company.com",
+     "emma.watson@company.com",
+]
+
+admins = [
+     "JinPing.Xi@company.com",
+     "Donald.Trump@company.com",
+]
+
+for project_key in ["RTMAASIA","ASIAFEED","MAPRD"]:
+     dev_role = jira.project_role(project_key,"10001")
+     existing_devs = [x["name"] for x in dev_role.raw["actors"]]
+     to_add_devs = [x for x in devs if x not in existing_devs]
+
+     admin_role = jira.project_role(project_key,"10002")
+
+     existing_admins = [x["name"] for x in admin_role.raw["actors"]]
+     to_add_admins = [x for x in admins if not in existing_admins]
+
+
+     if to_add_devs:
+          dev_role.add_user(to_add_devs)
+     if to_add_admins:
+          admin_role.add_user(to_add_admins)
+```
+
 # 6. pyinfra/
 # 7. terraform/
 # 8. .gitignore
