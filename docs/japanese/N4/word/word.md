@@ -2,7 +2,7 @@
 title: word
 layout: default
 parent: N4
-grand_parent: japanese
+grand_parent: Japanese
 ---
 
 **Table of Contents**
