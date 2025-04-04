@@ -19,6 +19,21 @@ grand_parent: Coding Practices
 
 ### 2 different Java data types
 1. Primitive Type = int, long, byte, short, floating-point value (float & double), logical values = booleans, chars
+	- There are 8 primitive types!
+	- These will be stored directly on the stack
+	- 
+	| Primitive type | size of bits | Min value | Max value | e.g. |
+	|----------|----------|----------|----------|----------|
+	| 1. byte   | 8  | -2**-7    | 2**7 - 1     | byte b = 100;     |
+	| 2. short  | 16 | -2**-15     | 2*15 - 1     | short s = 30_000;     |
+	| 3. int | 32 | -2**-31     | 2**31 - 1     | int i = 100_000_000;     |
+	| 4. long   | 64 | -2**-63     | 2**63 - 1     | long l = 100_000_690_699_000;     |
+	| 5. float   | 32 | -2**-149     | (2-2**-23)*2**127 =      | float f = 1.4269f;     |
+	| 6. double   | 64 | -2**-1024     | (2-2**-52)*(2**1023) =    | double d = 1.3062470030624770;     |
+	| 7. char   | 16 | 0     | 2**16-1     | char c = 'c';     |
+	| 8. boolean   | 1  | N/A     | N/A     | boolean F = false;     |
+
+
 2. Reference Type = reference to object/ reference to values (e.g. arrays)
 	- Good example of reference type = String
 
@@ -117,7 +132,9 @@ public class SimpleAddition {
 4. The whole code inside the curly bracket is called a `code block`
 
 ## Running Java = Compiling + Executing
-
+1. Install JRE on your machine
+2. compile the code: `javac SimpleAddition.java`
+3. Execute the code: `java SimpleAddition.java` and return the result
 
 
 # Topic 2 : Java OOP
