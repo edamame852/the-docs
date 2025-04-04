@@ -8,31 +8,28 @@ grand_parent: Coding Practices
 ## Table of contents
 {: .no_toc .text-delta }
 
-1. TOC
-{:toc}
-
 ---
-# Basics - Get Started with Java
+# Topic 1 : Basics - Get Started with Java
 
-## Java basic syntax
+## Java basic syntaxes
 
 ### Background
-- Java is statically typed, oop language
+- Java is a statically typed, oop language (i.e. python is dynamically typed)
 - Java is platform independent (can be compiled & executed on dif platforms)
 
 ### 2 different Java data types
-- Primitive Type = int, long, byte, short, floating-point value (float & double), logical values = booleans, chars
-- Reference Type = reference to object/ reference to values (e.g. arrays)
+1. Primitive Type = int, long, byte, short, floating-point value (float & double), logical values = booleans, chars
+2. Reference Type = reference to object/ reference to values (e.g. arrays)
 	- Good example of reference type = String
 
 ```java
 String myString = new String ('Hello World')
-// Instance of the class will create the object and it contains a set of chars called Hello World
+// Instance of the class String will create the object called myString and it contains a set of chars called 'Hello World'
 
 ```
 
 ### Declaring variables 
-Must do 2 things: Declare `type` & `name` (aka `identifier`)
+Must do 2 things: Declare `type` & `name` (aka `name` = `identifier`)
 
 Terminologies:
 - Declaration = setting up variable without values
@@ -89,8 +86,41 @@ int lengthOfMyArray = myArray.length; // Calling .length method
 - Assignment Operator `=`
 - Arithmetic Operators `+` `-` `*` `/` `%`
 - Logical operators `||` `&&` `!` (e.g. `if ( a%2 != 0 || a&2 == 0)`)
-- Comparison Operators 
+- Comparison Operators `<`,`<=`,`>`,`>=`,`!=`,`==`
+	- Quick method used with a comparison operator
+	- 
+	```java
+	public boolean canVotePresident (int age) {
+		if (age < 18) {
+			return false;
+		}
+		return true;
+	}
+	```
 
+## Java Program Structure
+
+1. Basic unit in Java = Class
+2. Class can have one or multiple fields/ properties, methods, other classes (i.e. inner classes or class members)
+3. main method MUST be included to make the Class executable, since main method means the entry point of the program
+
+```java
+public class SimpleAddition {
+	public static void main (String[] args) {
+		int a = 10;
+		int b = 20;
+		double c = a + b;
+		System.out.println(a+"+"+b+"+"+"="+c);
+	}
+}
+```
+4. The whole code inside the curly bracket is called a `code block`
+
+## Running Java = Compiling + Executing
+
+
+
+# Topic 2 : Java OOP
 -------------------------------------------------------------------------------------------------------------------------------------------------
 # 0. Java 8 to Java 17 Migration (reference [link](https://www.baeldung.com/java-migrate-8-to-17))
 - 1. Springboot version upgrade 2.x.x into 3.x.x
