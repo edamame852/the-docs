@@ -26,12 +26,167 @@ grand_parent: Coding Practices
 	|----------|----------|----------|----------|----------|
 	| 1. byte   | 8  | -2**-7    | 2**7 - 1     | byte b = 100;     |
 	| 2. short  | 16 | -2**-15     | 2*15 - 1     | short s = 30_000;     |
-	| 3. int | 32 | -2**-31     | 2**31 - 1     | int i = 100_000_000;     |
+	| 3. int | 32 | -2**-31     | 2**31 - 1 = ~ 2.1 billion    | int i = 100_000_000;     |
 	| 4. long   | 64 | -2**-63     | 2**63 - 1     | long l = 100_000_690_699_000;     |
 	| 5. float   | 32 | -2**-149     | (2-2**-23)*2**127 =      | float f = 1.4269f;     |
 	| 6. double   | 64 | -2**-1024     | (2-2**-52)*(2**1023) =    | double d = 1.3062470030624770;     |
 	| 7. char   | 16 | 0     | 2**16-1     | char c = 'c';     |
 	| 8. boolean   | 1  | N/A     | N/A     | boolean F = false;     |
+	- a value MUST be assigned to a variable, if the variable is defined in the method.
+	- Memory in size:
+		- byte (8) -> short (16) -> int (32) -> long (64)
+	- `int`
+		- Range : -2.1 billion until +2.1 billion 
+		- Stored in: 32 bit
+		- Default value: 0 (without assignment)
+		- Note: in java 8, upper range can store up to 4.29 billion with special helper functions for unsigned integers (typically for network protocols and file sizes, since there's no negative values)
+		- Idea: 
+			- 
+			```java
+			public class UnsignedIntExample {
+				public static void main(String[] args) {
+					// Example of treating an int as unsigned
+					int signedInt = -1; // Signed value (-1)
+					
+					// Convert signed int to unsigned using Integer.toUnsignedLong()
+					long unsignedLong = Integer.toUnsignedLong(signedInt);
+					
+					// Print the unsigned value
+					System.out.println("Signed int: " + signedInt);
+					System.out.println("Unsigned long: " + unsignedLong);
+				}
+			}
+			```
+		- Decimal values on an int will be CHOPPED OFF (not rounded)
+	- `byte`
+		- Range : -128 until +127 
+		- Stored in: 8 bit
+		- Related to: `int`
+		- Default value: 0 (without assignment)
+		- Takes up only 8 bits
+		- Idea:
+			- 
+			```java
+			byte b = 100;
+			byte empty; // This is acceptable
+			```
+	- `short`
+		- Range : -128 until +127 
+		- Stored in: 16 bit
+		- Related to: `int`
+		- Default value: 0 (without assignment)
+		- Note: Used when to save memory but byte is too small
+		- Idea:
+			- 
+			```java
+			short s = 20_000;
+			short s;
+			```
+	- `long`
+		- Range : -9 quintillion (2**-63) until +9 quintillion (2**63 - 1) 
+			- Ref: million -> billion -> trillion -> quadrillion -> quintillion
+		- Stored in: 64 bit
+		- Related to: `int`
+		- Default value: 0
+		- Idea: 
+			- 
+			```java
+			long l = 100_000_000_000;
+			long l;
+			```
+	- `float`
+		- Range: 1.4*10**-45 - 3.40*10**38
+		- Stored in: 32 bit
+		- Default value: 0.0
+		- Idea:
+			- `float` is a single-prevision decimal number = past 6 d.p. number is not premise and becomes an estimate = precision loss
+			- `BigDecimal` is used for precision financial operations
+			- In Java if decimal value is NOT specified (`f`), it is a `double`
+			- 
+			```java
+			float f = 3.145f; // f literal is a MUST for float
+			float f;
+			float f_max = Float.MAX_VALUE;
+			float f_min = Float.MIN_VALUE;
+
+			double d_with_D = 3.14530624700D; // BOTH works
+			double d_without_D = 3.14530624700; // BOTH works
+			double d;
+			```
+	- `double`
+		- Range: 4.94*10**-324 - 1.797*10**308
+		- Stored in: 64 bit
+		- Default value: 0.0
+		- Idea:
+			- `float` is a double-prevision decimal number
+	
+	- `boolean`
+		- Possible values: `true` or `false`
+		- Stored in : 1 bit (Java, for convenience stores in 1 byte/ 8 bits)
+		- Default value: `false`
+		- Idea:
+			- 
+			```java
+			boolean b = true;
+			boolean b_defaults_to_false:
+
+			if (b_defaults_to_false == false && b == true) {
+				//...
+			}
+			```
+	- `char`
+		- Possible values: `true` or `false`
+		- Stored in : 16 bit (ranges from 0 to 65535 unicode-encoded character) (e.g. `\u0000` to `\uffff`)
+		- Default value: `\u0000` (auto transformed)
+		- Also known as: character
+		- Idea:
+			- 
+			```java
+			char c = 'a';
+			char c = 65l
+			```
+
+	- Overflow issues due to size limits
+		- overflow for `int`: rolls over to min value
+			- Idea:
+			- 
+			```java
+			int i = Integer.MAX_VALUE;
+			int i = i + 1; // will roll over to -2_147_483_648
+			```
+		- overflow for `double`: rolls over to infinity
+			- Idea:
+			- 
+			```java
+			int d = Double.MAX_VALUE;
+			int d = d + 1; // will roll over to infinity
+			```
+	- Underflow issue
+		- underflow for `int`: rolls over to min value
+		- underflow for `double`: rolls over to 0.0 !
+	
+	- Auto-boxing = auto converting from primitive type to object wrapper by applying wrapper class
+		- Each primitive data type has Java class to wrap around it
+		- Doing it the other way around = unboxing
+		- primitive types: `int`, `double` ...
+		- wrapper class: `Integer`, `Double` ...
+		- For example: 
+			- 
+			```java
+			Integer i = i // Auto-boxing
+			```
+		- Another example:
+		- `ArrayList` can store objects only, to store integers, `<Integer>` is auto boxing values into from primitive `int` into `Integer` object
+			- 
+			```java
+			// A more complicated example:
+			ArrayList<Integer> numbers = new ArrayList<>();
+			numbers.add(5); // Auto-boxing: primitive 5 to Integer object
+			System.out.println("ArrayList: " + numbers);
+			```
+
+
+
 
 
 2. Reference Type = reference to object/ reference to values (e.g. arrays)
@@ -136,8 +291,50 @@ public class SimpleAddition {
 2. compile the code: `javac SimpleAddition.java`
 3. Execute the code: `java SimpleAddition.java` and return the result
 
+# Topic 2 : Java main() method
 
-# Topic 2 : Java OOP
+## Idea
+- main() method is Java's program entry point
+
+## Java common signature keywords
+
+- 
+```java
+public static void main(String[] args) { } 
+```
+- `public` : The access modifier, visibility: global
+- `static` : Method is accessible directly from the class, instantiated object is NOT required
+- `void` : method returns no value
+- `main` : JVM looks for this identifier when program executes
+
+- Methods for Checking args
+
+```java
+public static void main(String[] args){
+	if (args.length > 0) {
+		if (args[0].equals("test")) {
+			// test parameters
+		} else if (args[0].equals("productions")) {
+			// productions params
+		}
+	}
+}
+```
+
+## Variations to write main() in Java
+- `public static void main(String []args) {}` [] can be placed near String
+- `public static void main(String args[]) {}`
+- `public static void main(String...args) {}` represented as varargs
+- `public strictfp static void main(String[] args) {}` used between processors when there are floating point values
+	- `synchronized` and `final` are keywords too, but takes no affect here
+	- `final` could still be used on args to prevent args from being modified
+		- i.e. `public static void main(final String []args) {}`
+
+## More than 1 main() method ??!!
+- It's possible
+- 
+
+# Topic 3 : Java OOP
 -------------------------------------------------------------------------------------------------------------------------------------------------
 # 0. Java 8 to Java 17 Migration (reference [link](https://www.baeldung.com/java-migrate-8-to-17))
 - 1. Springboot version upgrade 2.x.x into 3.x.x
