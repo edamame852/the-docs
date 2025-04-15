@@ -114,3 +114,34 @@ def timing(f):
     return wrap
 ```
 
+## The use of `__iter__` and `__next__`
+
+- Both methods are to create iterable objects inside for/while loops
+- `__iter__` : Dunder method that is called when an object is initialized as an iterator, returns iterator object itself since it makes an object iterable
+- `__next__`: Dunder method to retrive the next item from the iterator, when no more items will return, it raises a `StopIteration` exception 
+
+```python
+class MyIterator:
+    def __init__(self, limit):
+        self.limit = limit
+        self.counter = 0
+
+    def __iter__(self):
+        return self  # The iterator object itself
+
+    def __next__(self):
+        if self.counter < self.limit:
+            self.counter += 1
+            return self.counter
+        else:
+            raise StopIteration  # No more items to iterate over
+
+# Usage
+my_iter = MyIterator(5)
+for num in my_iter:
+    print(num)
+```
+
+## What is a context manager in python
+
+## The difference between

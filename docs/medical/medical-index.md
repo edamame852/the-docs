@@ -18,6 +18,11 @@ permalink: /docs/medical
 7. Slide: under the microscope
 8. 
 
+# Cancer group Handbook - Anxiety disorder vs gen. population 
+- 2.7 fold increase = 3.7 times
+- odds ratio are used in population study
+- Have 6 chapters, Joanne is responsible on Ch.5 Diet, Medical health, social, education and employement
+
 # Cyto. vs Hiso.
 - Histo. is more tissue arch, blob -> cut
 - Cyto. is more burst of cells (ie. blood drawn)
@@ -27,7 +32,7 @@ permalink: /docs/medical
 # Case 2: Infarction (=blockage) on placenta - purple Ca2+ patch, 6cm large tumor but only took 1 block (of sample).
 
 # Case 3: Plasma Cell = B lymphocyte final cell differential
-## Found in Endometrium (internal uterine lining), limited significance for blocking pregnancy
+## Found in Endometrium (internal uterine lining), limited significance for blocking pregnancy when plasma cell is trivial
 = Chronic endometriosis
 ## Prescribe anti-inflammatory medication
 
@@ -63,6 +68,9 @@ permalink: /docs/medical
 # Whole dissection flow
 Sample arrive -> Paraffin -> formalin fixing -> cut by MO -> get piece -> color outer later in Indian ink (outer layer) -> place into 3*2*0.5 cassette -> technician work (machine process, gap into wax/paraffin block, trim down, dip H&E stain, add cover slip) -> see cancer -> marker mark 
 
+# Case 6: Peritonium fluid (stomach fluid)
+- Peritonium fluid maybe from polycystic liver/kidney syndrom, or from ovary, lots of balls, but cell structure is okay (regular nuclei, normal mitosis)
+- Age 30 ish,  
 
 # Indian Ink vs Marker
 Indian ink (blue af) (just paint) - pre-dissect
