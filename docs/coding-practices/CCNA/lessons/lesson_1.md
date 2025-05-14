@@ -12,9 +12,9 @@ grand_parent: Coding Practices
 ## 1.1 OSI Reference Model
 - Has 7 layers, Please Do Not Trust Sales Person Advice (Layer 1 to Layer 7)
     - Layer 7: Application
-    .
-    .
-    .
+        .
+        .
+        .
     - Layer 4: Transport; segment
     - Layer 3: Network; packet
     - Layer 2: Data Link; frame

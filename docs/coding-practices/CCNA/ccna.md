@@ -2,6 +2,7 @@
 title: CCNA
 layout: default
 parent: Coding Practices
+has_children: true
 ---
 # Non-SNS
 {: .no_toc }
