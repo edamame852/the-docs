@@ -1,8 +1,15 @@
 ---
 title: lesson_1
 layout: default
-parent: CCNA
+parent: ccna
 grand_parent: Coding Practices
+---
+## Table of contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
 ---
 
 1st Lesson - CCNA Fast Track (May 13, 2025)

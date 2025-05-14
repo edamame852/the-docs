@@ -1,5 +1,5 @@
 ---
-title: CCNA
+title: ccna
 layout: default
 parent: Coding Practices
 has_children: true
