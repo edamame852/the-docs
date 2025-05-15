@@ -16,7 +16,14 @@ grand_parent: Coding Practices
 
 # 0. CCNA Exam Questions
 
-1. 
+1. How to get MAC address/ physical access in...
+- Windows : `ipconfig /all`
+- MacOS : `ifconfig en0`: en0 = Apple's LAN card's name
+- Linux: `ip address show`
+
+2. How to find default gateway / routing tables
+- MacOS : `netstat -nr`
+- Linux: `ip route show`
 
 # 1. Networking Model
 
@@ -49,7 +56,14 @@ grand_parent: Coding Practices
         - Layer 3 devices = e.g. routers, switches keeps tracks of data forwarding logic by maintaining routing tables
         - Switch can act like a road-sign
         - High level understanding: Network A (10.1.1.1) End user < -- > Switch < -- > Network B (20.1.1.1)
-    - Layer 2: Data Link [information name: frame]
+    - Layer 2: Data Link [information name: frame]. Receive layer 3 data packet, then encapsulate the packet into frame for transmission.
+        - MAC Address = physical address = hardware address
+            - MAC Address is 48 bits long = 24 bits Verdor Code/ OUI/ Organizationally Unique Identifier + 24 bits Vendor Assigned Code
+            - Find MAC Address in cmd console: `arp -a`
+        - Example protocol: Ethernal - Using MAC (Media Access Control) address (12 Dec code/16 Hex code). These MAC address are included in network interface devicies (e.g. network cards)
+        - Example of Layer 2 devices: 
+            - Ethernet Bridges 
+            - Switches/ Multi-port bridges 
     - Layer 1: Physical [information name: bit]
 
 ## 1.3 TCP/IP Model = Internet Reference Model

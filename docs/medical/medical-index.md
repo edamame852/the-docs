@@ -65,6 +65,27 @@ permalink: /docs/medical
         - Intestine: gland
         - tongue's histology: gland
 
+# Presentation : NTRK re-aarranged spindle cell neoplasm
+- 4 types of Cancer:
+    - Sarcoma - connective tissue tumor (e.g. bone, tisue)
+    - casenorma - typical cancer
+    - Lymphoma - 
+    - Melenoma - Mucosa, epidermis but can metasis to other places
+- Pattern:
+    - white spots = fat
+    - Cancer/ benign/ malniant or logges in between the fat
+    - Colligen (ropey) - Light pink
+- Immuno-histo-chemistry = IHC
+    - Nerve markers:
+        - S100 = nerve marker
+        - SOX10 = nerve marker
+    - CD Marker
+    - TRK (pronunce: Track)
+        - Can be tested with pan-TRK (testing for multiple TRK (e.g. TRK1, TRK2, not too sensitive to TRK3 => move onto molecular testing))
+- Terms:
+    - FISH = Primer + Gene = luminate = probe (usually red + green = yellow)
+
+
 # Whole dissection flow
 Sample arrive -> Paraffin -> formalin fixing -> cut by MO -> get piece -> color outer later in Indian ink (outer layer) -> place into 3*2*0.5 cassette -> technician work (machine process, gap into wax/paraffin block, trim down, dip H&E stain, add cover slip) -> see cancer -> marker mark 
 
