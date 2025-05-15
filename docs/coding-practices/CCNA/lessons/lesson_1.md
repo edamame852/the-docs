@@ -34,6 +34,8 @@ grand_parent: Coding Practices
         - Common Application layer: HTTPS (default port: 443), HTTP(default port: 80), SNMP, SSH, DHCP, FTP, TFTP
         .
         .
+        *SKIPPING Layers 5 & 6*
+        .
         .
     - Layer 4: Transport [information name: segment] = Segments + re-assemble data for transporting data efficiently. 
         - On layer 4, note ports numbers can differentiate different app data
@@ -56,8 +58,11 @@ grand_parent: Coding Practices
         - Layer 3 devices = e.g. routers, switches keeps tracks of data forwarding logic by maintaining routing tables
         - Switch can act like a road-sign
         - High level understanding: Network A (10.1.1.1) End user < -- > Switch < -- > Network B (20.1.1.1)
-    - Layer 2: Data Link [information name: frame]. Receive layer 3 data packet, then encapsulate the packet into frame for transmission.
-        - MAC Address = physical address = hardware address
+    - Layer 2: Data Link Layer [information name: frame]. Receive layer 3 data packet, then encapsulate the packet into frame for transmission.
+        - Layer 2 can **perform error detection** on data frames, as it has a FCS (Frane Check Sequence) field at the end of the data frame.
+            - FCS field contains a value that is calculated by CRC algorithim, the output of the algo is sent by the sender and checked again the value calculated by receiver
+            - If FCS Check fails = receiver dumps data frame = gives CRC error, franes are lost, input error count increases!! 
+        - **MAC Address = physical address = hardware address**
             - MAC Address is 48 bits long = 24 bits Verdor Code/ OUI/ Organizationally Unique Identifier + 24 bits Vendor Assigned Code
             - Find MAC Address in cmd console: `arp -a`
         - Example protocol: Ethernal - Using MAC (Media Access Control) address (12 Dec code/16 Hex code). These MAC address are included in network interface devicies (e.g. network cards)
@@ -65,10 +70,22 @@ grand_parent: Coding Practices
             - Ethernet Bridges 
             - Switches/ Multi-port bridges 
     - Layer 1: Physical [information name: bit]
+        - Deals with phsyically transmitting data. Data is sent via voltage/ lasers and sent & receives as 0,1 bits
+        - Examples of layer 1 items: voltage, connectors, network cables, lasers, repeaters, hubs (= multi-port repeaters) ...
+        - Use of repeaters/ multi-port repeaters = regenerate 0,1 signals from one port and sent to all ports while traveling further
+
+## 1.2 Layer interactions
+- How is data passed down the layers? Layer 7 -> Presentation -> Session -> Transport -> Network -> Data link -> physical
+- **Data encapsulation** = Layer adds own layer info (= header) before sending to next layer 
 
 ## 1.3 TCP/IP Model = Internet Reference Model
-- Layer 5 + 6 + 7: Application
-- Layer 4: Transportation
-- Layer 3: Internet/ Network
-- Layer 1 + 2: Link/host-to-network
- 
+- Background:
+    - 
+- The 4 layers of TCP/IP Model
+    - Layer 5 + 6 + 7: Application Layer
+    - Layer 4: Transportation Layer
+    - Layer 3: Internet/ Network Layer
+    - Layer 1 + 2: Link/host-to-network Layer
+- OSI vs TCP/IP Model
+    - OSI:
+    - TCP/IP
