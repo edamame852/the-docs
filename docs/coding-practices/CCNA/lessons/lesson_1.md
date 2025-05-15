@@ -47,6 +47,8 @@ grand_parent: Coding Practices
     - Layer 3: Network [information name: packet]. Responsible for data delivery from source host to destination host via logical address such as IPv4 (aka, IP Address e.g. 10.1.1.1)
         - IPv4 Address has 2 parts: Network Address (e.g. 10) + host address (e.g. 1.1.1)
         - Layer 3 devices = e.g. routers, switches keeps tracks of data forwarding logic by maintaining routing tables
+        - Switch can act like a road-sign
+        - High level understanding: Network A (10.1.1.1) End user < -- > Switch < -- > Network B (20.1.1.1)
     - Layer 2: Data Link [information name: frame]
     - Layer 1: Physical [information name: bit]
 
