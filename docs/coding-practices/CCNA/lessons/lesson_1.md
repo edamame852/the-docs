@@ -14,7 +14,7 @@ grand_parent: Coding Practices
 
 1st Lesson - CCNA Fast Track (May 13, 2025)
 
-# 0. CCNA Exam stuff
+# 0. CCNA Exam Questions
 
 1. 
 
@@ -28,16 +28,29 @@ grand_parent: Coding Practices
         .
         .
         .
-    - Layer 4: Transport [inforamtion name: segment] = Segments + re-assemble data for transporting data efficiently. 
-        - On layer 4, note ports numbers can differntiate differnet app data
+    - Layer 4: Transport [information name: segment] = Segments + re-assemble data for transporting data efficiently. 
+        - On layer 4, note ports numbers can differentiate different app data
         - Common Transport layer: TCP vs UDP
-            - TCP (Transmission Control Protocal): CONNECTION oriented. First establish connect connection, then send data.
-            - UDP (User Datagram Protocol): CONNECTION**LESS**
-    - Layer 3: Network [inforamtion name: packet]
-    - Layer 2: Data Link [inforamtion name: frame]
-    - Layer 1: Physical [inforamtion name: bit]
+            - TCP (Transmission Control Protocol): CONNECTION oriented. First establish connect connection, then send data.
+                - Examples: 
+                    - HTTP (tcp/80)
+                    - SMTP (tcp/25)
+                    - SSH (tcp/22)
+                    - FTP (tcp/21)
+                    - etc...
+            - UDP (User Datagram Protocol): CONNECTION**LESS** protocol, no need connection before sending data
+                - Examples:
+                    - SNMP (udp/161)
+                    - TFTP (udp/69)
+                    - VoIP (udp/1xxxx-3xxxx)
+                    - etc...
+    - Layer 3: Network [information name: packet]. Responsible for data delivery from source host to destination host via logical address such as IPv4 (aka, IP Address e.g. 10.1.1.1)
+        - IPv4 Address has 2 parts: Network Address (e.g. 10) + host address (e.g. 1.1.1)
+        - Layer 3 devices = e.g. routers, switches keeps tracks of data forwarding logic by maintaining routing tables
+    - Layer 2: Data Link [information name: frame]
+    - Layer 1: Physical [information name: bit]
 
-## 1.3 TCP/IP Model = Internet Refernce Model
+## 1.3 TCP/IP Model = Internet Reference Model
 - Layer 5 + 6 + 7: Application
 - Layer 4: Transportation
 - Layer 3: Internet/ Network
