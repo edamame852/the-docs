@@ -25,6 +25,20 @@ grand_parent: Coding Practices
 - MacOS : `netstat -nr`
 - Linux: `ip route show`
 
+3. Configuring switch/router with SecureCRT app (Do not get this wrong on the exam)
+- Step by step:
+    - 1. Open SecureCRT app, `File` -> `Quick Connect`
+    - 2. Pop up window set up like the following:
+        - Protocol: `Serial`
+        - Port: `COM1` (The serial port your computer is connecting from, the insert point of COM cable)
+        - Baud rate: `9600` (Baud rate = bps = bits per second)
+    - 3. Click `Connect`, should see blank screen then hit [Enter], done.
+
+4. How to distinguish if the machine is half duplex/ full duplex based on a collision report?
+    - You can look up the report in `#` privileged mode, and check with `sh int f0/3`
+    - Has late collision, but no CRC error => Half-duplex (since report is sent but crashed)
+    - Has 0 late collision, but many CRC errors (by FCS) => Full-Duplex (since data loss)
+
 # 1. Networking Model
 
 ## 1.1 OSI Reference Model / Open Systems Interconnection
@@ -61,7 +75,10 @@ grand_parent: Coding Practices
     - Layer 2: Data Link Layer [information name: frame]. Receive layer 3 data packet, then encapsulate the packet into frame for transmission.
         - Layer 2 can **perform error detection** on data frames, as it has a FCS (Frane Check Sequence) field at the end of the data frame.
             - FCS field contains a value that is calculated by CRC algorithm, the output of the algo is sent by the sender and checked again the value calculated by receiver
-            - If FCS Check fails = receiver dumps data frame = gives CRC error, frames are lost, input error count increases!! 
+            - Whole high level flow:
+                - Sender: Data -> CRC calculate -> sender FCS hash created
+                - Receiver: Data -> CRC calculate -> receiver FCS bash created and compared with sender FCS.
+                - If FCS Check fails = receiver dumps data frame = gives CRC error, frames are lost, input error count increases!! 
         - **MAC Address = physical address = hardware address**
             - MAC Address is 48 bits long = 24 bits Verdor Code/ OUI/ Organizationally Unique Identifier + 24 bits Vendor Assigned Code
             - Find MAC Address in cmd console: `arp -a`
@@ -77,6 +94,13 @@ grand_parent: Coding Practices
 ## 1.2 Layer interactions
 - How is data passed down the layers? Layer 7 -> Presentation -> Session -> Transport -> Network -> Data link -> physical
 - **Data encapsulation** = Layer adds own layer info (= header) before sending to next layer 
+- For example in layer 2 header: it contains Layer 3's protocol, since IPv4 address is layer 3 
+```bash
+Ehternet II, Src: Cisco_85...
+ > Destination:
+ > Source...
+ < Types: IPv4 (0x0800) 
+```
 
 ## 1.3 TCP/IP Model = Internet Reference Model = Department of Defense 4 layer model
 - The 4 layers of TCP/IP Model
@@ -120,3 +144,85 @@ grand_parent: Coding Practices
     - Or nowadays, for computers without COM port, use USD to serial adapters us ok
 
 - Configuring a switch (IMPORTANT will show up on exam) via SecureCRT (Check session 0)
+
+## 2.5 Fiber Optic Cable
+- Exam material!! FIber Optic Cable different layers. From outmost to inmost
+    - Outer jacket
+    - Strength Member
+    - Coasting
+    - Cladding (glass)
+    - Core glass / The fiber optic cable
+- Fiber optic cable benefits:
+    - Longer distances (over 100m until 1-2 km)
+    - Less attenuation
+    - Less electro-magnetic interference
+- Fiber optic cable types:
+    - Single Mode fiber = single mode of light
+        - Longer distances (=> 10km depending on transmission type and speed)
+        - Expensive (due to equipments and connectors)
+    - Multi-mode fiber = carries multiple nodes of light
+        - Shorter distances (< 2km depending on transmission type and speed)
+        - More expensive than single mode
+
+- Realistic example for a 10 GbE ethernet cable
+    - Multi-mode fiber: 220m, 440m
+    - Single-mode fiber: 10km, 40km, 80km
+
+
+## 2.6 Half duplex () vs Full-duplex ethernet (dedicated non-collision enviornment)
+
+- Comparison:
+    - Half duplex: Communication flowing in 1 direction, one at a time.
+        - Basically the hub in the logical bus design
+        - Data Collision may occur, resulting in data corruption
+            - To prevent that, CMSA/CD (Carrier Sense Multiple Access with Collision Detection) is used to reduce data collision chances 
+        - Operates in shared collision environment = low data bandwidth of transmission and receiving. Since half duplex cannot transmit and receive data at the same time
+    - Full duplex: Communication flowing in 2 direction together.
+        - Basically the switch in the logical switching design
+        - Data collision cannot occur, automatically not use CSMA/CD by design = will not perform carrier sense before data transmission
+        - Able to transmit and receive data to and from other computers
+        - Dedicated non-collision environment = high combined bandwidth of transmitting and receiving
+        - Bandwidth is doubled comparing to half-duplex
+
+- Important terms in the world of duplexes:
+    - 1. Carrier Sense: All computer listens until medium is completely silent before data transmission.
+    - 2. Collision Detection
+        - if corrupted data signal is found = collision happened
+        - Perform immediate backoff and stops transmission
+        - Random time is waited by computer before retrying transmission
+    
+- Auto Negotiations by ports
+    - Port can auto detect port speed and duplex mode (when both devices has the same speed & duplex mode)
+    - Otherwise manual negotiation is needed
+
+- Lab: Check duplex in a Cisco Switch
+    - 1. type `enable` in SecureCRT = normal User mode `>` -> Privileged Exec Mode `#`
+    - 2. Type `configure terminal` = upgrade again
+    - 3. Type `interface g0/1` setting up g0/1 that is connected to back of Cisco switch
+    - 4. Check for duplex type `duplex ?`
+
+- The complicated Duplex Mismatch 
+    - Idea: When a port (e.g. LAN/ switch/ router port) is operating half-duplex and the connected port is the other type or vice versa. Resulting in intermittently slow performance
+
+    - Two possible collision types in duplex mismatching (require layer 2 above to help)
+        - if Late collision (= collision after first 512 bit of info) exists = then data is present
+        - if NO late collision exists = then data is NOT present
+    - How to distinguish if the machine is half duplex/ full duplex based on a collision report?
+        - EXAM question! Check section 0.
+
+# 3. Detail Concepts on Logical Switching
+
+## Terminology:
+1. Broadcast data frame has destination MAC address of FF-FF-FF-FF-FF-FF (= unknown unicast/ flooding)
+
+## 3.1 How does Switching work
+- Example: 3 hosts/ computers (Host A, B, C) connected to a switch with empty MAC address table
+    - 1. Host A sends to Host B
+        - idea: host A source address: 00-00-00-11-11-11 to destination address 00-00-00-22-22-22
+        - But MAC address doesn't contain host B
+        - Data frame is **flooded** = **unknown unicast**
+        - Both host B and C got the frame, host B accepts and process the frame, host C dumps the frame.
+    - 2. Host B sends back to host A
+        - MAC address knows where the frame came from, address table updated
+        - data frame sent to port 1 (host A) only
+- Broadcast frame is flooded vs unicast frame has MAC address of a single device 
