@@ -27,7 +27,7 @@ grand_parent: Coding Practices
 
 # 1. Networking Model
 
-## 1.1 OSI Reference Model
+## 1.1 OSI Reference Model / Open Systems Interconnection
 - OSI model is released by ISO
 - Has 7 layers, **Please Do Not Trust Sales Person Advice** (Layer 1 to Layer 7)
     - Layer 7: Application = protocols that directly supports user apps, interface for sending and getting data
@@ -78,14 +78,20 @@ grand_parent: Coding Practices
 - How is data passed down the layers? Layer 7 -> Presentation -> Session -> Transport -> Network -> Data link -> physical
 - **Data encapsulation** = Layer adds own layer info (= header) before sending to next layer 
 
-## 1.3 TCP/IP Model = Internet Reference Model
-- Background:
-    - 
+## 1.3 TCP/IP Model = Internet Reference Model = Department of Defense 4 layer model
 - The 4 layers of TCP/IP Model
     - Layer 5 + 6 + 7: Application Layer
     - Layer 4: Transportation Layer
     - Layer 3: Internet/ Network Layer
     - Layer 1 + 2: Link/host-to-network Layer
 - OSI vs TCP/IP Model
-    - OSI:
-    - TCP/IP
+    - OSI: 7 layers
+    - TCP/IP: 4 layers
+
+
+# 2 Ethernet
+
+- 
+
+## 2.1 Logical Bus Design = computers connected to hub with cables
+- Internal design core logic: if 1 computer sends, others WAIT. (Only 1 computer can send data frame at the same time)
