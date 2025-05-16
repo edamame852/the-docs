@@ -226,3 +226,96 @@ Ehternet II, Src: Cisco_85...
         - MAC address knows where the frame came from, address table updated
         - data frame sent to port 1 (host A) only
 - Broadcast frame is flooded vs unicast frame has MAC address of a single device 
+
+## 3.2 MAC Address table aging time
+- Aging time is default set at 300 second (can be increased)
+- When Source Hardware address is not received by MAC address table for 300s, switch deletes the hardware address from the table = MAC Aging
+- Adding to Address table = MAC learning
+
+## 3.3 Lab: Working with MAC Access table
+
+- Working with a Switch
+    - Normal mode `#` = User Exec Mode / User Mode, which you'll see `Switch>`. The default description name/ hostname of a Cisco switch is "Switch"
+        -  Display software and hardware information with `show version` or `sh ver`, press [spacebar] for more info
+        - Report will tell you Switch3 has 24 FastEthernet (100Mbps) ports & 2 GB Ethernet ports
+        - press [Esc] to quit the report
+    - Type `en` or `enable` to promote to Privilege Exec Mode (`#`)
+        - i.e. 
+        ```bash
+        Switch>en
+        Switch#
+        ```
+
+
+    - Promote again to Global Configuration mode by doing `config t` or `config terminal`
+        - i.e. 
+        ```bash
+        Switch#config t
+        Enter Configuration commands...
+        Switch(config)#
+        ```
+        - Now you can configure the switch as a whole!
+
+    - Change hostname of the switch `hostname NewSwitchName`
+        - i.e. 
+        ```bash
+        Switch(config)# hostname Switch100
+        Switch100(config)#
+        ```
+
+    - To quit
+        - `exit`: Go up 1 level (i.e. Global Configuration mode to Privileged Exec Mode)
+        - `end`: Goes up 2 levels (i.e. goes up 2 levels Global Config -> User Exec Mode/ Normal Mode)
+
+- Working with a Router
+    - Check Mac Address table entries in privileged Exec Mode:
+    - i.e. `show mac address-table interface g1/1` = Checking what's connected to g1/1, if no one then MAC address is empty
+
+    - Starting up a router = you need interface configuration mode:
+        - i.e. 
+        ```bash
+        Router>en
+        Router#config t
+        Router(config) #hostname Router1
+        Router1(config) #int g0/0
+        Router1(config-if) #no shutdown
+        Router(config-if) #end
+        Router1#
+        ```
+
+    - BTW The `shutdown` command to shutdown interface, vice versa, we use `no shutdown`
+        - High level: User -> Privilege -> Global -> Interface mode
+
+    - Check the mac table again `show mac address-table interface g1/1`, table is NOT empty :)
+
+
+## 3.4 Collision and Broadcast domain
+
+- Collision Domain:
+    - Definition: if host in LAN are connected by hubs = same collision domain
+    - When 2 host sending data together = collision to occur inside a hub
+    - When host in LAN are connected by switches, they have different collision domains. Since connected to logical switching environments, collision cannot occur like that in the same domain
+
+- Broadcast Domain: 
+    - definition: if host in LAN are connected by hubs/switches ONLY = same broadcast domain
+    - Router doesn't forward broadcast data frame across interfaces, since router provides segregated broadcast domains
+
+# 4. Features in CISCO switches
+
+## 4.1 What is VLAN
+- VLAN = group of switch ports that are isolated from other switch ports
+- within VLAN group cannot travel to other groups through the switch, since VLAN logically divides the switch into different independent switches at layer 2
+
+- Checking Cisco switch ports and see which VLAN it belongs to... `show vlan brief`
+
+- Benefits of VLAN:
+    - 1. Better network performance
+        - many broadcast data frames can affect switch & network performance 
+        - with Multiple VLANS, they can restrict a host's broadcast to it's own VLAN members hence better performance since the broadcast is limited to its broadcast domain
+    - 2. Better Security
+        - VLANs can limit data frames to its own VLAN members
+        - You cannot share data frames through connection to a port of another VLAN = better security
+    - 3. More flexibility
+        - Easy to create, reassign multiple VLAN by console commands, no involvement with physical relocation/ re-installation of cables
+        - This will come up on the EXAM !!! Usually via VLAN + CDP + ...
+
