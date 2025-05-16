@@ -60,12 +60,12 @@ grand_parent: Coding Practices
         - High level understanding: Network A (10.1.1.1) End user < -- > Switch < -- > Network B (20.1.1.1)
     - Layer 2: Data Link Layer [information name: frame]. Receive layer 3 data packet, then encapsulate the packet into frame for transmission.
         - Layer 2 can **perform error detection** on data frames, as it has a FCS (Frane Check Sequence) field at the end of the data frame.
-            - FCS field contains a value that is calculated by CRC algorithim, the output of the algo is sent by the sender and checked again the value calculated by receiver
-            - If FCS Check fails = receiver dumps data frame = gives CRC error, franes are lost, input error count increases!! 
+            - FCS field contains a value that is calculated by CRC algorithm, the output of the algo is sent by the sender and checked again the value calculated by receiver
+            - If FCS Check fails = receiver dumps data frame = gives CRC error, frames are lost, input error count increases!! 
         - **MAC Address = physical address = hardware address**
             - MAC Address is 48 bits long = 24 bits Verdor Code/ OUI/ Organizationally Unique Identifier + 24 bits Vendor Assigned Code
             - Find MAC Address in cmd console: `arp -a`
-        - Example protocol: Ethernal - Using MAC (Media Access Control) address (12 Dec code/16 Hex code). These MAC address are included in network interface devicies (e.g. network cards)
+        - Example protocol: Ethernal - Using MAC (Media Access Control) address (12 Dec code/16 Hex code). These MAC address are included in network interface devices (e.g. network cards)
         - Example of Layer 2 devices: 
             - Ethernet Bridges 
             - Switches/ Multi-port bridges 
@@ -91,7 +91,32 @@ grand_parent: Coding Practices
 
 # 2 Ethernet
 
-- 
+- Ethernet data link layer protocol (layer 2) are commonly used in LAN
+- This layer is now usually implemented by logical bus/ switching designs.
 
 ## 2.1 Logical Bus Design = computers connected to hub with cables
-- Internal design core logic: if 1 computer sends, others WAIT. (Only 1 computer can send data frame at the same time)
+- Internal design core logic: if 1 computer sends, others WAIT. (Only 1 computer can send data frame at the same time). 
+- Logical bus design provides only **shared connection** (not the best ethernet)
+- Example Scenario:
+    - 4 computers connected to a hub with bandwidth 100 Mbps, each computer has 25 Mbps optimistically
+
+## 2.2 Logical Switching Design = computers connected to switch with cables
+- Internal design core logic: Virtual circuit is formed inside the switch.
+- Logical Switch provides **dedicated connection**.
+- Example Scenario:
+    - 4 computers connected to a hub with bandwidth 100 Mbps, each computer has 100 Mbps optimistically
+
+## 2.3 Copper Ethernet Cable
+- Typical pinout of copper ethernet cable
+    - Max lengths all around 100m (typically how far copper can stretch)
+- Types of copper ethernet cables: 
+    - UTP = Unshielded Twisted Pair Cables
+    - STP = Shielded Twisted Pair Cables (has metallic foil encasing the twisted pairs as conducting shield)
+        - Benefits: Less noise = less electro-magnetic interference = better speeds!!
+
+## 2.4 Rollover Console Cable/ Rollover Cable/ Console Cable/ Serial Cable
+- Typical Console Cable: RF 45 (has 4+5 = 9 pins), we use it in Cisco often
+- This cable is connected to COM ports/ Computer's serial port (computer + console cable = server's COM port)
+    - Or nowadays, for computers without COM port, use USD to serial adapters us ok
+
+- Configuring a switch (IMPORTANT will show up on exam) via SecureCRT (Check session 0)
