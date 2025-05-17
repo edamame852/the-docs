@@ -42,16 +42,17 @@ grand_parent: Coding Practices
 
     - Determining Root Bridge, Root Port, Designated port !
         - Step 1: How to find Root Bridge? 
-            - Method: Determined by lower Bridge ID (Bridge ID = Priority Value + MAC address). In total there are 2 ways 
+            - Method: Determined by lower Bridge ID (Bridge ID = Priority Value + MAC address). In total there are 2 steps 
                 - Lowest priority value (default priority value = 32768)
                 - Lowest MAC address value
             - Please locate Bridge ID with `sh version` or `sh spanning-tree` on previlaged level
             - The other bridge that's not root is regarded as non-root bridge
             - Example for determining the root bridge by priority values:
             - ![](../../../../../assets/images/ccna/lesson2/lesson_2_stp_1.jpg)
+            
 
         - Step 2: How to find the (already forwarding state) Root ports in the non-root brdiges
-            - Method: There are 4 ways.
+            - Method: There are 4 steps.
                 - Lowest cumulative path cost towards the root bridge (1Gbps = 4 for short-mode STP/ 20,000 for short-mode STP)
                     - For example: 
                     - ![](../../../../../assets/images/ccna/lesson2/lesson_2_stp_2.jpg)
@@ -62,6 +63,40 @@ grand_parent: Coding Practices
                 - Lowest **port priority** by the received BPDU message from the sender bridge 
                 - Lowest **port number** by the received BPDU message from the sender bridge 
                     - ![](../../../../../assets/images/ccna/lesson2/lesson_2_stp_4.jpg)
+
+        - Step 3: How to find designated port (default as forwarding state) between segments!
+            - If there are 6 segments, then there needs to be 6 desingated ports (?)
+            - Method: There are 4 steps
+                - If No BPDU Messages/ Spanning-tree message (i.e. STP Frames) is received in this port = Designated ports (e.g. PC, Printer... Since they don't since BPDU)  
+                    - Like this: 
+                    - ![](../../../../../assets/images/ccna/lesson2/lesson_2_stp_5.jpg)
+                - The lowest cost to root bridge
+                    - ![](../../../../../assets/images/ccna/lesson2/lesson_2_stp_6.jpg)
+                    - At this port we are 4 out of 6 done!
+                - The lowest bridge ID (again: Bridge ID = Priority Value + MAC Address)
+                    - 5 out of 6 DONE ! 
+                    - ![](../../../../../assets/images/ccna/lesson2/lesson_2_stp_7.jpg)
+                - The lowest port ID ! (e.g. g1/19 vs g1/20 then g/19 wins!)
+                    - Finished!!
+                    - ![](../../../../../assets/images/ccna/lesson2/lesson_2_stp_8.jpg)
+
+        - Step 4: How to find Alterate port in a switch port? 
+            - When the port is non root port nor designated port... BLOCK IT & Alternate port
+            - Like so...
+                - ![](../../../../../assets/images/ccna/lesson2/lesson_2_stp_9.jpg)
+
+    - Summarizing RSTP switching ports
+        - Fowarding root port
+        - Fowarding Designated port
+        - Blocking/discarding alternate port
+        - Backup port (a special block port) (Rarely ask in CCNA, more in CCNP)
+            - Will be put to discarding state hmmmm
+
+### 4.2.x RSTP port state and the underlying logic
+
+- Changing port roles from blocking to forwarding
+    - Current setup
+        - ![](../../../../../assets/images/ccna/lesson2/lesson_2_rstp_1.jpg) 
                 
 
 
