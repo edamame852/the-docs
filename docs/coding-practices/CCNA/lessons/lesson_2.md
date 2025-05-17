@@ -41,14 +41,28 @@ grand_parent: Coding Practices
     - STP Messages = BPDU (Bridge Protocol Data Units) which determines the port states
 
     - Determining Root Bridge, Root Port, Designated port !
-        - Step 1. How to find Root Bridge? 
-            - Method: Determined by lower Bridge ID (Bridge ID = Priority Value + MAC address). 
+        - Step 1: How to find Root Bridge? 
+            - Method: Determined by lower Bridge ID (Bridge ID = Priority Value + MAC address). In total there are 2 ways 
                 - Lowest priority value (default priority value = 32768)
                 - Lowest MAC address value
             - Please locate Bridge ID with `sh version` or `sh spanning-tree` on previlaged level
             - The other bridge that's not root is regarded as non-root bridge
             - Example for determining the root bridge by priority values:
             - ![](../../../../../assets/images/ccna/lesson2/lesson_2_stp_1.jpg)
+
+        - Step 2: How to find the (already forwarding state) Root ports in the non-root brdiges
+            - Method: There are 4 ways.
+                - Lowest cumulative path cost towards the root bridge (1Gbps = 4 for short-mode STP/ 20,000 for short-mode STP)
+                    - For example: 
+                    - ![](../../../../../assets/images/ccna/lesson2/lesson_2_stp_2.jpg)
+                    - Switch 1 DONE, Switch 3 still need further investigation
+                - Lowest sender bridge ID (via `sh spanning-tree`)
+                    - ![](../../../../../assets/images/ccna/lesson2/lesson_2_stp_3.jpg)
+                    - still need further investigation !!
+                - Lowest **port priority** by the received BPDU message from the sender bridge 
+                - Lowest **port number** by the received BPDU message from the sender bridge 
+                    - ![](../../../../../assets/images/ccna/lesson2/lesson_2_stp_4.jpg)
+                
 
 
 
