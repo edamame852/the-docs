@@ -47,8 +47,9 @@ grand_parent: Coding Practices
                 - Lowest MAC address value
             - Please locate Bridge ID with `sh version` or `sh spanning-tree` on previlaged level
             - The other bridge that's not root is regarded as non-root bridge
-### Attempt
-![](../../../../../assets/images/ccna/test.jpg)
+            - Example for determining the root bridge by priority values:
+                - ![](../../../../../assets/images/ccna/lesson_2_stp_1.jpg)
+
 
 
 
