@@ -48,7 +48,7 @@ grand_parent: Coding Practices
             - Please locate Bridge ID with `sh version` or `sh spanning-tree` on previlaged level
             - The other bridge that's not root is regarded as non-root bridge
 ### Picture
-<img src="../diagrams/Switche_STP.jpg">
+<img src="../diagrams/Switche_STP.jpg" alt="test">
 
 
 
