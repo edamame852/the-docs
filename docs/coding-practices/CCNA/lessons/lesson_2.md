@@ -50,5 +50,5 @@ grand_parent: Coding Practices
             - Example:
             ![](../diagrams/Switche_STP.jpg)
         - Step 2: How to find root port (only Non-root bridge has this)
-            - 
+            - ...
 
