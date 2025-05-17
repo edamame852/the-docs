@@ -48,7 +48,7 @@ grand_parent: Coding Practices
             - Please locate Bridge ID with `sh version` or `sh spanning-tree` on previlaged level
             - The other bridge that's not root is regarded as non-root bridge
             - Example for determining the root bridge by priority values:
-                - ![](../../../../../assets/images/ccna/lesson2/lesson_2_stp_1.jpg)
+![](../../../../../assets/images/ccna/lesson2/lesson_2_stp_1.jpg)
 
 
 
