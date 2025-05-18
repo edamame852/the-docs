@@ -97,8 +97,120 @@ grand_parent: Coding Practices
 - Changing port roles from blocking to forwarding
     - Current setup
         - ![](../../../../../assets/images/ccna/lesson2/lesson_2_rstp_1.jpg) 
-                
+        
+    - Assume the link from top of switch A is broken
+
+    - The Alternate port reopens as forwarding and became the root port
+        - It will look like this in the end
+        - ![](../../../../../assets/images/ccna/lesson2/lesson_2_rstp_2.jpg) 
+        - Which it went through the state of 
+            - Discarding (BLK): Data frame is blocked
+            - Learning (LRN): Data frame is blocked, but MAC address can be learned/built at this stage
+            - Forwarding (FWD): Data frame is forwarded
+
+### 4.2.y Configuring RSTP Switches!
+- This is the target network diagram design (= the current topology)
+- ![](../../../../../assets/images/ccna/lesson2/lesson_2_rstp_3.jpg)
+
+- Open switch3 at privileged mode with `sh spanning-tree`, it shows general STP info and roles/ states of the ports in the swtich
+    - ieee means it's the traditional rstp. Let's change it to Rapid PVST+
+    ```bash
+    VLAN0001
+        Spanning tree enabled protocol ieee 
+    ```
+    - Perform the following commands, most importantly `spanning-tree mode rapid-pvst`
+    - Repeat this process for other switches 1 and 2 please.
+    ```bash
+    en
+    config t
+    spanning-tree mode rapid-pvst
+    end
+    ```
+- Please recall Switch 2 is elected Root bridge due to it's lowest Brdige ID (i.e. acutally, lowest MAC address :D)
+
+- Let's check Switch 2's info with `sh spanning-tree`
+```bash
+VLAN0001
+    Spanning tree enabled protocol rstp
+Root ID     Priority 32769 (Default for VLAN is 32768)
+            Address 5001.0004.0000
+            This bridge is the root (sometimes this gets convered up in the exam)
+            Hello Time ...
+Bridge ID   Priority 32769
+            Address 5001.0004.0000
+            Hello Time ...
+Interface
+--------------------
+.
+.
+.
+```
+
+- Since the Root ID and (Current) Bridge ID (i.e. BID) are the same, the switch we're looking at is the elected Root Bridge! 
 
 
+- Let's check Switch 3 again: `sh spanning-tree`
+```bash
+VLAN0001
+    Spanning tree enabled protocol rstp
+Root ID     Priority 32769 (Default for VLAN is 32768)
+            Address 5001.0004.0000
+            Cost 4
+            Port 7
+            Hello Time ...
+Bridge ID   Priority 32769
+            Address 5001.0005.0000
+            Hello Time ...
+
+Interface       Role        Sts     Cost        Prio.Nbr        Type
+-----------     ------      ----    -------    ---------        ------     
+Gi0/0           Desg        FWD     4           128.1           p2p
+Gi0/1           Desg        FWD     4           128.2           p2p
+Gi0/2           Desg        FWD     4           128.3           p2p
+Gi0/3           Desg        FWD     4           128.4           p2p
+Gi1/0           Desg        FWD     4           128.5           p2p
+Gi1/1           Desg        FWD     4           128.6           p2p
+Gi1/2           Root        FWD     4           128.7           p2p
+Gi1/3           Alth        BLK     4           128.8           p2p
+```
+- Notice the following:
+    - g1/2 is the root port
+    - g1/1 is not connected to any switch. hence desingated port since no BPDU messages and it's connected to PC
+    - g1/3 is not root port nor designated port, hence it's an alternate port and is set to discarded state
 
 
+- Let's check Switch 1:
+```bash
+VLAN0001
+    Spanning tree enabled protocol rstp
+Root ID     Priority 32769 (Default for VLAN is 32768)
+            Address 5001.0004.0000
+            Cost 4
+            Port 3
+            Hello Time ...
+Bridge ID   Priority 32769
+            Address 5001.0006.0000
+            Hello Time ...
+
+Interface       Role        Sts     Cost        Prio.Nbr        Type
+-----------     ------      ----    -------    ---------        ------     
+Gi0/0           Desg        FWD     4           128.1           p2p
+Gi0/1           Altn        BLK     4           128.2           p2p
+Gi0/2           Root        FWD     4           128.3           p2p
+Gi0/3           Desg        FWD     4           128.4           p2p
+```
+- Notice the following:
+    - g0/2 is the root port
+    - g0/1 is not root port nor designated port, hence it's an alternate port and is set to discarded state
+
+### 4.2.z Configuring ports into PortFast (PF) = Edge Ports!
+- Meaning:  
+    - Originally: Discarding State --> Learning State --> Forwarding state
+    - Now: Discarding State ------directly----> Forwarding state
+- Limitation:  
+    - Only ports that are NOT connected to any switch/hub (i.e. comptuer, printer, any non-hub non switch thingy. Things without loops)
+- How to configure ports into edge ports: `spanning-tree portfast`
+
+- Diasters happens if portFast/edge ports are configured on ports that are connected to swtich/hubs...
+    - **(temp) Broadcast storms**
+    - However, if BPDU is received on any PF ports, it losses it's edge port feature and becomes normal port 
