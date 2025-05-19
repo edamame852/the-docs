@@ -150,7 +150,6 @@ Interface
 
 
 - Let's check Switch 3 again: `sh spanning-tree`
-- 
 ```bash
 VLAN0001
     Spanning tree enabled protocol rstp
@@ -181,7 +180,6 @@ Gi1/3           Alth        BLK     4           128.8           p2p
 
 
 - Let's check Switch 1:
-- 
 ```bash
 VLAN0001
     Spanning tree enabled protocol rstp
