@@ -150,8 +150,7 @@ Interface
 
 
 - Let's check Switch 3 again: `sh spanning-tree`
-- 
-```bash
+"""
 VLAN0001
     Spanning tree enabled protocol rstp
 Root ID     Priority 32769 (Default for VLAN is 32768)
@@ -175,7 +174,7 @@ Gi1/3           Alth        BLK     4           128.8           p2p
 .
 .
 .
-```
+"""
 
 - Notice the following:
     - g1/2 is the root port
