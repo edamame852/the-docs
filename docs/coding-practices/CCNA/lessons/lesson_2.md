@@ -150,7 +150,7 @@ Interface
 
 
 - Let's check Switch 3 again: `sh spanning-tree`
-```
+```bash
 VLAN0001
     Spanning tree enabled protocol rstp
 Root ID     Priority 32769 (Default for VLAN is 32768)
@@ -164,6 +164,7 @@ Bridge ID   Priority 32769
 ```
 ```
 Interface       Role        Sts     Cost        Prio.Nbr        Type
+-----------     ------      ----    -------    ---------        ------     
 Gi0/0           Desg        FWD     4           128.1           p2p
 Gi0/1           Desg        FWD     4           128.2           p2p
 Gi0/2           Desg        FWD     4           128.3           p2p
@@ -172,10 +173,7 @@ Gi1/0           Desg        FWD     4           128.5           p2p
 Gi1/1           Desg        FWD     4           128.6           p2p
 Gi1/2           Root        FWD     4           128.7           p2p
 Gi1/3           Alth        BLK     4           128.8           p2p
-.
-.
-.
-"""
+```
 
 - Notice the following:
     - g1/2 is the root port
