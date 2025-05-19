@@ -150,7 +150,7 @@ Interface
 
 
 - Let's check Switch 3 again: `sh spanning-tree`
-"""
+```
 VLAN0001
     Spanning tree enabled protocol rstp
 Root ID     Priority 32769 (Default for VLAN is 32768)
@@ -161,7 +161,8 @@ Root ID     Priority 32769 (Default for VLAN is 32768)
 Bridge ID   Priority 32769
             Address 5001.0005.0000
             Hello Time ...
-
+```
+```
 Interface       Role        Sts     Cost        Prio.Nbr        Type
 Gi0/0           Desg        FWD     4           128.1           p2p
 Gi0/1           Desg        FWD     4           128.2           p2p
@@ -194,7 +195,9 @@ Root ID     Priority 32769 (Default for VLAN is 32768)
 Bridge ID   Priority 32769
             Address 5001.0006.0000
             Hello Time ...
-
+```
+    
+```
 Interface       Role        Sts     Cost        Prio.Nbr        Type
 -----------     ------      ----    -------    ---------        ------     
 Gi0/0           Desg        FWD     4           128.1           p2p
