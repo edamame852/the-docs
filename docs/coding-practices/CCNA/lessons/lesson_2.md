@@ -164,7 +164,6 @@ Bridge ID   Priority 32769
             Hello Time ...
 
 Interface       Role        Sts     Cost        Prio.Nbr        Type
-----------------------------------------------------------------------------------------------------
 Gi0/0           Desg        FWD     4           128.1           p2p
 Gi0/1           Desg        FWD     4           128.2           p2p
 Gi0/2           Desg        FWD     4           128.3           p2p
