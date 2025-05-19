@@ -14,9 +14,9 @@ grand_parent: Coding Practices
 {:toc}
 
 ---
-0. File structure
+## 0. File structure
 
-1. `__main__.py`
+## 1. `__main__.py`
 
 - Enable logging
 - Setting app entry point
@@ -95,13 +95,13 @@ if __name__ == __main__:
 
 ```
 
-2. Base Class for HK (Parent to NT, KLN, HKI)
+## 2. Base Class for HK (Parent to NT, KLN, HKI)
 
-3. Base Class for test
+## 3. Base Class for test
 
-4. tox.ini
+## 4. tox.ini
 
-5. `pyproject.toml`
+## 5. `pyproject.toml`
 
 ```
 [tool.poetry]
@@ -161,7 +161,7 @@ pattern = "default-unprefixed"
 
 ```
 
-6. `create_logger.py`
+## 6. `create_logger.py`
 
 ```python
 
@@ -200,7 +200,7 @@ def create_logger(default_district_log_starter:str, log_custom_name:str,log_cust
 
 ```
 
-7. upload.json
+## 7. upload.json
 
 ```json
 
@@ -220,7 +220,7 @@ def create_logger(default_district_log_starter:str, log_custom_name:str,log_cust
 
 ```
 
-8. Jenkinsfile.asia
+## 8. Jenkinsfile.asia
 
 ```groovy
 #!/usr/bin/env groovy
