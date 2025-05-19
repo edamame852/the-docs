@@ -172,7 +172,9 @@ Gi1/0           Desg        FWD     4           128.5           p2p
 Gi1/1           Desg        FWD     4           128.6           p2p
 Gi1/2           Root        FWD     4           128.7           p2p
 Gi1/3           Alth        BLK     4           128.8           p2p
+
 ```
+
 - Notice the following:
     - g1/2 is the root port
     - g1/1 is not connected to any switch. hence desingated port since no BPDU messages and it's connected to PC
