@@ -235,4 +235,54 @@ Gi0/3           Desg        FWD     4           128.4           p2p
 
 - MAC Address Flushing = removing old records (applicable to all non-edge ports)
 
-## 4.2.B 
+## 4.2.B Lab: Tuning RSTP
+
+- Tune RSTP Practice 1: Configure port pirority and making the counter port as a (preferred) root port
+    - Switch 3 `sh spanning-tree` g1/3 is an alterate port
+    - Switch 2, promote to interface configuration mode! Switch 2's g1/3's Prio.Nbr becomes 64.8 `spanning-tree port-priority 64`
+    - 
+    ```bash
+    en
+    config t
+    int g1/3 
+    spanning-tree port-priority 64
+    end
+    ```
+    - Check Switch 3 again `sh spanning-tree` g1/3 is Root port
+    - In switch 3: g1/2 and g1/3 has swtiched roles (alterate <> root)
+- Tune RSTP Practice 2: Configure Bridge ID pirority and making the current bridge into a root bridge
+    - Swtich 1, set VLAN root root priority `spanning-tree vlan 1 root primary`. Swtich 1 is not the root yet.
+    - 
+    ```bash
+    en
+    config t
+    int g1/3 
+    spanning-tree vlan 1 root primary
+    end
+    ```
+    - Switch 1 is now the root bridge!!
+- Tune RSTP Practice 3: Configure Switch 3 to be the secondary root brdige
+    - In swtich3
+    - 
+    ```bash
+    en
+    config t
+    int g1/3 
+    spanning-tree vlan 1 root secondary
+    end
+    ```
+    - As shown, with `sh spanning-tree` swtich 1 is still the root brdige (Pirority Value 24576) and switch 3 is configured as a secondary root bridge (Pirority Value 28672)
+- Tune RSTP Practice 4: Configure port into an edge port `spanning-tree portfast`
+    - Assume we want to configure swtich 2's g1/1 & g0/2 as edge ports
+    - 
+    ```bash
+    en
+    config t
+    int g1/1 
+    spanning-tree portfast
+    int g0/2
+    spanning-tree portfast
+    end
+    ```
+    - Type p2p is converted to p2p Edge
+    > Note: Even if g0/2 is converted to Edge Port, since it keeps on getting BPDU messages from other swtiches, it will NEVER reach edge port status!!
