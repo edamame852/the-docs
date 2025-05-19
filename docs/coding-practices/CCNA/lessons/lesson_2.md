@@ -150,6 +150,7 @@ Interface
 
 
 - Let's check Switch 3 again: `sh spanning-tree`
+- 
 ```bash
 VLAN0001
     Spanning tree enabled protocol rstp
@@ -180,6 +181,7 @@ Gi1/3           Alth        BLK     4           128.8           p2p
 
 
 - Let's check Switch 1:
+- 
 ```bash
 VLAN0001
     Spanning tree enabled protocol rstp
@@ -214,3 +216,23 @@ Gi0/3           Desg        FWD     4           128.4           p2p
 - Diasters happens if portFast/edge ports are configured on ports that are connected to swtich/hubs...
     - **(temp) Broadcast storms**
     - However, if BPDU is received on any PF ports, it losses it's edge port feature and becomes normal port 
+
+
+### 4.2.A Topology changes (TC)!
+- TC Occurs when non-edge port becomes edge ports!
+- RSTP logic during TC
+    - Step 0: Assume we only have 2 switch, 2 ports with these connections
+        - ![](../../../../../assets/images/ccna/lesson2/lesson_2_tc_1.jpg) 
+    - Step 1: New connection is set, Switch 2 (Root Bridge) sends STP message for setting new connection
+        - ![](../../../../../assets/images/ccna/lesson2/lesson_2_tc_2.jpg) 
+    - Step 2: Root port and Desinated port is elected and verified
+        - Switch 1 finds g1/2 is a superior port from BPDU messages
+        - Switch 1 blocks g1/3 other non-edge ports
+        - Switch 1 tells Switch 2, it agrees g1/2 is a designated port
+        - ![](../../../../../assets/images/ccna/lesson2/lesson_2_tc_3.jpg)
+    - Step 3: Block is lifted and put directly into forwarding state
+        - ![](../../../../../assets/images/ccna/lesson2/lesson_2_tc_4.jpg)
+
+- MAC Address Flushing = removing old records (applicable to all non-edge ports)
+
+## 4.2.B 
