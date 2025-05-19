@@ -102,7 +102,7 @@ if __name__ == __main__:
 4. tox.ini
 
 5. pyproject.toml
-```toml
+```
 [tool.poetry]
 name = "hk_eod_parser"
 version = "1.0.0"
@@ -157,7 +157,6 @@ pydantic-settings = "^2.2.1"
 [tool.poetry-dynamic-versioning]
 enable = true
 pattern = "default-unprefixed"
-
 
 ```
 
