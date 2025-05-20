@@ -68,4 +68,32 @@ grand_parent: Coding Practices
         switchport access vlan 2
         end
         ```
+    - Step 3: Verify with `sh vlan`! Done !
+        - 
+        ```bash
+        VLAN    Name                Status      Ports
+        -------------------------------------------------------------------------------
+        1       default             active      Gi0/0, Gi0/1, Gi0/3,
+                                                Gi1/0, Gi1/1, Gi1/2, Gi1/3
+        2       Accounting          active      Gi0/2 <================================= NICEEEE
+        1002    fddi-default        act/unsup   
+        1003    token-ring-default  act/unsup
+        1004    fddinet-default     act/unsup
+        1005    trnet-default       act/unsup
+        .
+        .
+        .
+        ``` 
 
+- Practice: Configuring multiple swtich ports? 
+    - Ans: do these 2 things
+        - Step 1: `int range g0/1-3` or `int range g0/1, g0/3`. These two expressions both works
+        - Step 2: `switchport access vlan 2`
+
+
+### 4.3.3 VLAN Trunk!! (VERY IMPORTANT!)
+- Important:
+    - VLAN Trunk is able to handle all VLAN and forward all VLAN traffic in one connection.
+    - If VLAN Trunk doesn't exist... 1 new VLAN needs 1 new swtich port... # of cables will be unmanagable in the long run... Hence, use VLAN trunk!
+    - Trunk ports will add VLAN info = VLAN tag to the forwarded data frame.
+- When do we use a tag ?
