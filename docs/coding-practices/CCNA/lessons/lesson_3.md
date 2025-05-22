@@ -22,6 +22,9 @@ grand_parent: Coding Practices
 
 3. During the CCNA practical exam, please **verify** after you **configure** !!  
 
+4. MC will ask about Native VLAN mismatch, how do we tackle this issue?
+> Ans: 2 answers, both works. Either **merge** (left and right native VLAN merges) or **spanning-tree block** blocking both VLANs together!
+
 # 4. Features in CISCO switches
 ## 4.3 Default VLAN
 
@@ -93,7 +96,23 @@ grand_parent: Coding Practices
 
 ### 4.3.3 VLAN Trunk!! (VERY IMPORTANT!)
 - Important:
-    - VLAN Trunk is able to handle all VLAN and forward all VLAN traffic in one connection.
-    - If VLAN Trunk doesn't exist... 1 new VLAN needs 1 new swtich port... # of cables will be unmanagable in the long run... Hence, use VLAN trunk!
+    - VLAN Trunk can handle + forward all VLAN frames and all VLAN traffic through one single connection.
+    - If VLAN Trunk doesn't exist... 1 new VLAN needs 1 new swtich port... # of cables will be unmanagable in the long run... Hence, use **VLAN trunk**!
     - Trunk ports will add VLAN info = VLAN tag to the forwarded data frame.
-- When do we use a tag ?
+- When do we use a tag ? Ans: all non-native VLANs's data frame will be tagged!
+
+- **Native VLAN**, default is VLAN 1. However, native VLAN can be set by speicifying a VLAN ID during trunk port configurations.
+    - Adding VLAN information to data frames is under this protocol: **IEEE 802.1Q** or **802.1q encapsulation** (dot 1 Q)
+    - Please note! MUST configure the same native VLAN for the trunk ports for both sides of the connection!!! Otherwise, Native VLAN Mismatch !!!
+    - Refer to this diagram for an example for VLAN
+    - ![](../../../../../assets/images/ccna/lesson3/lesson_3_vlan_1.jpg) 
+
+- Native VLAN mismatch:
+- You'll see this on the log...
+    - Meaning VLAN 8 and VLAN 99 are clashing since they're both configured as Native VLAN in their own respective trunks!
+    ```bash
+    Switch1#
+    %CDP-4-NATIVE_VLAN_MISMATCH: Native VLAN mismatch discovered on GigabitEthernet1/2 (8), with Switch2 GigabitEthernet1/2 (99).
+    ```
+    - Diagram of the VLAN mismatch
+        - ![](../../../../../assets/images/ccna/lesson3/lesson_3_vlan_2.jpg) 
