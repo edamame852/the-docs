@@ -25,6 +25,14 @@ grand_parent: Coding Practices
 4. MC will ask about Native VLAN mismatch, how do we tackle this issue?
 > Ans: 2 answers, both works. Either **merge** (left and right native VLAN merges) or **spanning-tree block** blocking both VLANs together!
 
+5. Need to learn to to check trunk links!
+> Ans: using `swtichport trunk encapsulation dot1q` & `swtichport mode trunk` & `swtichport trunk native vlan 1`
+
+6. InterVLAN will be tested as MC! Q: Why do we need InterVLAN when we have VLAN 1 and VLAN 2?
+> Because we can keep the 3 benefits of VLAN while maintaining VLAN 1 and VLAN 2 communication via L3 InterVLAN !
+
+7. DTP stuff (Dynamic Trunk Protocol) will be tested in MC: DTP switchport modes...likely
+
 # 4. Features in CISCO switches
 ## 4.3 Default VLAN
 
@@ -52,7 +60,7 @@ grand_parent: Coding Practices
 
 ### 4.3.2 VLAN Configuration
 
-- Practice: Creating VLAN 2 and assign g0/2 into VLAN 2!
+- Practice 1: Creating VLAN 2 and assign g0/2 into VLAN 2!
     - Step 1: Create VLAN 2 on Switch 1 via `vlan 2` and takes you to VLAN COnfiguration mode and change name with `name Acounting`.
         - 
         ```bash
@@ -88,7 +96,7 @@ grand_parent: Coding Practices
         .
         ``` 
 
-- Practice: Configuring multiple swtich ports? 
+- Practice 2: Configuring multiple swtich ports? 
     - Ans: do these 2 things
         - Step 1: `int range g0/1-3` or `int range g0/1, g0/3`. These two expressions both works
         - Step 2: `switchport access vlan 2`
@@ -101,6 +109,10 @@ grand_parent: Coding Practices
     - Trunk ports will add VLAN info = VLAN tag to the forwarded data frame.
 - When do we use a tag ? Ans: all non-native VLANs's data frame will be tagged!
 
+- Two trunk protocols:
+    - IEEE:
+    - ISL: Inter-Switch Link (Cisco proprietary)
+
 - **Native VLAN**, default is VLAN 1. However, native VLAN can be set by speicifying a VLAN ID during trunk port configurations.
     - Adding VLAN information to data frames is under this protocol: **IEEE 802.1Q** or **802.1q encapsulation** (dot 1 Q)
     - Please note! MUST configure the same native VLAN for the trunk ports for both sides of the connection!!! Otherwise, Native VLAN Mismatch !!!
@@ -109,10 +121,140 @@ grand_parent: Coding Practices
 
 - Native VLAN mismatch:
 - You'll see this on the log...
-    - Meaning VLAN 8 and VLAN 99 are clashing since they're both configured as Native VLAN in their own respective trunks!
+    - Meaning VLAN 7 and VLAN 88 are clashing since they're both configured as Native VLAN in their own respective trunks!
     ```bash
     Switch1#
     %CDP-4-NATIVE_VLAN_MISMATCH: Native VLAN mismatch discovered on GigabitEthernet1/2 (8), with Switch2 GigabitEthernet1/2 (99).
     ```
     - Diagram of the VLAN mismatch
         - ![](../../../../../assets/images/ccna/lesson3/lesson_3_vlan_2.jpg) 
+
+
+- Practice 3: Configure VLAN trunk IEEE 802.1q between Swtich 1 and Switch 2's g1/2. Native default VLAN 1. Also verify VLAN status for Switch 1.
+
+    - ![](../../../../../assets/images/ccna/lesson3/lesson_3_vlan_3.jpg) 
+
+    - Configure switch 1:
+    ```bash
+    en
+    config t
+    int g1/2
+    switchport trunk encapsulation dot1q
+    switchport mode trunk
+    switchport trun native vlan 1
+    ```
+    - `switchport trunk encapsulation dot1q`: Setting encapsulation, setting trunk port to be dot1Q
+    - `switchport mode trunk`: Configuringt the port to trunk port
+    - `switchport trun native vlan 1`: set native VLAN to VLAN 1 (optional command, since default is VLAN 1)
+
+    - Configure switch 2:
+    ```bash
+    en
+    config t
+    int g1/2
+    switchport trunk encapsulation dot1q
+    switchport mode trunk
+    end
+    ```
+
+    - Verify switch 1: `show int trunk` (= shows info of all trunk ports)
+        - Trunk encapsulation the trunk showing 802.1q
+        - Native VLAN of trunk is VLAN 1
+        - VLAN can only be sent through 1-4094 (Cisco default opens all VLAN 1-4094) (VLAN is 12 bit, has 4095)
+
+    ```bash
+    Port        Mode        Encapsulation       Status      Native vlan
+    Gi1/2       on          802.1q              trunking    1
+
+    Port        vlans allowed on trunk
+    Gi1/2       1-4094
+    .
+    .
+    .
+    ```
+
+- Practice 4: Configure mulitple native VLANs for multiple  
+    - Command: `swtichport trunk allowed vlan` to define all allowed VLANs on the trunk link.
+    - ![](../../../../../assets/images/ccna/lesson3/lesson_3_vlan_4.jpg)
+    
+    - 
+    ```bash
+    en
+    config t
+    int g1/2
+        switchport trunk encapsulation dot1q
+        switchport mode trunk
+        switchport trunk allowed vlan 1,3-4
+    int g1/3
+        switchport trunk encapsulation dot1q
+        switchport mode trunk
+        switchport trunk allowed vlan 2
+    end
+    ```
+
+    - Verify swtichport ! `show interfaces g1/2 swtichport`
+    - 
+    ```bash
+    Name: Gi 1/2
+    Switchport: Enable
+    Adminstrative Mode: trunk
+    Operational Mode: trunk
+    Admin...: ...
+    Opertionaal Trunking eEncapsulation: dot1q
+    .
+    .
+    .
+    ```
+
+    - Verify swtichport! `show vlan brief` (shows only the VLAN descriptions top part) as oppose to `show vlan`
+    - Notice! Gi1/2 (or g1/2) is removed from the all ports since trunk port BELONG TO ALL (not just one single VLAN)
+    ```bash
+    VLAN    Name        Status      Forts
+    -------------------------------------------------
+    1       default     active      Gi0/0, Gi0/1, Gi0/3, Gi1/0
+                                    Gi1/1, Gi1/3
+    2       Accounting  active      G0/2
+    1002    fddi-default        act/unsup   
+    1003    token-ring-default  act/unsup
+    1004    fddinet-default     act/unsup
+    1005    trnet-default       act/unsup
+    .
+    .
+    ```
+
+### 4.3.5 IMPORTANT: InterVLAN Routing
+- On L2, different VLANs cannot communicate...but with L3/ IP routing it's possible, we call this method: **InterVLAN routing**!
+- This is how InterVLAN works:
+    - ![](../../../../../assets/images/ccna/lesson3/lesson_3_vlan_5.jpg)
+
+### 4.3.6 Other VLAN and Trunk related features
+
+
+#### 4.3.6.1 Important: DTP concepts
+- DTP = Dynamic Trunking Protocol (Cisco proprietary)
+    - DTP allows negociation (via DTP messages) between 2 swtiches and decides whether a trunk link should be formed! 
+
+- There are 4 different DTP swtichport modes:
+    - 1. swtichport modes `trunk` = permanetly perming trunking (Compatible modes: ALL but access)
+    - 2. swtichport modes `dynamic desirable` = actively requesting trunking (Compatible modes: ALL but access)
+    - 3. swtichport modes `dynamic auto` = willing to passively perform trunking (Compatible modes: ALL but access + dynamic auto)
+    - 4. swtichport modes `access` = permanently NOT performing trunking (Compatible modes: None)
+
+- Verify trunk mode with `show interface trunk`
+- If both switch port modes are access then are a few possibiles other than just no trunk being formed...
+    - other issues...
+    - To solve it: Setting up Native VLAN to resolve this issue! (out syll)
+
+#### 4.3.6.2 Important: VTP concepts
+- Important concepts:
+    - Trunk Link must be set up before VTP can be used.
+    - VTP MUST be propagated via trunk link under the same domain link
+    - VTP can propagate VLAN info (VLAN ID, VLAN Name) **automatically** via trunk links to all switches as long as they are under the same domain link
+    - VTP gurantees setting same VLAN across all swtiches across the network
+
+- 3 modes of VTP:
+    - Server Mode: Will attempt to affect other switches by taking charge of sending VTP messages
+        - Configuring Server Mode:
+    - Client Mode: Pass on VTP message nit cannot initiate removal/adding of VLAN
+        - Configuring Client Mode:
+    - Transparent Mode: Doesn't join in the fun and pass on VTP message
