@@ -33,6 +33,10 @@ grand_parent: Coding Practices
 
 7. DTP stuff (Dynamic Trunk Protocol) will be tested in MC: DTP switchport modes...likely
 
+8. Exam will cover lab on Ether Channel, bundling >=2 links into one big logical channel
+
+9. 
+
 # 4. Features in CISCO switches
 ## 4.3 Default VLAN
 
@@ -248,13 +252,78 @@ grand_parent: Coding Practices
 #### 4.3.6.2 Important: VTP concepts
 - Important concepts:
     - Trunk Link must be set up before VTP can be used.
-    - VTP MUST be propagated via trunk link under the same domain link
+    - VTP MUST be propagated via trunk link under the same domain link (set same domain with `vtp domain SysDomain`)
     - VTP can propagate VLAN info (VLAN ID, VLAN Name) **automatically** via trunk links to all switches as long as they are under the same domain link
-    - VTP gurantees setting same VLAN across all swtiches across the network
+    - VTP gurantees setting same VLAN across all swtiches across the network (passwords must be the same too)
 
 - 3 modes of VTP:
     - Server Mode: Will attempt to affect other switches by taking charge of sending VTP messages
-        - Configuring Server Mode:
+        - Configuring Server Mode: `vtp mode server`
+        - 
+        ```bash
+        en
+        config t
+        vtp domain SysDomain
+        vtp mode server
+        vtp password ccna
+        vlan 2
+        name Accounting
+        end
+        ```
     - Client Mode: Pass on VTP message nit cannot initiate removal/adding of VLAN
-        - Configuring Client Mode:
-    - Transparent Mode: Doesn't join in the fun and pass on VTP message
+        - Configuring Client Mode: `vtp mode client`
+        - 
+        ```bash
+        en
+        config t
+        vtp domain SysDomain
+        vtp mode client
+        vtp password ccna
+        exit
+        ```
+    - Transparent Mode: Can remove/add VLAN but doesn't join in the fun and pass on VTP message
+        - Configuring Transparent Mode: `vtp mode transparent`
+        - 
+        ```bash
+        en
+        config t
+        vtp domain SysDomain
+        vtp mode transparent
+        vtp password ccna
+        end
+        ```
+    - Note: If we want to set another server mode Switch... we don't have to create another vlan like `vlan 2`
+
+## 4.4 EtherChannel
+
+### 4.4.1 Overview
+- EtherChannel = Aggregating >= 2 ethernet connection into 1 (i.e. 4 * 1Gi = 4 Gi)
+- Ensuring stability and grouping, the individual physical links works best at **same speed** + **same duplex mode**
+
+### 4.4.2 Configuring L2 EtherChannel (Lab)
+- Topology of the design of EtherChannel configuration
+- ![](../../../../../assets/images/ccna/lesson3/lesson_3_ether_1.jpg)
+
+
+- Step 1: Swtich left = Switch 1: Resetting to default status
+    - 
+    ```bash
+    en
+    config t
+    default interface g1/2
+    default interface g1/3
+    end
+    ```
+    - assign clean up/ resetting switch ports to default with `default interface g1/2`
+
+- Step 2: Bundle the 2 switch ports `int <switch ports>` then `channel-group 1 mode active`
+    - 
+    ```bash
+    en
+    config t
+    int range g1/2-3
+    channel-group 1 mode active
+    end
+    ```
+
+
