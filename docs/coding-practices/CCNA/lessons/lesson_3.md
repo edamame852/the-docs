@@ -322,8 +322,51 @@ grand_parent: Coding Practices
     en
     config t
     int range g1/2-3
-    channel-group 1 mode active
+    channel-group 1 mode active <-------- 2 ports will send LACP messages requesting to form EtherChannel
     end
     ```
+    - Note: `active` here means the LACP is active, allowing the 2 switches to negotiate whether a EtherChannel should be constructed. LACP is IEEE 802.3ad protocol, so it's also available on non-cisco devices.
+
+    - There are 2 LACP modes: `active` and `passive`
+        - `active`: LACP packet is sent by port requesting to form EtherChannel
+        - `passive`: Port accepts EtherChannel request when received LACP request. LACP confirmation packet is sent ONLY IF another LACP request packet is sent. 
+        - > Don't think too hard... just LACP messages is okay
+
+    - Out Syll stuff: Cisco proprietary protocol (PAgP)
+        - ........... later ..... (on page 54)
+
+- Step 3: Don't forget to configure the other switch!! This switch will take `passive` modes for its port
+    - 
+    ```bash
+    en
+    config t
+    default interface g1/2
+    default interface g1/3
+    int range g1/2-3
+    channel-group 1 mode passive
+    end
+    ```
+
+- Step 4: Sanity check and verify !!
+    - In left switch: use `show etherchannel summary`. This command shows an easy output with all the port channel interface, the negotiation protocol and # of member port, and its status
+    - You should see the summary like this...
+    - 
+    ```bash
+    Flags:  D - down ... S - layer 2
+            P - bundled in port channel
+
+            M - not in use, minimum links not met
+            m - not in use, port not aggregated due to minimum links not met
+    ...
+
+    Number of channel-groups in use:    1
+    Number of aggregators:              1
+    
+    Group       Port Channel        Protocol        Ports
+    ------------------------------------------------------------------------
+    1           Po1(SU)             LACP            Gi1/2(P)        Gi1/3(P)
+    ```
+    - If you see `(SD)` then it's down 
+
 
 
