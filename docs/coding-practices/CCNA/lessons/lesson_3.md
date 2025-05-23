@@ -26,7 +26,7 @@ grand_parent: Coding Practices
 > Ans: 2 answers, both works. Either **merge** (left and right native VLAN merges) or **spanning-tree block** blocking both VLANs together!
 
 5. Need to learn to to check trunk links!
-> Ans: using `swtichport trunk encapsulation dot1q` & `swtichport mode trunk` & `swtichport trunk native vlan 1`
+> Ans: using `switchport trunk encapsulation dot1q` & `switchport mode trunk` & `switchport trunk native vlan 1`
 
 6. InterVLAN will be tested as MC! Q: Why do we need InterVLAN when we have VLAN 1 and VLAN 2?
 > Because we can keep the 3 benefits of VLAN while maintaining VLAN 1 and VLAN 2 communication via L3 InterVLAN !
@@ -65,7 +65,7 @@ grand_parent: Coding Practices
 ### 4.3.2 VLAN Configuration
 
 - Practice 1: Creating VLAN 2 and assign g0/2 into VLAN 2!
-    - Step 1: Create VLAN 2 on Switch 1 via `vlan 2` and takes you to VLAN COnfiguration mode and change name with `name Acounting`.
+    - Step 1: Create VLAN 2 on Switch 1 via `vlan 2` and takes you to VLAN COnfiguration mode and change name with `name Accounting`.
         - 
         ```bash
         en
@@ -74,7 +74,7 @@ grand_parent: Coding Practices
         name Accounting
         end
         ```
-    - Step 2: Assign switch port g0/2 to VLAN2 via `int 0/2` = entering interface config mode and modify swtich port setting and assign it to VLAN 2 with `swtichport access vlan 2`.
+    - Step 2: Assign switch port g0/2 to VLAN2 via `int 0/2` = entering interface config mode and modify switch port setting and assign it to VLAN 2 with `switchport access vlan 2`.
         - 
         ```bash
         en
@@ -109,7 +109,7 @@ grand_parent: Coding Practices
 ### 4.3.3 VLAN Trunk!! (VERY IMPORTANT!)
 - Important:
     - VLAN Trunk can handle + forward all VLAN frames and all VLAN traffic through one single connection.
-    - If VLAN Trunk doesn't exist... 1 new VLAN needs 1 new swtich port... # of cables will be unmanagable in the long run... Hence, use **VLAN trunk**!
+    - If VLAN Trunk doesn't exist... 1 new VLAN needs 1 new switch port... # of cables will be unmanageable in the long run... Hence, use **VLAN trunk**!
     - Trunk ports will add VLAN info = VLAN tag to the forwarded data frame.
 - When do we use a tag ? Ans: all non-native VLANs's data frame will be tagged!
 
@@ -117,7 +117,7 @@ grand_parent: Coding Practices
     - IEEE:
     - ISL: Inter-Switch Link (Cisco proprietary)
 
-- **Native VLAN**, default is VLAN 1. However, native VLAN can be set by speicifying a VLAN ID during trunk port configurations.
+- **Native VLAN**, default is VLAN 1. However, native VLAN can be set by specifying a VLAN ID during trunk port configurations.
     - Adding VLAN information to data frames is under this protocol: **IEEE 802.1Q** or **802.1q encapsulation** (dot 1 Q)
     - Please note! MUST configure the same native VLAN for the trunk ports for both sides of the connection!!! Otherwise, Native VLAN Mismatch !!!
     - Refer to this diagram for an example for VLAN
@@ -134,7 +134,7 @@ grand_parent: Coding Practices
         - ![](../../../../../assets/images/ccna/lesson3/lesson_3_vlan_2.jpg) 
 
 
-- Practice 3: Configure VLAN trunk IEEE 802.1q between Swtich 1 and Switch 2's g1/2. Native default VLAN 1. Also verify VLAN status for Switch 1.
+- Practice 3: Configure VLAN trunk IEEE 802.1q between Switch 1 and Switch 2's g1/2. Native default VLAN 1. Also verify VLAN status for Switch 1.
 
     - ![](../../../../../assets/images/ccna/lesson3/lesson_3_vlan_3.jpg) 
 
@@ -145,11 +145,11 @@ grand_parent: Coding Practices
     int g1/2
     switchport trunk encapsulation dot1q
     switchport mode trunk
-    switchport trun native vlan 1
+    switchport trunk native vlan 1
     ```
     - `switchport trunk encapsulation dot1q`: Setting encapsulation, setting trunk port to be dot1Q
-    - `switchport mode trunk`: Configuringt the port to trunk port
-    - `switchport trun native vlan 1`: set native VLAN to VLAN 1 (optional command, since default is VLAN 1)
+    - `switchport mode trunk`: Configuring the port to trunk port
+    - `switchport trunk native vlan 1`: set native VLAN to VLAN 1 (optional command, since default is VLAN 1)
 
     - Configure switch 2:
     ```bash
@@ -177,7 +177,7 @@ grand_parent: Coding Practices
     .
     ```
 
-- Practice 4: Configure mulitple native VLANs for multiple  
+- Practice 4: Configure multiple native VLANs for multiple  
     - Command: `swtichport trunk allowed vlan` to define all allowed VLANs on the trunk link.
     - ![](../../../../../assets/images/ccna/lesson3/lesson_3_vlan_4.jpg)
     
@@ -196,21 +196,21 @@ grand_parent: Coding Practices
     end
     ```
 
-    - Verify swtichport ! `show interfaces g1/2 swtichport`
+    - Verify switchport ! `show interfaces g1/2 switchport`
     - 
     ```bash
     Name: Gi 1/2
     Switchport: Enable
-    Adminstrative Mode: trunk
+    Administrative Mode: trunk
     Operational Mode: trunk
     Admin...: ...
-    Opertionaal Trunking eEncapsulation: dot1q
+    Operational Trunking eEncapsulation: dot1q
     .
     .
     .
     ```
 
-    - Verify swtichport! `show vlan brief` (shows only the VLAN descriptions top part) as oppose to `show vlan`
+    - Verify switchport! `show vlan brief` (shows only the VLAN descriptions top part) as oppose to `show vlan`
     - Notice! Gi1/2 (or g1/2) is removed from the all ports since trunk port BELONG TO ALL (not just one single VLAN)
     ```bash
     VLAN    Name        Status      Forts
@@ -236,16 +236,16 @@ grand_parent: Coding Practices
 
 #### 4.3.6.1 Important: DTP concepts
 - DTP = Dynamic Trunking Protocol (Cisco proprietary)
-    - DTP allows negociation (via DTP messages) between 2 swtiches and decides whether a trunk link should be formed! 
+    - DTP allows negotiation (via DTP messages) between 2 switches and decides whether a trunk link should be formed! 
 
-- There are 4 different DTP swtichport modes:
-    - 1. swtichport modes `trunk` = permanetly perming trunking (Compatible modes: ALL but access)
-    - 2. swtichport modes `dynamic desirable` = actively requesting trunking (Compatible modes: ALL but access)
-    - 3. swtichport modes `dynamic auto` = willing to passively perform trunking (Compatible modes: ALL but access + dynamic auto)
-    - 4. swtichport modes `access` = permanently NOT performing trunking (Compatible modes: None)
+- There are 4 different DTP switchport modes:
+    - 1. switchport modes `trunk` = permanently perming trunking (Compatible modes: ALL but access)
+    - 2. switchport modes `dynamic desirable` = actively requesting trunking (Compatible modes: ALL but access)
+    - 3. switchport modes `dynamic auto` = willing to passively perform trunking (Compatible modes: ALL but access + dynamic auto)
+    - 4. switchport modes `access` = permanently NOT performing trunking (Compatible modes: None)
 
 - Verify trunk mode with `show interface trunk`
-- If both switch port modes are access then are a few possibiles other than just no trunk being formed...
+- If both switch port modes are access then are a few possibilities other than just no trunk being formed...
     - other issues...
     - To solve it: Setting up Native VLAN to resolve this issue! (out syll)
 
@@ -254,7 +254,7 @@ grand_parent: Coding Practices
     - Trunk Link must be set up before VTP can be used.
     - VTP MUST be propagated via trunk link under the same domain link (set same domain with `vtp domain SysDomain`)
     - VTP can propagate VLAN info (VLAN ID, VLAN Name) **automatically** via trunk links to all switches as long as they are under the same domain link
-    - VTP gurantees setting same VLAN across all swtiches across the network (passwords must be the same too)
+    - VTP guarantees setting same VLAN across all switches across the network (passwords must be the same too)
 
 - 3 modes of VTP:
     - Server Mode: Will attempt to affect other switches by taking charge of sending VTP messages

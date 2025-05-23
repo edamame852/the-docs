@@ -15,6 +15,108 @@ grand_parent: Coding Practices
 
 ---
 ## 0. File structure
+- .github/workflows/auto_git_release.yml
+- assets/inputs/
+     - nt/
+     - kln/
+     - hki/
+- hk_eod_parser/
+     - nt_eod_parser/
+          - logs/
+          - __init__.py
+          - nt_eod_parser.py
+     - kln_eod_parser/
+          - logs/
+          - __init__.py
+          - kln_eod_parser.py
+     - hki_eod_parser/
+          - logs/
+          - __init__.py
+          - hki_eod_parser.py
+     - helper/
+          - kln_mapping/
+               - kln_mapping.csv
+          - __init__.py
+     - utils/
+          - create_logger.py
+          - create_new_folder.py
+          - mapping_file_filter.py
+          - self_defined_classes.py
+          - timing.py
+          - __init__.py
+     - __init__.py
+     - __main__.py
+     - hk_parser.py
+- tests/
+     - integration_test/
+          - __init__.py
+          - base.py
+          - test_parser.py
+     - resources/
+     - utils/
+     - __init__.py
+- .gitignore
+- Jenkinsfile.asia
+- README.md
+- poetry.lock
+- pyproject.toml
+- tox.ini
+- upload.json
+
+```bash
+.
+├── .github
+│   └── workflows
+│       └── auto_git_release.yml
+├── assets
+│   └── inputs
+│       ├── nt
+│       ├── kln
+│       └── hki
+├── hk_eod_parser
+│   ├── nt_eod_parser
+│   │   ├── logs
+│   │   ├── __init__.py
+│   │   └── nt_eod_parser.py
+│   ├── kln_eod_parser
+│   │   ├── logs
+│   │   ├── __init__.py
+│   │   └── kln_eod_parser.py
+│   ├── hki_eod_parser
+│   │   ├── logs
+│   │   ├── __init__.py
+│   │   └── hki_eod_parser.py
+│   ├── helper
+│   │   ├── kln_mapping
+│   │   │   └── kln_mapping.csv
+│   │   └── __init__.py
+│   ├── utils
+│   │   ├── create_logger.py
+│   │   ├── create_new_folder.py
+│   │   ├── mapping_file_filter.py
+│   │   ├── self_defined_classes.py
+│   │   ├── timing.py
+│   │   └── __init__.py
+│   ├── __init__.py
+│   ├── __main__.py
+│   └── hk_parser.py
+├── tests
+│   ├── integration_test
+│   │   ├── __init__.py
+│   │   ├── base.py
+│   │   └── test_parser.py
+│   ├── resources
+│   ├── utils
+│   └── __init__.py
+├── .gitignore
+├── Jenkinsfile.asia
+├── README.md
+├── poetry.lock
+├── pyproject.toml
+├── tox.ini
+└── upload.json
+
+```
 
 ## 1. `__main__.py`
 
@@ -38,6 +140,7 @@ def main():
      )
 
      args_parser.add_argument("-i","--input" help="Input file (.zip or csv)",required=True)
+     args_parser.add_argument("-map","--mapping_file_path" help="Mapping file",required=True)   
      args_parser.add_argument("-oPath", help="Output file path")
      args_parser.add_argument("-oName","--output_name", help="Output file name")
      args_parser.add_argument("-d", "--district",help="district", required=True)
@@ -82,8 +185,8 @@ def main():
           )
 
      # Handling exception
-     if args["market"] not in ["nt","kln","hki"]:
-          logging=create_logger("Incorrect-Parser-logs",args["log_file_name"],"ERROR")
+     else:
+          logging = create_logger("Incorrect-Parser-logs",args["log_file_name"],"ERROR")
           logging.error(f"Input Market : {args["market"]} is not supported. Existing HK EOD Parser.")
           return
 
@@ -95,7 +198,34 @@ if __name__ == __main__:
 
 ```
 
-## 2. Base Class for HK (Parent to NT, KLN, HKI)
+## 2. Base Class for HK (Parent to NT, KLN, HKI) = hk_parser.py
+```python
+from datetime import datetime
+from datetime import timedelta #offsetting days
+import pytz #timezone stuff
+from abc import ABC, abstractmethod
+
+class HkParser(ABC):
+     def __init__(self, marketID:str, outputName:str, inputPath:str, outputPath:str, logging):
+          self.marketID = marketID
+          self.inputPath = inputPath
+          self.outputPath = outputPath
+          self.outputName = outputName
+          self._logger = logging
+
+     def _time_since_epoc(self, date:str, hour:str, mins:str, secs:str, milisecs:str) -> int:
+          time = f'{hour}:{mins}:{secs}.{milisecs}'
+          dt = (datetime.strptime(date + time, "%Y%m%d %H:%M:%s.%f")- timedelta(hours=1)).astimezone(pytz.timezone("Asia/Tokyo"))
+          return int(dt.timestamp()*1,000,000)
+     
+     @abstractmethod
+     def parse_and_output():
+          pass
+
+     def run(self):
+          self.parse_and_output()
+```
+
 
 ## 3. Base Class for test
 
@@ -228,8 +358,10 @@ def create_logger(default_district_log_starter:str, log_custom_name:str,log_cust
 @Library('jenkins-libs') _
 
 pipline{
-     agent{}
-     options{}
+     agent{ node {label "build_el69" } }
+     options{
+          buildDiscarder(logRotator(numToKeepStr:"20", artifactNumToKeepStr: "20"))
+     }
      stages{
           stage("Checkout"){
                steps{
@@ -238,8 +370,86 @@ pipline{
                     }
                }
           }
+          stage("Test"){
+               steps{
+                    script{
+                         utils.with_jfrog_credentials{ sh("tox run") }
+                    }
+               }
+          }
+          stage("Build and publish"){
+               when { buildingTag() }
+               steps{
+                    script{
+                         utils.with_jfrog_credentials{ sh("tox run -e build")}
+                         utils.jf_retry("rt upload --detailed-summary --spec upload.json")
+                    }
+               }
+          }
      }
 }
+```
 
+## hk_eod_parser/utils
+
+### 9. self_defined_classes.py
+
+```python
+from dataclasses import dataclass
+import pandas as pd
+import logging
+
+@dataclass
+class Dataframe:
+     df: pd.DataFrame
+
+class Logging:
+     logger: logging
+```
+
+### 10. mapping_file_filter.py
+
+```python
+import re
+import csv
+import logging
+
+def mapping_file_filter(map_path:str) -> str | list:
+     mappingList = None
+     if map_path.split("/")[-1].split(".")[-1] == "txt":
+          logging.info("Parsing with txt mapping file")
+          with open(f"{map_path}", "r", encoding="utf-8") as _mapping:
+               mappingList = re.split("\n|,", (_mapping.read()))
+     if map_path.split("/")[-1].split(".")[-1] == "csv":
+          logging.info("Parsing with csv mapping file")
+          mappingList = []
+          with open(map_path) as _mapping:
+               mappingList.append(row[0])
+               mappingList.append(row[1])
+     return mappingList
+```
+
+### 11. create_new_folder.py
+
+```python
+import os
+
+def create_new_folder(path):
+     if not os.path.exists(path):
+          os.makedirs(path)
+```
+
+### 12. create_logger.py
+
+```python
+import logging
+from datetime import datetime
+import os
+
+# This is not the best design, need some refactoring here
+
+def create_logger(default_market_log_starter:str, log_custom_name:str, log_custom_level:str="INFO"):
+     if log_custom_name is None:
+          default_log_directory = os
 
 ```
