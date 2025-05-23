@@ -299,6 +299,7 @@ grand_parent: Coding Practices
 ### 4.4.1 Overview
 - EtherChannel = Aggregating >= 2 ethernet connection into 1 (i.e. 4 * 1Gi = 4 Gi)
 - Ensuring stability and grouping, the individual physical links works best at **same speed** + **same duplex mode**
+- Layer 2 (Trunk/ VLAN & cannot set IP) vs Layer 3 (can set IP, mainly Routing)
 
 ### 4.4.2 Configuring L2 EtherChannel (Lab)
 - Topology of the design of EtherChannel configuration
