@@ -450,6 +450,14 @@ import os
 
 def create_logger(default_market_log_starter:str, log_custom_name:str, log_custom_level:str="INFO"):
      if log_custom_name is None:
-          default_log_directory = os
+          default_log_directory = os.path.expanduser("~/logs")
+          default_market_log_directory = os.path.join(default_log_directory, default_market_log_starter.split("-")[0])
 
+          if not os.path.exists(default_log_directory):
+               os.mkdir(default_log_directory)
+
+          if not os.path.exists(default_market_log_directory):
+               os.mkdir(default_market_log_directory)
+          
+          log_file_name = os.path.join(default_market_log_directory, f"{default_market_log_starter}-{datetime.now().strftime('%Y%m%d-%H:%M:%S')}")
 ```
