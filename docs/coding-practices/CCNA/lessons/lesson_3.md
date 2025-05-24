@@ -589,20 +589,21 @@ grand_parent: Coding Practices
         - 
         ```bash
             switchport port-security maximum 1
-            switchport port-security mac-address 0000.1111.111
+            switchport port-security mac-address 0000.1111.1111
             switchport port-security violation shutdown
             switchport port-security
             end
         ```
         - `switchport port-security maximum 1` = Setting the maximum number of MAC Address to 1 (default is already 1)
-        - `switchport port-security  mac-address 0000.1111.111` = The allowed MAC address
-        - `switchport port-security violation shutdown` = Setting violation actions
-            - `shutdown` = "error-disable", will display logs, violation counter will increase.
-            - `restrict` = violation frames will drop, will display logs, violation counter will increase.
-            - `protect` = violation frames will drop, will NOT display logs, violation counter will NOT increase.
-        - `switchport port-security` = enabling port security
+        - `switchport port-security  mac-address 0000.1111.1111` = The allowed MAC address
+        - `switchport port-security violation shutdown` = Setting violation actions. Currently it's "shutdown"
+            - There are a total of 3 different violation actions:
+                - `shutdown` = "error-disable", will display logs, violation counter will increase.
+                - `restrict` = violation frames will drop, will display logs, violation counter will increase.
+                - `protect` = violation frames will drop, will NOT display logs, violation counter will NOT increase.
+        - `switchport port-security` = Starting up port security
 
-    - Step 4: Let's check Switch 1 and verify it's mac address is blocked
+    - Step 4: Let's check Switch 1 and verify it's mac address is blocked. Need to wait a bit.
         - 
         ```bash
         *Mar 1 16:20:18.376: %PORT_SECURITY-2-PSECURE_VIOLATION: Security violation occurred, caused by MAC address 50001.0001.0000 on port GigabitEthernet1/1.
@@ -611,4 +612,28 @@ grand_parent: Coding Practices
         .
         *Mar 1 16:20:18.376: %LINK-3-UPDOWN: Interface GigabitEthernet1/1, changed state to down.
         ```
+        - Recap, we allowed `0000.1111.1111` to be white-listed in Switch1 but Router1 is sending `50001.0001.0000` as seen in the log!. Hence the frame is dropped and port is shot down!
+
+    - Step 5: Verify that the port is down by port security with 3 different commands `show int g1/1` / `show port-security` / `show port-security interface g1/1`
+        - Nice, now we can verify g1/1 is down 
+
+        - Method 1: `show int g1/1`.
+        ```bash
+            show int g1/1
+            GigabitEthernet1/1 is down, line protocol is down (err-disabled)
+        ```
+
+        - Method 2: `show port-security`.
+        ```bash
+            Secure Port     MaxSecureAddr       CurrentAddr         SecurityViolation           Security Action
+                                                (Count)             (Count)
+            ------------------------------------------------------------------------------------------------------
+            Gi1/1                       1                   1                       1                   Shutdown
+            ------------------------------------------------------------------------------------------------------
+            Total Addresses in System (exclusion one mac per port)      : 0
+            Max Addresses limit in System (excluding one mac per port)  : 4096
+        ```
+        > Notice: SecurityViolation has now been increased to 1
+
+        - Method 3: `show port-security interface g1/1` 
     
