@@ -368,27 +368,128 @@ grand_parent: Coding Practices
     - If you see `(SD)` then it's down, `(SU)` then it's up.
 
 - Step 5: Check LACP passive and active protocols
-    - Verify in swtich 1: `show lacp neighbor`.
+    - Verify in swtich 1: `show lacp neighbor`. `(SP)` means it's configured into **LACP Passive mode**.
         - result:
         ```bash
-        Flags:  S   - Device is requesting slow LACPDUs
-                F   - Device is requesting fast LACPDUs
-                A   - Device is in Active Mode          P   - Device is in Passive Mode
-        
-        Channel Group 1 neighbors
+            Flags:  S   - Device is requesting slow LACPDUs
+                    F   - Device is requesting fast LACPDUs
+                    A   - Device is in Active Mode          P   - Device is in Passive Mode
+            
+            Channel Group 1 neighbors
 
-        Partner's information:
+            Partner's information:
 
-                                LACP Port
-        Port        Flags       Priority        Dev ID      Age     key     Key     Number      State
-
+                                    LACP Port                                   Admin   Oper    Port        Port
+            Port        Flags       Priority        Dev ID              Age     key     Key     Number      State
+            Gi 1/2      SP          32768           5001.0004.8000      12s     0x0     0x1     0x103       0x3C
+            Gi 132      SP          32768           5001.0004.8000      12s     0x0     0x1     0x103       0x3C
 
         ```
-    - Verify in swtich 2: `show lacp neighbor`/
+    - Verify in swtich 2: `show lacp neighbor`. `(SA)` means it's configured into **LACP active mode**.
         - result:
             ```bash
+            Flags:  S   - Device is requesting slow LACPDUs
+                    F   - Device is requesting fast LACPDUs
+                    A   - Device is in Active Mode          P   - Device is in Passive Mode
             
-            ```
+            Channel Group 1 neighbors
 
+            Partner's information:
 
+                                    LACP Port                                   Admin   Oper    Port        Port
+            Port        Flags       Priority        Dev ID              Age     key     Key     Number      State
+            Gi 1/2      SA          32768           5001.0005.8000      19s     0x0     0x1     0x103       0x3C
+            Gi 132      SA          32768           5001.0005.8000      19s     0x0     0x1     0x103       0x3C
+
+        ```
+
+- Step 6: We check the new etherChannel with command `sh int po1`.
+    > Note: Both port channel + line protocl needs to be up together!!
+    - 
+    ```bash
+    Port-channel1 is up, line protocol is up (connected)
+        Hardware is EtherChannel address is  .... omitted the rest ...
+    ```
+    - EtherChannel is formed, hence logical interface of Po1 is "up" here.
+
+- Step 7: Further verifying EtherChannel with spanning-tree with `sh spanning-tree`
+    - 
+    ```bash
+        VLAN0001
+            Spanning tree enabled protocol rstp
+        Root ID     Priority 32769 (Default for VLAN is 32768)
+                    Address 5001.0004.0000
+                    This bridge is the root (sometimes this gets convered up in the exam)
+                    Hello Time ...
+        Bridge ID   Priority 32769
+                    Address 5001.0004.0000
+                    Hello Time ...
+        Interface
+        --------------------
+        Gi0/0
+        Gi0/1
+        Gi0/2
+        Gi0/3
+        Gi1/0
+        Gi1/1
+        .
+        .
+        .
+        Po1
+    ```
+    - Note these findings:
+        - g1/2 and g1/3 are no longer shown (since they are bundled by EtherChannel)
+        - A single interface called Po1 is showed (has 1+1 Gb = a total of 2Gb of speed)
+
+### 4.4.x Configuring EtherChannel as trunk link (Assuming EtherChannel is already formed) (Lab)
+- Step 1: Do everything all at once... for Switch1
+    - Config new VLAN, called VLAN 2
+    - int the new EtherChannel Po1 (Port Channel 1)
+    - Encapsulate as 802.1 dot1Q trunk port
+    - Enable trunk mode
+    - Assign trunk to VLAN 2 (VLAN 2 as native VLAN)
+    - 
+    ```bash
+        en
+        config t
+        vlan 2
+        name Accounting
+        exit
+        int Po1
+        switchport trunk encapsulation dot1q
+        swtichport mode trunk
+        switchport trunk native vlan 2
+        end
+    ```
+
+- Step 2: Repeat the same setup for Switch2
+    ```bash
+        en
+        config t
+        vlan 2
+        name Accounting
+        exit
+        int Po1
+        switchport trunk encapsulation dot1q
+        swtichport mode trunk
+        switchport trunk native vlan 2
+        end
+    ```
+
+- Step 3: Please verify with `sh int trunk`
+
+- If you see this, Channel Port 1, has native vlan 2 and successfully configured as IEEE 802.1Q trunk link
+```bash
+    Port        Mode        Encapsulation       Status      Native vlan
+    Po1         on          802.1q              trunking    2
+
+    Port        vlans allowed on trunk
+    Po1         1-4094
+    .
+    .
+    .
+```
+
+### 4.4.3 Configuring L3 EtherChannel
+- Idea: L3 EtherChannel = L2 EtherChannel + IP address 
 
