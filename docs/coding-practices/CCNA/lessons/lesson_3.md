@@ -350,28 +350,25 @@ grand_parent: Coding Practices
 
 - Step 4: Sanity check and verify !!
     - In left switch: use `show etherchannel summary`. This command shows an easy output with all the port channel interface, the negotiation protocol and # of member port, and its status
-    - You should see the summary like this...
+    - You should see the summary like this:
     - 
     ```bash
-    Flags:  D - down ... S - layer 2
-            P - bundled in port channel
+        Flags:  D - down ... S - layer 2
+                P - bundled in port channel
+                M - not in use, minimum links not met
+                m - not in use, port not aggregated due to minimum links not met
 
-            M - not in use, minimum links not met
-            m - not in use, port not aggregated due to minimum links not met
-    .
-    .
-    .
-    Number of channel-groups in use:    1
-    Number of aggregators:              1
-    
-    Group       Port Channel        Protocol        Ports
-    ------------------------------------------------------------------------
-    1           Po1(SU)             LACP            Gi1/2(P)        Gi1/3(P)
+        Number of channel-groups in use:    1
+        Number of aggregators:              1
+        
+        Group       Port Channel        Protocol        Ports
+        ------------------------------------------------------------------------
+        1           Po1(SU)             LACP            Gi1/2(P)        Gi1/3(P)
     ```
     - If you see `(SD)` then it's down, `(SU)` then it's up.
 
 - Step 5: Check LACP passive and active protocols
-    - Verify in swtich 1: `show lacp neighbor`
+    - Verify in swtich 1: `show lacp neighbor`.
         - result:
         ```bash
         Flags:  S   - Device is requesting slow LACPDUs
@@ -384,10 +381,10 @@ grand_parent: Coding Practices
 
                                 LACP Port
         Port        Flags       Priority        Dev ID      Age     key     Key     Number      State
-        
+
 
         ```
-    - Verify in swtich 2: `show lacp neighbor`
+    - Verify in swtich 2: `show lacp neighbor`/
         - result:
             ```bash
             
