@@ -377,13 +377,12 @@ grand_parent: Coding Practices
             
             Channel Group 1 neighbors
 
-            Partner's information:
+            Partners information:
 
                                     LACP Port                                   Admin   Oper    Port        Port
             Port        Flags       Priority        Dev ID              Age     key     Key     Number      State
             Gi 1/2      SP          32768           5001.0004.8000      12s     0x0     0x1     0x103       0x3C
             Gi 132      SP          32768           5001.0004.8000      12s     0x0     0x1     0x103       0x3C
-
         ```
     - Verify in swtich 2: `show lacp neighbor`. `(SA)` means it's configured into **LACP active mode**.
         - result:
@@ -394,7 +393,7 @@ grand_parent: Coding Practices
             
             Channel Group 1 neighbors
 
-            Partner's information:
+            Partners information:
 
                                     LACP Port                                   Admin   Oper    Port        Port
             Port        Flags       Priority        Dev ID              Age     key     Key     Number      State
@@ -491,5 +490,125 @@ grand_parent: Coding Practices
 ```
 
 ### 4.4.3 Configuring L3 EtherChannel
-- Idea: L3 EtherChannel = L2 EtherChannel + IP address 
+- Idea: L3 EtherChannel = L2 EtherChannel + IP address [Syll 1.1.b]
+- ![](../../../../../assets/images/ccna/lesson3/lesson_3_ether_2.jpg)
+- Step 1: Configure for Switch 1
 
+```bash
+    config t
+    hostname Switch1
+    int range g1/2-3
+    channel-group 1 mode active
+    exit
+
+    int po1
+    no switchport
+    ip address 172.16.0.1 255.255.0.0
+    end
+```
+
+- `no switchport` configure port to L3 port/  Router port. The IP 172.16.0.1 can be 
+
+- Step 2: Configure for Switch 2
+
+```bash
+    config t
+    hostname Switch1
+    int range g1/2-3
+    channel-group 1 mode active
+    exit
+
+    int po1
+    no switchport
+    ip address 172.16.0.1 255.255.0.0
+    end
+```
+
+- Step 3: Verify to see if can ping 172.16.0.2 with `show etherchannel summary`
+    - 
+    ```bash
+        Flags:  D - down                P - bundled in port-channel
+                I - stand-alone         s - suspended
+                H - Hot-standby (LACP only)
+                R - Layer3              S - Layer2
+                U - in use              N - not in use; no aggregation
+                f - failed to allocate aggregator
+
+                M - not in use, minimum links not met
+                m - not in use, port not aggregated due to minimum links not met
+                u - unsuitable for bundling
+                w - waiting to be aggregated
+                d - default port
+
+                A - formed by Auto LAG
+
+        Number of channel-groups in use:    1
+        Number of aggregators:              1
+        
+        Group       Port Channel        Protocol        Ports
+        ------------------------------------------------------------------------
+        1           Po1(SU)             LACP            Gi1/2(P)        Gi1/3(P)
+    ```
+
+### 4.4.z New Skills
+- `erase startup-config` = resetting switch and no save config
+- `reload` --> `no` = not saving config
+    - if fails to reload:
+        - `int range g1/2-3`
+        - `shut`
+        - `no shut`
+
+## 4.5 Port Security [Syll pt. 5.7]
+- Port security can block host/ MAC address that are accessing the LAN
+- Why do we need port security? Ans: Attacker can access with hub
+    - ![](../../../../../assets/images/ccna/lesson3/lesson_3_ps_1.jpg)
+ 
+- Topology for port security in Router & Switch
+    - ![](../../../../../assets/images/ccna/lesson3/lesson_3_ps_2.jpg)
+
+    - Step 1: Set up Router 1 (note: the port is int g0/0), Recall router is off by default.
+        - 
+        ```bash
+            en
+            config t
+            int g0/0
+            no shutdown
+            end
+        ```
+    - Step 2: Set up Switch 1 (note: the port is int g1/1), Recall router is off by default.
+        - 
+        ```bash
+            config t
+            int g1/1
+            switchport mode access
+        ```
+        - `switchport mode access` = Set DTP switchport mode to "access"
+            - Setting it to "access" or "trunk" to enable port security later
+
+    - Step 3: Set up port-security in switch 1
+        - 
+        ```bash
+            switchport port-security maximum 1
+            switchport port-security mac-address 0000.1111.111
+            switchport port-security violation shutdown
+            switchport port-security
+            end
+        ```
+        - `switchport port-security maximum 1` = Setting the maximum number of MAC Address to 1 (default is already 1)
+        - `switchport port-security  mac-address 0000.1111.111` = The allowed MAC address
+        - `switchport port-security violation shutdown` = Setting violation actions
+            - `shutdown` = "error-disable", will display logs, violation counter will increase.
+            - `restrict` = violation frames will drop, will display logs, violation counter will increase.
+            - `protect` = violation frames will drop, will NOT display logs, violation counter will NOT increase.
+        - `switchport port-security` = enabling port security
+
+    - Step 4: Let's check Switch 1 and verify it's mac address is blocked
+        - 
+        ```bash
+        *Mar 1 16:20:18.376: %PORT_SECURITY-2-PSECURE_VIOLATION: Security violation occurred, caused by MAC address 50001.0001.0000 on port GigabitEthernet1/1.
+        .
+        .
+        .
+        *Mar 1 16:20:18.376: %LINK-3-UPDOWN: Interface GigabitEthernet1/1, changed state to down.
+        ```
+    
