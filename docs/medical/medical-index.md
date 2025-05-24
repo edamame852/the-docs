@@ -83,7 +83,10 @@ permalink: /docs/medical
     - TRK (pronunce: Track)
         - Can be tested with pan-TRK (testing for multiple TRK (e.g. TRK1, TRK2, not too sensitive to TRK3 => move onto molecular testing))
 - Terms:
-    - FISH = Primer + Gene = luminate = probe (usually red + green = yellow)
+    - FISH = Primer (it's a detector) + Gene = luminate = probe (usually red + green = yellow)
+        - Primer = the starter to stick to DNA starting sequence
+        - The primer illuminates red and green seperately = CANCER
+        - The primer illuminates red and green together = Yello then normal
 
 
 # Whole dissection flow
@@ -91,7 +94,7 @@ Sample arrive -> Paraffin -> formalin fixing -> cut by MO -> get piece -> color 
 
 # Case 6: Peritonium fluid (stomach fluid)
 - Peritonium fluid maybe from polycystic liver/kidney syndrom, or from ovary, lots of balls, but cell structure is okay (regular nuclei, normal mitosis)
-- Age 30 ish,  
+- Age 30 ish
 
 # Indian Ink vs Marker
 Indian ink (blue af) (just paint) - pre-dissect
@@ -103,11 +106,15 @@ Permanent Marker - post-dissect
 - Paraffin (wax) not oil - More long term solution
 - In the event of mis-frozen section, unfrozen then paraffin sample, the stain resolution will also decrease
 
-# Current colleague
+# Current colleagues
 1. Josh - HKU Med, 1st deg - Bio, volunteered to help type Path. report, Added on IG (200 cases that day)
 2. Kevin - from Mainland, PhD (30+), ex-surgeon ~3 years
-3. Gary - dai lo that buys lunch. Mostly in N. hospital
-4. To Ka Fai - senior, prof, grin taunt Joanne, likes coming back Sun
+3. Prof Gary "Tse" - dai lo that buys lunch. Mostly in N. hospital but comes in PWH often, breast specialist
+    - PWH has no breast service
+4. Prof. To Ka Fai - senior, prof, grin taunt Joanne, likes coming back Sun.  
+    - Helping with University Pathology Service
+    - Works in office almost everyday (~11am showup until 8-9pm)
+    - Looks at shit reel during afternoon
 5. Maribel - Tell Kevin to dictate
 6. Amy - medical staff boss
 7. Ronald - go back to N. hospital, sometimes still in PWH. Is a teacher
@@ -119,8 +126,17 @@ Permanent Marker - post-dissect
 13. Angela - +7-8 than Joanne, Was pregnant, 0.5 < kid year old < 1, was anesthesia
 14. Irene - did frozen section, was studying in Macau, now exchange in HK. 
 15. Lak Mari - Sri Lankan, came to HK Oct-Nov 2024 
-16. Dr.Yu - over 60, work until May 2025, current p.t.
+16. Dr.Yu - over 60, work until May 2025 (never mind), current p.t.
+    - No more surgical pathology (cut things, biweekly)
+        - Autopsy (NO, it's under surgical Pathology)
+    - Cytology (YES, weekly)
+    - Molecular (= Besides H&E, chemical stain (anti-body stain), FISH, Gene sequencing) (Maybe he doesn't do it)
+    - Teaching
+    - Gyne specialist
 17. Jonathan - a let-go surgeon (contract w/ surg expired), have kids (40+), suspected 03' grad. 
+18. Prof. Vernent Lai - prof, 70 yera old, kinda French
+    - Helping with University Pathology Service
+19. Prof. Ng - PWH, but no regular duty, brain specialist. Will join meeting.
 
 
 

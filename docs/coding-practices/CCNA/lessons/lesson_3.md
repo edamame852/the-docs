@@ -35,7 +35,8 @@ grand_parent: Coding Practices
 
 8. Exam will cover lab on Ether Channel, bundling >=2 links into one big logical channel
 
-9. 
+9. CDP will be tested, what device information is visable in CDP?
+    - Ans: Native VLAN, Device ID, Capability (Router/Switch), Port ID, IP Address, platform(model), IOS...
 
 # 4. Features in CISCO switches
 ## 4.3 Default VLAN
@@ -563,7 +564,7 @@ grand_parent: Coding Practices
 - Why do we need port security? Ans: Attacker can access with hub
     - ![](../../../../../assets/images/ccna/lesson3/lesson_3_ps_1.jpg)
  
-- Topology for port security in Router & Switch
+- Lab 1: Topology for port security in Router & Switch, port-security mode as `access`
     - ![](../../../../../assets/images/ccna/lesson3/lesson_3_ps_2.jpg)
 
     - Step 1: Set up Router 1 (note: the port is int g0/0), Recall router is off by default.
@@ -635,5 +636,137 @@ grand_parent: Coding Practices
         ```
         > Notice: SecurityViolation has now been increased to 1
 
-        - Method 3: `show port-security interface g1/1` 
+        - Method 3: `show port-security interface g1/1`.
+        ```bash
+            Port Security                   :       Enabled
+            Port Status                     :       Secure-shutdown
+            Violation Mode                  :       Shutdown
+            Aging Time                      :       0 mins <--- means no aging config, so the protected/ configured MAC address (0000.1111.1111) will be deleted after aging time
+            Aging Type                      :       Absolute
+            SecureStatic Address Aging      :       Disabled
+            Maximum MAC Addresses           :       1
+            Total MAC address               :       1
+            Configured MAC Addresses        :       1 <---- There is one address that is protected, but it never shows up here
+            Sticky MAC Addresses            :       0
+            Last Source Address:Vlan        :       50001.0001.000:1 <------ This is our attacker
+            Security Violation Count        :       1
+        ```
+        > Note if aging time = 10mins, the SOLE MAC address will only be protected for 10 mins
+
+    - Step 5: Clean up, reset all the ports to default status!
+        - Idea: clearing up all the port security configs !
+        ```bash
+            config t
+            default interface g1/1 <---- resetting port g1/1
+            int g1/1
+            shutdown    <--- Remember we shut and no shut due to err-disable from port-security. Port is re-enabled in this way.
+            no shutdown
+            end
+            show port-security interface g1/1
+            
+        ```
+        - The report now looks like this:
+        ```bash
+        Port        Name        Status      Vlan        Duplex      Speed       Type
+        Gi1/1                   Connected   1           a-full      auto        RJ45
+        ```
+- Lab 2: Topology for port security in Router & Switch, port-security violation mode as `protect`
+
+    - Step 1: Not hard coding MAC Address and violation mode is set to `protect`.
+    ```bash
+        config t
+        int g1/1
+        switchport mode access
+        switchport port-security maximum 1
+        switchport port-security mac-address sticky <---- the MAC address is not hard coded ~ Any MAC address come this way will auto enter the port config setting
+        switchport port-security port-security violation protect
+        switchport port-security
+        end   
+    ```
+
+    - Step 2: Verify that the Router1 IP has been picked up by port-security successfully, with `sh run int g1/1`
+    ```bash
+    Building Configuration...
     
+    Current configuration   :   253 bytes
+    
+    interface GigabitEthernet1/1
+        switchport mode access
+        swtichport port-security violation protect
+        switchport port-security mac-address sticky
+        switchport port-security mac-address sticky 5001.0001.0000
+        switchport port-security
+        negotiation auto
+    end
+    ```
+
+    - Step 3: Verify the port-security for the sticky MAC address `sh port-security interface g1/1`
+    - Violation mode is "protect" 
+        ```bash
+            Port Security                   :       Enabled
+            Port Status                     :       Secure-up
+            Violation Mode                  :       Protect
+            Aging Time                      :       0 mins
+            Aging Type                      :       Absolute
+            SecureStatic Address Aging      :       Disabled
+            Maximum MAC Addresses           :       1
+            Total MAC address               :       1
+            Configured MAC Addresses        :       0
+            Sticky MAC Addresses            :       1
+            Last Source Address:Vlan        :       50001.0001.000:1
+            Security Violation Count        :       0
+        ```
+    
+    > Notes: unknown MAC address will be dropped and security count will not increase
+
+
+## 4.6 CDP & LLDP
+- CDP = Cisco proprietary L2 Data Link Layer protocol
+- LLDP =  Non-cicso link layer discovery protocol
+
+### 4.6.1 CDP = Cisco proprietary L2 Data Link Layer protocol (Cisco Discovery Protocol)
+- Some devices don't support CDP: Cisco products (including: ADA (Adapative Sercurity Appliance), firewall products)
+- But MOST devices support CDP
+- Use of CDP: Allows user to check neighboring device information! (i.e. Native VLAN(Enable trunk link pls) + Device ID, capability, Port ID, IP Address...)
+- Note: CDP is on by default 
+- Note: CDP sends new messages/refresh every 60 secs
+
+#### Lab 1: CDP Topolgy from Router perspective
+- ![](../../../../../assets/images/ccna/lesson3/lesson_3_cdp_1.jpg)
+
+- Device information list:
+    - Device ID: Name of the device (e.g. Router1)
+    - Local Interface: Switch g1/1 is connection to Router1
+    - Holdtime: Reminding seconds, before the entry is cleared. Hold time is 180s (will live 120-180s) (CDP messages refreshes every 60s)
+        - If holdtime is 0, then the records will be cleared
+    - Capability: Device is a Router (R), Source Route Bridge(B) = Broadband Router
+    - Port ID: Router 1 device (Yourself) is using g0/0 to Switch1 (Neighbors)
+
+- Step 1: Change Router name and turn it on
+    - 
+    ```bash
+    config t
+    hostname Router1
+    int g0/0
+    no shut <-------- Recall Router is off by default~
+    end
+    ```
+- Step 2: Check neighbors with CDP capability with `sh cdp neighbors g1/1`
+- 
+    ```bash
+    Capability codes: R - Router,   T - Trans Bridge,   B - Source Route Bridge
+                      S - Switch,   H - Host,   I - IGMP,   r - Repeater,   P - Phone,
+                      D - Remote,   C - CVTA,   M - Two-port Mac relay
+
+    Device ID       Local Intrfce       Holdtme     Capability      Platform        PortID
+    Router          Gig 1/1             134             R   B                       Gig 0/0 
+
+                    <Local Interface: This is the neighbor>                         <PortID: This is Yourself>
+
+    Total cdp entries displayed : 1
+    ```
+
+
+- Step 3 will be dicussed in lesson 4, there's another way to check neighbors using CDP
+
+
