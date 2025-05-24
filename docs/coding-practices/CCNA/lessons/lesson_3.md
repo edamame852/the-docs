@@ -358,8 +358,9 @@ grand_parent: Coding Practices
 
             M - not in use, minimum links not met
             m - not in use, port not aggregated due to minimum links not met
-    ...
-
+    .
+    .
+    .
     Number of channel-groups in use:    1
     Number of aggregators:              1
     
@@ -367,7 +368,30 @@ grand_parent: Coding Practices
     ------------------------------------------------------------------------
     1           Po1(SU)             LACP            Gi1/2(P)        Gi1/3(P)
     ```
-    - If you see `(SD)` then it's down 
+    - If you see `(SD)` then it's down, `(SU)` then it's up.
+
+- Step 5: Check LACP passive and active protocols
+    - Verify in swtich 1: `show lacp neighbor`
+        - result:
+        ```bash
+        Flags:  S   - Device is requesting slow LACPDUs
+                F   - Device is requesting fast LACPDUs
+                A   - Device is in Active Mode          P   - Device is in Passive Mode
+        
+        Channel Group 1 neighbors
+
+        Partner's information:
+
+                                LACP Port
+        Port        Flags       Priority        Dev ID      Age     key     Key     Number      State
+        
+
+        ```
+    - Verify in swtich 2: `show lacp neighbor`
+        - result:
+            ```bash
+            
+            ```
 
 
 
