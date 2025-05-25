@@ -5,4 +5,6 @@ parent: N1
 grand_parent: japanese
 ---
 
-# Year 
+# N1 2019 July
+## 言語知識
+{% include quiz.html file='N1-2019-July-1'%}

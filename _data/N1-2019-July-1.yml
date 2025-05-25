@@ -1,0 +1,19 @@
+title: AZ-204 quiz - Topic 1 (37 Questions)
+randomized: true
+
+questions:
+    - type: "multiple-choice"
+      question: "Q15: <br/> 無駄な経費は極力減らそう"
+      items:
+          - choice: できる限り
+            correct: false
+          - choice: 大幅に
+            correct: true
+          - choice: 一気に
+            correct: false
+          - choice: 思い切って
+            correct: false
+      followup: "できる限り = as much as possible<br/>大幅に = significantly<br/>一気に = all at once<br/>思い切って = boldly"
+    - type: "multiple-choice"
+
+    
