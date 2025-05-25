@@ -3,7 +3,7 @@ randomized: true
 
 questions:
     - type: "multiple-choice"
-      question: "Q15: <br/> 無駄な経費は極力減らそう"
+      question: "Q15: <br/> 無駄な経費は<u>極力<u>減らそう"
       items:
           - choice: できる限り
             correct: false
@@ -16,4 +16,3 @@ questions:
       followup: "できる限り = as much as possible<br/>大幅に = significantly<br/>一気に = all at once<br/>思い切って = boldly"
     - type: "multiple-choice"
 
-    
