@@ -275,3 +275,25 @@ lldp ?
 
 - Usually the topology for Voice VLAN:
     - ![](../../../../../assets/images/ccna/lesson4/lesson_4_ip_phone_1.jpg)
+
+- Why do we need the Voice VLAN feature ? AKA why not send data frames through normal VLAN ? Why use Voice VLAN
+    - Voice VLAN can distinguish normal user data frames vs voice data frame
+    - Without this distinguishing the two, voice data frame quality can be greatly affected (Since voice is sensitive to delay & packet drops)
+
+- Let's do some labs
+
+#### Lab 1: Did not set up Voice VLAN
+
+```bash
+en
+config t
+vlan 2
+name Accounting
+int g0/2
+switchport access vlan2
+end
+```
+
+> Notice: 
+
+#### Lab 2: Set up Voice VLAN
