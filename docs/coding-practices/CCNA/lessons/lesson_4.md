@@ -439,12 +439,31 @@ There are 4 classes. Class A,B,C,D; Each class uses different lengths/number of 
         - ![](../../../../../assets/images/ccna/lesson4/lesson_4_local_broadcast_1.jpg)
 
 ## 5.x.3 Simulation labs!
+Please refer to this [website for simulation](https://simulation.redirectme.net/na_crt_tftp_pt722_3cd_3150/SIMULATION%20%28Part%29.pdf)
 
-### Simulation Lab 1: Swtich, VLAN
+### Simulation Lab 1 (CCNA Exam Practical Style 1): Swtich, VLAN
+- Task 1: Switch 1 needs to initiate vlan12 and vlan 34. Switch 2 needs only vlan 12. Please verify the proper setup using `sh vlan brief` 
+- Techniques: `copy run start` allows you to save configs for the exam
+- Task 2: Setting up VLAN 99, and don't forget to include the switchport e0/1 for that. Please wait for the access port to warm up...otherwise, you might screw yourself...
+- Task 3: No trunk, so we're using access trunk, `switchport access vlan12`
+- Task 4: IP Phone
+- Task 5: Neighbor discovery protocl (use CDP), turn off cdp for the port! 
 
-### Simulation Lab 2: LARP EtherChannel bundling
+### Simulation Lab 2 (CCNA Exam Practical Style 2):: LARP EtherChannel = bundling 
+- Task 1: Setting up channel group to be ALL active (this might change in the real exam, i.e. one passive, one active)
+- Task 2: EhterChannel tunk link set up, verify with `sh vlan brief`
+- Task 3: Careful with the dot1q command. 2 switches needs to be set. 
+- Task 4: untag data frames = native VLAN (This part must be set up first before everything else)
+- Important ! Define the dot1Q first, before you set up your trunks
 
-### Simulation Lab 3: Different VLAN and different switches
+
+### Simulation Lab 3 (CCNA Exam Practical Style 3): Different VLAN and different switches
+- Task 0: Don't touch the VTP settings and define the 2 VLANs yourself, VLAN 202 and VLAN 303
+- Task 1-3:
+    - Switch 1: Need only VLAN 303
+    - Switch 2: Need both VLAN 202 and VLAN 303, int just 1 port
+    - Switch 3: Need both VLAN 202 and VLAN 303, int 2 ports (i.e. int e0/3 for allowing both VLAN 202 and VLAN 303)
+- Performing sanity checks: please chekc with `sh int trunk`
 
 ### Simulation Lab 4: Subset setting (next time)
 
