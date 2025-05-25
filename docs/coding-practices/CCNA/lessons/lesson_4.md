@@ -18,7 +18,11 @@ grand_parent: Coding Practices
 2. Turing off CDP on global config level & on interface level will both be tested
 3. LLDP and CDP will both be tested! LLDP is non-cisco proprietary, CDP is.
 4. CCNA MC: What is a LLDP re-init time? Ans: Default is 5 seconds to implement all the changes done to the port.
-5. CCNA Lab/ Exam: Will test how to set up Voice VLAN
+5. CCNA Lab/ Exam: Will test you how to set up Voice VLAN
+6. MC will test the cocepts of PCP/Priority bits
+7. MC will test your knowledge of converting decimals to binary values
+8. There will be no calculators on the CCNA exam
+
 
 # 4. Features in CISCO switches
 ## 4.6 CDP and LLDP (CDP was already discussed in lesson 3, will focus on LLDP now)
@@ -284,6 +288,9 @@ lldp ?
 
 #### Lab 1: Did not set up Voice VLAN
 
+- This is the current topology diagram:
+    - ![](../../../../../assets/images/ccna/lesson4/lesson_4_ip_phone_2.jpg)
+
 ```bash
 en
 config t
@@ -294,6 +301,51 @@ switchport access vlan2
 end
 ```
 
-> Notice: 
+> Notice: User PC -- data --> Cicso IP Phone -- data --> Switch
+- There is no tag in the data frame
+- If the bandwith is HUGE then there won't be any package drop/ delay but vice versa, it will cause some issues.
 
 #### Lab 2: Set up Voice VLAN
+
+- To fix the issue: Additionally configure Voice VLAN on access port by the interface mode `switchport voice vlan <VLAN ID>`
+- IP Phone will get the Voice VLAN settings via CDP, thus tagging all the VoIP traffic with the VLAN 200 tag.
+
+- This is the current topology diagram:
+    - ![](../../../../../assets/images/ccna/lesson4/lesson_4_ip_phone_3.jpg)
+
+```bash
+en
+config t
+vlan 2
+name Accounting
+
+vlan 200
+name Voice
+int g0/2
+switchport access vlan 2
+switchport voice vlan 200
+end
+```
+- Q: What is a pirority bit?
+    - Ans: Priority bit/ Priority/ PCP (Priority Code Point)/ CoS (Class of Service) bits are the initial 3bit field tag for handling voice data frames under a priority queue
+    - Usually this piroirty bit is 5 in decimal, in binary, it's **101** (during phone call, actively exchanging voice data frames)
+        - It's **011** in binary, when the call is still connecting/ dialing
+
+- There are 3 parts to the enriched data frame that is getting sent through VLAN 200:
+    - The 3 bit priority bit/ PCP : i.e. 101 in binary or 5 in decimal
+    - The VLAN 200 tag, i.e. 200
+    - original data frame
+
+# 5. IP Address
+
+## 5.1 IP Address's structure
+
+- There are 2 IP address formats:
+    - in binary
+    - in decimal
+
+- Each IP is 32 bits long = 4 * 8 bit fields (octects) = 4 octects
+- These octects are seperated by periods
+- Each octect can live between the range 0 ~ 255 in decimal (00000000 ~ 11111111 in binary)
+
+## 5.2 Binary numbers
