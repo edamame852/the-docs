@@ -85,7 +85,7 @@ grand_parent: Coding Practices
     Copyright (c) 1986-2016 by Cisco Systems, Inc.
     Compile Tue 22-Mar-16 16:19 by prod_rel_team
 
-    advertisment version: 2
+    advertisement version: 2
     Management address(es): <---------------------- These are NEW :D
         IP address: 10.0.0.1 <---------------------- These are NEW :D
 
@@ -145,7 +145,7 @@ grand_parent: Coding Practices
     Copyright (c) 1986-2016 by Cisco Systems, Inc.
     Compile Tue 22-Mar-16 16:19 by prod_rel_team
 
-    advertisment version: 2
+    advertisement version: 2
     VTP Management Domain: 'FrancoDomain' 
     Native VLAN: 2 <---------------------- Removed IP Management address. These are NEW :D
     Duplex: full <---------------------- Removed IP Management address. These are NEW :D
@@ -156,7 +156,7 @@ grand_parent: Coding Practices
 ### 4.6.2 LLDP = Link Layer Discovery Protocol
 
 - Background: 
-    - LLDP is a vendor neutral protocol/ non-cisco propietry protocol (so can be used in i.e. Juniper)
+    - LLDP is a vendor neutral protocol/ non-cisco proprietary protocol (so can be used in i.e. Juniper)
     - This protocol is specified by IEEE 802.1AB
     - LLDP is L2 protocol and serves the same function as CDP
     - Unlike CDP, which refreshes every 60s, LLDP refreshed every **30 seconds**
@@ -217,7 +217,7 @@ grand_parent: Coding Practices
     Compile Tue 22-Mar-16 16:19 by prod_rel_team
 
     Time remaining: 97 seconds 
-    System Capabilties: B, R
+    System Capabilities: B, R
     Enabled Capabilities: R <------ Only Router
     Management Addresses:
         IP: 10.0.0.1 <------ IP is visable
@@ -230,7 +230,7 @@ grand_parent: Coding Practices
 
 ```
 
-#### Lab 2: Checking what other lldp comamnds is avaliable in the console
+#### Lab 2: Checking what other lldp commands is available in the console
 
 - 
 ```bash
@@ -254,7 +254,7 @@ lldp ?
 
 #### Lab 3: Resetting LLDP re-initilization delay timer away from the default 5 seconds.
 
-- LLDP Re-initilization time = The delayed time for LLDP to be re-useable
+- LLDP Re-initialization time = The delayed time for LLDP to be re-useable
 - Adjusting the LLDP reinit time can avoid frequent initialization causing by frequent settings changes to LLDP
 
 - Step 1: Re-init the time for LLDP port
@@ -271,7 +271,7 @@ lldp ?
         Status: ACTIVE
         LLDP advertisements are sent every 30 seconds
         LLDP hold time advertised is 120 seconds
-        LLDP interface reinitialisation delay is 5 seconds
+        LLDP interface reinitialization delay is 5 seconds
     ```
 
 ## 4.7 Voice VLAN !
@@ -301,9 +301,9 @@ switchport access vlan2
 end
 ```
 
-> Notice: User PC -- data --> Cicso IP Phone -- data --> Switch
+> Notice: User PC -- data --> Cisco IP Phone -- data --> Switch
 - There is no tag in the data frame
-- If the bandwith is HUGE then there won't be any package drop/ delay but vice versa, it will cause some issues.
+- If the bandwidth is HUGE then there won't be any package drop/ delay but vice versa, it will cause some issues.
 
 #### Lab 2: Set up Voice VLAN
 
@@ -344,13 +344,13 @@ end
     - in binary
     - in decimal
 
-- Each IP is 32 bits long = 4 * 8 bit fields (octects) = 4 octects
-- These octects are seperated by periods
-- Each octect can live between the range 0 ~ 255 in decimal (00000000 ~ 11111111 in binary)
+- Each IP is 32 bits long = 4 * 8 bit fields (octets) = 4 octets
+- These octets are separated by periods
+- Each octet can live between the range 0 ~ 255 in decimal (00000000 ~ 11111111 in binary)
 
 ## 5.2 Binary numbers
 
-- Converting from bianry to decimal
+- Converting from binary to decimal
     - `00000000` in binary = 0 in decimal
     - `00010001` in binary = 2**0 + 2**4 = 1 + 16 = 17 in decimal
 - Converting from decimal to binary
@@ -370,9 +370,9 @@ end
 There are 4 classes. Class A,B,C,D; Each class uses different lengths/number of Network ID bits
 
 ### 5.3.1 Class A: 1-126
-- Format: The 4 octects = Network ID + Host ID + Host ID + Host ID. However there are 4 rules to follow!!
-- Rule 1: Class A's first octect = The Network ID must be from 1 - 126 (Exlcuding 0 and 127 !!!) (withholding prefix starting with `0` hence the range is **0**0000000 ~ "**0**0000001 ~ **0**1111110" ~**0**1111111)
-    - 0: or 0.0.0.0 is reseved as this host on the network
+- Format: The 4 octets = Network ID + Host ID + Host ID + Host ID. However there are 4 rules to follow!!
+- Rule 1: Class A's first octet = The Network ID must be from 1 - 126 (Excluding 0 and 127 !!!) (withholding prefix starting with `0` hence the range is **0**0000000 ~ "**0**0000001 ~ **0**1111110" ~**0**1111111)
+    - 0: or 0.0.0.0 is reserved as this host on the network
         - 0.0.0.0 is used as the source IP address, for a device that yet to have an IP, the device requests an IP via DHCP to talk to 0.0.0.0 to request an IP on the network.
         - Note: 0 is not considered as class A
     - 1-126: Normal Class A IP Address
@@ -396,8 +396,8 @@ There are 4 classes. Class A,B,C,D; Each class uses different lengths/number of 
 
 
 ### 5.3.2 Class B: 128-191
-- Format: The 4 octects = Network ID + Network ID + Host ID + Host ID. Again, there are 4 rules to follow!!
-- Rule 1: Class B's **first** octect = The Network ID must be from 128 - 191 (withholding prefix starting with `10` hence the range is **10**000000 ~ **10**111111)
+- Format: The 4 octets = Network ID + Network ID + Host ID + Host ID. Again, there are 4 rules to follow!!
+- Rule 1: Class B's **first** octet = The Network ID must be from 128 - 191 (withholding prefix starting with `10` hence the range is **10**000000 ~ **10**111111)
 - Rule 2: Class B's first 2 octets = Network ID, the next 2 octets = Host ID
 - Rule 3: To become a valid host IP address. The last 2 octets bits cannot be all 0s
     - Represents this network: 172.16.`0.0` (the last 2 octets are 0)
@@ -408,8 +408,8 @@ There are 4 classes. Class A,B,C,D; Each class uses different lengths/number of 
 
 
 ### 5.3.3 Class C: 192-223 (We use this at home)
-- Format: The 4 octects = Network ID + Network ID + Network ID + Host ID. Again, there are 4 rules to follow!!
-- Rule 1: Class C's **first** octect = The Network ID must be from 192 - 223 (withholding prefix starting with `110` hence the range is **110**00000 ~ **110**11111) = 
+- Format: The 4 octets = Network ID + Network ID + Network ID + Host ID. Again, there are 4 rules to follow!!
+- Rule 1: Class C's **first** octet = The Network ID must be from 192 - 223 (withholding prefix starting with `110` hence the range is **110**00000 ~ **110**11111) = 
 - Rule 2: Class C's first 3 octets = Network ID, the last octet = Host ID
 - Rule 3: To become a valid host IP address. The last octet bit cannot be 0
     - Represents this network: 192.16.0.`0` (the last octet is 0)
@@ -419,7 +419,7 @@ There are 4 classes. Class A,B,C,D; Each class uses different lengths/number of 
     - Represents a directed broadcast: 172.16.255.`255` (the last octet is NOT 1)
 
 ### 5.3.4 Class D: 224-239
-- Rule 1: Class D's **first** octect = The Network ID must be from 224-239 (withholding prefix starting with `1110` hence the range is **1110**0000 ~ **1110**1111)
+- Rule 1: Class D's **first** octet = The Network ID must be from 224-239 (withholding prefix starting with `1110` hence the range is **1110**0000 ~ **1110**1111)
 - Class D is used for multi-casting
 - Topology of uni-cast vs multi-cast
     - uni-cast
@@ -429,29 +429,29 @@ There are 4 classes. Class A,B,C,D; Each class uses different lengths/number of 
 
 
 ### 5.3.5 Class E: 240 - 255
-- Rule 1: Class E's **first** octect = The Network ID must be from 240 - 255 (withholding prefix starting with `11110` hence the range is **11110**000 ~ **11110**111)
+- Rule 1: Class E's **first** octet = The Network ID must be from 240 - 255 (withholding prefix starting with `11110` hence the range is **11110**000 ~ **11110**111)
 - Class E is reserved for future use (reserved for IPv6 now)
 
 
 #### Special address: 255.255.255.255 - local broadcast
-    - When a host computer sends a local broadcast packet, this packet will be accepted by all other host PCs on the lcoal network! (With excepts to router, as router does not forward packages like these)
+    - When a host computer sends a local broadcast packet, this packet will be accepted by all other host PCs on the local network! (With excepts to router, as router does not forward packages like these)
     - Local Broadcast topology:
         - ![](../../../../../assets/images/ccna/lesson4/lesson_4_local_broadcast_1.jpg)
 
 ## 5.x.3 Simulation labs!
 Please refer to this [website for simulation](https://simulation.redirectme.net/na_crt_tftp_pt722_3cd_3150/SIMULATION%20%28Part%29.pdf)
 
-### Simulation Lab 1 (CCNA Exam Practical Style 1): Swtich, VLAN
+### Simulation Lab 1 (CCNA Exam Practical Style 1): Switch, VLAN
 - Task 1: Switch 1 needs to initiate vlan12 and vlan 34. Switch 2 needs only vlan 12. Please verify the proper setup using `sh vlan brief` 
 - Techniques: `copy run start` allows you to save configs for the exam
 - Task 2: Setting up VLAN 99, and don't forget to include the switchport e0/1 for that. Please wait for the access port to warm up...otherwise, you might screw yourself...
 - Task 3: No trunk, so we're using access trunk, `switchport access vlan12`
 - Task 4: IP Phone
-- Task 5: Neighbor discovery protocl (use CDP), turn off cdp for the port! 
+- Task 5: Neighbor discovery protocol (use CDP), turn off cdp for the port! 
 
 ### Simulation Lab 2 (CCNA Exam Practical Style 2):: LARP EtherChannel = bundling 
 - Task 1: Setting up channel group to be ALL active (this might change in the real exam, i.e. one passive, one active)
-- Task 2: EhterChannel tunk link set up, verify with `sh vlan brief`
+- Task 2: EhterChannel trunk link set up, verify with `sh vlan brief`
 - Task 3: Careful with the dot1q command. 2 switches needs to be set. 
 - Task 4: untag data frames = native VLAN (This part must be set up first before everything else)
 - Important ! Define the dot1Q first, before you set up your trunks
@@ -463,7 +463,7 @@ Please refer to this [website for simulation](https://simulation.redirectme.net/
     - Switch 1: Need only VLAN 303
     - Switch 2: Need both VLAN 202 and VLAN 303, int just 1 port
     - Switch 3: Need both VLAN 202 and VLAN 303, int 2 ports (i.e. int e0/3 for allowing both VLAN 202 and VLAN 303)
-- Performing sanity checks: please chekc with `sh int trunk`
+- Performing sanity checks: please check with `sh int trunk`
 
 ### Simulation Lab 4: Subset setting (next time)
 

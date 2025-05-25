@@ -307,7 +307,7 @@ grand_parent: Coding Practices
 - ![](../../../../../assets/images/ccna/lesson3/lesson_3_ether_1.jpg)
 
 
-- Step 1: Swtich left = Switch 1: Resetting to default status
+- Step 1: Switch left = Switch 1: Resetting to default status
     - 
     ```bash
     en
@@ -385,7 +385,7 @@ grand_parent: Coding Practices
             Gi 1/2      SP          32768           5001.0004.8000      12s     0x0     0x1     0x103       0x3C
             Gi 132      SP          32768           5001.0004.8000      12s     0x0     0x1     0x103       0x3C
         ```
-    - Verify in swtich 2: `show lacp neighbor`. `(SA)` means it's configured into **LACP active mode**.
+    - Verify in switch 2: `show lacp neighbor`. `(SA)` means it's configured into **LACP active mode**.
         - result:
             ```bash
             Flags:  S   - Device is requesting slow LACPDUs
@@ -404,7 +404,7 @@ grand_parent: Coding Practices
         ```
 
 - Step 6: We check the new etherChannel with command `sh int po1`.
-    > Note: Both port channel + line protocl needs to be up together!!
+    > Note: Both port channel + line protocol needs to be up together!!
     - 
     ```bash
     Port-channel1 is up, line protocol is up (connected)
@@ -419,7 +419,7 @@ grand_parent: Coding Practices
             Spanning tree enabled protocol rstp
         Root ID     Priority 32769 (Default for VLAN is 32768)
                     Address 5001.0004.0000
-                    This bridge is the root (sometimes this gets convered up in the exam)
+                    This bridge is the root (sometimes this gets covered up in the exam)
                     Hello Time ...
         Bridge ID   Priority 32769
                     Address 5001.0004.0000
@@ -457,7 +457,7 @@ grand_parent: Coding Practices
         exit
         int Po1
         switchport trunk encapsulation dot1q
-        swtichport mode trunk
+        switchport mode trunk
         switchport trunk native vlan 2
         end
     ```
@@ -471,7 +471,7 @@ grand_parent: Coding Practices
         exit
         int Po1
         switchport trunk encapsulation dot1q
-        swtichport mode trunk
+        switchport mode trunk
         switchport trunk native vlan 2
         end
     ```
@@ -692,7 +692,7 @@ grand_parent: Coding Practices
     
     interface GigabitEthernet1/1
         switchport mode access
-        swtichport port-security violation protect
+        switchport port-security violation protect
         switchport port-security mac-address sticky
         switchport port-security mac-address sticky 5001.0001.0000
         switchport port-security
@@ -722,16 +722,16 @@ grand_parent: Coding Practices
 
 ## 4.6 CDP & LLDP
 - CDP = Cisco proprietary L2 Data Link Layer protocol
-- LLDP =  Non-cicso link layer discovery protocol
+- LLDP =  Non-Cisco link layer discovery protocol
 
 ### 4.6.1 CDP = Cisco proprietary L2 Data Link Layer protocol (Cisco Discovery Protocol)
-- Some devices don't support CDP: Cisco products (including: ADA (Adapative Sercurity Appliance), firewall products)
+- Some devices don't support CDP: Cisco products (including: ADA (Adaptive Security Appliance), firewall products)
 - But MOST devices support CDP
 - Use of CDP: Allows user to check neighboring device information! (i.e. Native VLAN(Enable trunk link pls) + Device ID, capability, Port ID, IP Address...)
 - Note: CDP is on by default 
 - Note: CDP sends new messages/refresh every 60 secs
 
-#### Lab 1: CDP Topolgy from Router perspective
+#### Lab 1: CDP Topology from Router perspective
 - ![](../../../../../assets/images/ccna/lesson3/lesson_3_cdp_1.jpg)
 
 - Device information list:
@@ -767,6 +767,6 @@ grand_parent: Coding Practices
     ```
 
 
-- Step 3 will be dicussed in lesson 4, there's another way to check neighbors using CDP
+- Step 3 will be discussed in lesson 4, there's another way to check neighbors using CDP
 
 
