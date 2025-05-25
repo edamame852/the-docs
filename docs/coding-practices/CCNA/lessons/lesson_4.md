@@ -349,3 +349,102 @@ end
 - Each octect can live between the range 0 ~ 255 in decimal (00000000 ~ 11111111 in binary)
 
 ## 5.2 Binary numbers
+
+- Converting from bianry to decimal
+    - `00000000` in binary = 0 in decimal
+    - `00010001` in binary = 2**0 + 2**4 = 1 + 16 = 17 in decimal
+- Converting from decimal to binary
+    - e.g. `30` = 30/2 = 15 R **0**, 15/2 = 7 R **1**, 7/2 = 3 R **1**, 3/2 = 1 R **1**, 1/2 = 0 R **1**
+        - Start from the bottom you'll get `11110` = 16 + 8 + 4 + 2 + 0 = 30 (which is our answer !)
+
+- Concept of bits:
+    - 1 bit: Either 0 or 1 (maximum 2 combinations)
+    - 2 bits: Either 00, 11, 01, 10 (maximum 4 combinations)
+    - 3 bits: Either 000, 001, 010, 011, 100, 101, 110, 111 (maximum 8 combinations)
+    .
+    .
+    .
+    - 24 bits: Either .... (maximum 16,777,216 combinations = 2**24)
+
+## 5.3 Discussing Network ID without subnetting
+There are 4 classes. Class A,B,C,D; Each class uses different lengths/number of Network ID bits
+
+### 5.3.1 Class A: 1-126
+- Format: The 4 octects = Network ID + Host ID + Host ID + Host ID. However there are 4 rules to follow!!
+- Rule 1: Class A's first octect = The Network ID must be from 1 - 126 (Exlcuding 0 and 127 !!!) (withholding prefix starting with `0` hence the range is **0**0000000 ~ "**0**0000001 ~ **0**1111110" ~**0**1111111)
+    - 0: or 0.0.0.0 is reseved as this host on the network
+        - 0.0.0.0 is used as the source IP address, for a device that yet to have an IP, the device requests an IP via DHCP to talk to 0.0.0.0 to request an IP on the network.
+        - Note: 0 is not considered as class A
+    - 1-126: Normal Class A IP Address
+    - 127: Reserved for internal loopback and testing (i.e.`127.0.0.1`)
+        - Most OS when you `ping 127.0.0.1` you can verify whether your TCP/IP protocol stack is healthy and corrected installed
+        - 
+        ```bash
+        pinging 127.0.0.1 with 32 bytes of data:
+        Reply from 127.0.0.1: bytes=32 time<1ms TTL=128
+        Reply from 127.0.0.1: bytes=32 time<1ms TTL=128
+        Reply from 127.0.0.1: bytes=32 time<1ms TTL=128
+        ```
+
+- Rule 2: First octet/ First 8 bits = The class A's NetworkID. The next 24 bits represent the HostID
+- Rule 3: For a useable HostID to represent a network but not a host, the rest of the host IDs bits cannot be all 0s
+    - Represents a network: 125.`0.0.1` 
+    - Represents just a host: 10.`0.0.0`, 111.`0.0.0`
+- Rule 4: To become a valid Host IP Address, the rest of the host IDs bits cannot all be 1 (i.e. 11111111 in binary = 255 in decimal)
+     - Represents a network: 125.`0.0.1` 
+     - Represents a directed broadcast: 10.`255.255.255`, 111.`255.255.255`
+
+
+### 5.3.2 Class B: 128-191
+- Format: The 4 octects = Network ID + Network ID + Host ID + Host ID. Again, there are 4 rules to follow!!
+- Rule 1: Class B's **first** octect = The Network ID must be from 128 - 191 (withholding prefix starting with `10` hence the range is **10**000000 ~ **10**111111)
+- Rule 2: Class B's first 2 octets = Network ID, the next 2 octets = Host ID
+- Rule 3: To become a valid host IP address. The last 2 octets bits cannot be all 0s
+    - Represents this network: 172.16.`0.0` (the last 2 octets are 0)
+    - Represents this host: 172.16.`0.1` (the last 2 octets are NOT 0)
+- Rule 4: To become a valid host IP address. The last 2 octets bits cannot be all 1s (i.e. 11111111 in binary = 255 in decimal)
+    - Represents this network: 172.16.`254.255` (the last 2 octets are 1s)
+    - Represents a directed broadcast: 172.16.`255.255` (the last 2 octets are NOT 1s)
+
+
+### 5.3.3 Class C: 192-223 (We use this at home)
+- Format: The 4 octects = Network ID + Network ID + Network ID + Host ID. Again, there are 4 rules to follow!!
+- Rule 1: Class C's **first** octect = The Network ID must be from 192 - 223 (withholding prefix starting with `110` hence the range is **110**00000 ~ **110**11111) = 
+- Rule 2: Class C's first 3 octets = Network ID, the last octet = Host ID
+- Rule 3: To become a valid host IP address. The last octet bit cannot be 0
+    - Represents this network: 192.16.0.`0` (the last octet is 0)
+    - Represents this host: 192.16.0.`1` (the last octet is NOT 0)
+- Rule 4: To become a valid host IP address. The last octet bit cannot be 1 (i.e. 11111111 in binary = 255 in decimal)
+    - Represents this network: 172.16.254.`254` (the last octet is 1)
+    - Represents a directed broadcast: 172.16.255.`255` (the last octet is NOT 1)
+
+### 5.3.4 Class D: 224-239
+- Rule 1: Class D's **first** octect = The Network ID must be from 224-239 (withholding prefix starting with `1110` hence the range is **1110**0000 ~ **1110**1111)
+- Class D is used for multi-casting
+- Topology of uni-cast vs multi-cast
+    - uni-cast
+        - ![](../../../../../assets/images/ccna/lesson4/lesson_4_unicast_1.jpg)
+    - multicast
+        - ![](../../../../../assets/images/ccna/lesson4/lesson_4_multicast_1.jpg)
+
+
+### 5.3.5 Class E: 240 - 255
+- Rule 1: Class E's **first** octect = The Network ID must be from 240 - 255 (withholding prefix starting with `11110` hence the range is **11110**000 ~ **11110**111)
+- Class E is reserved for future use (reserved for IPv6 now)
+
+
+#### Special address: 255.255.255.255 - local broadcast
+    - When a host computer sends a local broadcast packet, this packet will be accepted by all other host PCs on the lcoal network! (With excepts to router, as router does not forward packages like these)
+    - Local Broadcast topology:
+        - ![](../../../../../assets/images/ccna/lesson4/lesson_4_local_broadcast_1.jpg)
+
+## 5.x.3 Simulation labs!
+
+### Simulation Lab 1: Swtich, VLAN
+
+### Simulation Lab 2: LARP EtherChannel bundling
+
+### Simulation Lab 3: Different VLAN and different switches
+
+### Simulation Lab 4: Subset setting (next time)
+
