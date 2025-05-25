@@ -19,4 +19,5 @@ questions:
         <br/>一気に = all at once (without resting) \ 
         <br/>思い切って = boldly/strongly/determinedly"
     - type: "multiple-choice"
+      question: "Qxx: <br/> ---- <b><u> ---- </u></b> ----"
 
