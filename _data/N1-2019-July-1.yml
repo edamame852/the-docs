@@ -3,7 +3,7 @@ randomized: true
 
 questions:
     - type: "multiple-choice"
-      question: "Q15: <br/> 無駄な経費は<u>極力</u>減らそう"
+      question: "Q15: <br/> 無駄な経費は<b><u>極力</u></b>減らそう"
       items:
           - choice: できる限り
             correct: true
