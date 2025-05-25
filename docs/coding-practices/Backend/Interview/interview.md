@@ -87,10 +87,9 @@ Ans:
 
 2. What is an option?
 Ans: 
-- Guarantying you buy/sell a stock at fixed price in the future
-- Kinda like a coupon, you can choice to exercise/ not exercise
+- Guaranteeing you buy/sell a stock at fixed price in the future
+- Like a supermarket coupon, you can choice to exercise/ not exercise
 - Strike price : to buy/sell at fixed price
-
 
 3. What is a swap?
 Ans: 
