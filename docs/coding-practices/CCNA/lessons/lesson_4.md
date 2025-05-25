@@ -17,7 +17,8 @@ grand_parent: Coding Practices
 1. The CCNA exam will be using virtual devices, never real physical ones
 2. Turing off CDP on global config level & on interface level will both be tested
 3. LLDP and CDP will both be tested! LLDP is non-cisco proprietary, CDP is.
-
+4. CCNA MC: What is a LLDP re-init time? Ans: Default is 5 seconds to implement all the changes done to the port.
+5. CCNA Lab/ Exam: Will test how to set up Voice VLAN
 
 # 4. Features in CISCO switches
 ## 4.6 CDP and LLDP (CDP was already discussed in lesson 3, will focus on LLDP now)
@@ -211,10 +212,66 @@ grand_parent: Coding Practices
     Copyright (c) 1986-2016 by Cisco Systems, Inc.
     Compile Tue 22-Mar-16 16:19 by prod_rel_team
 
-    advertisment version: 2
+    Time remaining: 97 seconds 
+    System Capabilties: B, R
+    Enabled Capabilities: R <------ Only Router
+    Management Addresses:
+        IP: 10.0.0.1 <------ IP is visable
+    Auto Negotiation - Not Supported
+    Physical media capabilities - not advertised
+    Media Attachment Unit type - not advertised
+    Vlan ID: - not advertised
 
-    Total cdp entries displayed: 1
+    Total entries displayed: 1 <------ the word 'cdp' is removed
 
 ```
 
+#### Lab 2: Checking what other lldp comamnds is avaliable in the console
 
+- 
+```bash
+config t
+int g1/1
+lldp ?
+```
+- This is the output of `lldp ?` under interface config mode
+    - 
+    ```bash
+    switch1(config-if) #lldp ?
+        med-tlv-secret      Selection of LLDP MED TLVs to send
+        receive             Enable LLDP reception on interface
+        tlv-select          Selection of LLDP TLVs to send
+        transmit            Enable LLDP transmission on interface
+    ```
+    - We only have to pay attention to the 2 lddp commands for on/off:
+        - `lldp receive` & `lldp no receive` = Allowing/ Dis-allowing port to receive LLDP messages
+        - `lldp transmit` & `lldp no transmit` = Allowing/ Dis-allowing port to transmitting LLDP messages
+
+
+#### Lab 3: Resetting LLDP re-initilization delay timer away from the default 5 seconds.
+
+- LLDP Re-initilization time = The delayed time for LLDP to be re-useable
+- Adjusting the LLDP reinit time can avoid frequent initialization causing by frequent settings changes to LLDP
+
+- Step 1: Re-init the time for LLDP port
+    - 
+    ```bash
+    config t
+    lldp reinit 5
+    end
+    ```
+- Step 2: Verify lldp information with `sh lldp`:
+    - 
+    ```bash
+    GLobal LLDP Information:
+        Status: ACTIVE
+        LLDP advertisements are sent every 30 seconds
+        LLDP hold time advertised is 120 seconds
+        LLDP interface reinitialisation delay is 5 seconds
+    ```
+
+## 4.7 Voice VLAN !
+- Meaning: Voice VLAN = a VLAN for sending VoIP/ Voice Over IP data frames (i.e. those that are sent/received by IP Phones)
+
+- Usually the topology for Voice VLAN:
+    - ![](../../../../../assets/images/ccna/lesson4/lesson_4_ip_phone_1.jpg)
