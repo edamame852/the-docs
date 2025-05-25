@@ -6,13 +6,17 @@ questions:
       question: "Q15: <br/> 無駄な経費は<u>極力<u>減らそう"
       items:
           - choice: できる限り
-            correct: false
-          - choice: 大幅に
             correct: true
+          - choice: 大幅に
+            correct: false
           - choice: 一気に
             correct: false
           - choice: 思い切って
             correct: false
-      followup: "できる限り = as much as possible<br/>大幅に = significantly<br/>一気に = all at once<br/>思い切って = boldly"
+      followup: "極力 = As much as possible \
+        <br/>できる限り = as much as possible \
+        <br/>大幅に = significantly/greatly \ 
+        <br/>一気に = all at once (without resting) \ 
+        <br/>思い切って = boldly/strongly/determinedly"
     - type: "multiple-choice"
 
