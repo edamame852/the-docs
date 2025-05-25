@@ -1,5 +1,5 @@
 ---
-title: CI
+title: CICD
 layout: default
 parent: Coding Practices
 has_children: true

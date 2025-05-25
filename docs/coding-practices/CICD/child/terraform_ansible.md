@@ -1,7 +1,7 @@
 ---
 title: terraform_ansible
 layout: default
-parent: CI
+parent: CICD
 grand_parent: Coding Practices
 has_children: true
 ---

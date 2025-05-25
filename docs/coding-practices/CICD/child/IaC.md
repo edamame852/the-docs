@@ -1,7 +1,7 @@
 ---
 title: IaC (Infra as Code)
 layout: default
-parent: CI
+parent: CICD
 grand_parent: Coding Practices
 has_children: true
 ---
