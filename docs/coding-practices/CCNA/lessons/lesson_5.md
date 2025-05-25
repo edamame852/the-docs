@@ -1,5 +1,5 @@
 ---
-title: lesson_4
+title: lesson_5
 layout: default
 parent: CCNA
 grand_parent: Coding Practices
@@ -18,7 +18,7 @@ grand_parent: Coding Practices
 
 
 # 5. IP Address
-## 5.4 Subnet Mask
+## 5.4 Subnet Masking
 
 ### 5.4.1
 - Overview of Subset
