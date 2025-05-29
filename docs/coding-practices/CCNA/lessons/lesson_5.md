@@ -14,8 +14,36 @@ grand_parent: Coding Practices
 5th Lesson - CCNA Fast Track (May 27, 2025). We left off at page 80.
 
 # 0. CCNA Exam Questions
+1. Can these 2 broadcast domains networks work when they are configured under the same network/subnet IP address?
+    - ![](../../../../../assets/images/ccna/lesson5/lesson_5_subnet_4.jpg)
+    - Left port(g0/0): 192.168.1.1/24
+    - Right port (g0/1): 192.168.1.2/24
+    
+    - Explaination: Subnet mask is assumed to be 255.255.255.0 with /24
+    - Meaning, 192.168.1.1 and 192.168.1.2 are within the same subnet!
+    - If 192.168.1.1 wants to talk to 192.168.1.2, it sends a broadcast message (192.168.1.255)
+    - But if 192.168.1.2 is in a different broadcast domain, 192.168.1.1 will never learn the MAC address of 192.168.1.2
+    - IP wise, they are subnets of each other BUT, they're NOT connected on a layer 2 level
 
+    - Attempting with code:
+        - 
+        ```bash
+        en
+        config t
+        int g0/0
+        ip address 192.168.1.1 255.255.255.0
+        no shutdown
 
+        en
+        config t
+        int g0/1
+        ip address 192.168.1.2 255.255.255.0
+        no shutdown
+        ```
+    - Note: The post masked value 192.168.1.0 (the broadcast domain) overlaps g0/0
+    - `incorrect IP address assignment`
+
+2. MC will cover VLSM
 
 # 5. IP Address
 ## 5.4 Subnet Masking
@@ -46,7 +74,10 @@ grand_parent: Coding Practices
     - if yes: No router is needed :D
     - if no: Router is needed to send packet
 
+- ![](../../../../../assets/images/ccna/lesson5/lesson_5_subnet_1.jpg)
+
 - Question 4: Determine if these 2 IP are under the same internet? IP1 = 10.0.0.3 & IP2 = 10.10.1.1
+    - ![](../../../../../assets/images/ccna/lesson5/lesson_5_subnet_2.jpg)
     - Step 1: Determine classful. Ans: This is Class A. Hence the subnet mask is 255.0.0.0
     - Step 2: Mask the first IP with subnet mask
         - IP1:          10.0.0.3    (00001010.00000000.00000000.00000011)
@@ -64,7 +95,9 @@ grand_parent: Coding Practices
         - In this case they are the same, hence it's the same network, router is not needed
 
 
+
 - Question 5: Determine if these 2 IP are under the same internet? IP1 = 10.0.0.3 & IP2 = 159.159.3.3
+    - ![](../../../../../assets/images/ccna/lesson5/lesson_5_subnet_3.jpg)
     - Step 1: Determine classful. Ans: This is Class A. Hence the subnet mask is 255.0.0.0
     - Step 2: Mask the first IP with subnet mask
         - IP1:          10.0.0.3    (00001010.00000000.00000000.00000011)
@@ -80,9 +113,12 @@ grand_parent: Coding Practices
         - Result:                   (10011111.00000000.00000000.00000000) = 159.0.0.0
     - Step 4: Compared the masked result
         - Theya have different results, hence it's NOT the same network, router is needed D:
+    
+    
 
 
 ## 5.5 Subnetting = breaking down classful network (A,B,C,D) -> A1, A2, A3 ..., B1, B2, ...
+- Note: This is the non-VLSM method
 - Idea of subnetting = using more bits as network ID ! (Recall IP address of classful networks are always Network ID + Host ID)
 
 - Not using subnetting (thse following cases)
@@ -92,3 +128,123 @@ grand_parent: Coding Practices
     - case 4: Any class B that ends with /16 (e.g. 130.10.0.0/16)
     - case 5: Class C with subnet mask 255.255.255.0
     - case 6: Any class C that ends with /16 (e.g. 192.10.0.0/24)
+
+- Subnetting equations:
+    - Equation 1: # of subnets = 2**(# of subnet bits)
+    - Equation 2: # of host (per subnet) = 2**(# of host ID bits) - 2
+
+
+- Question 1A: We have a class C network ID of 200.200.100.0/24, we want to divide into equal pieces of subnets using 3 subnet bits. What is the subnet mask gonna be ?
+    - Ans: Well, it's not 255.255.255.0 that's for sure since it's /24, which gives us some clues to it being a Class C.
+    - Step 1: Using equation 1 to find the # of subnet division
+        - (# of subset) = 2**(# of subnet bits)
+        - (# of subnet) = 2 ** 3 = 8, We will have 8 subnets in total
+    - Step 2: Determine the subnet mask IP
+        - Since we're taking 3 subnet bits = on top of the 255.255.255.x
+        - in x's first 3 digits, we're taking one bits in binary. Hence, 3 ones and 5 zeros in this octet
+        - so **111**00000 in binary, in decimal it's 2^7 + 2^6 + 2^5 = 224
+        - So the answer is 255.255.255.224 is first entry of the last subnet, which is our subnet mask!
+
+- Question 1B: Notice we are dividing into 8 subnets
+    - Our original IP in Decimal: 200.200.100.0/24
+    - Since we're taking 3 subnet bits, hence it would be 200.200.100.0/24+3 or /27 ??????
+    - We're extracting the first 3 bits hence **111**00000 it's only one of the combos:
+        - subnet 1: Last Octet Binary digits: **000**00000 = 0
+        - subnet 2: Last Octet Binary digits: **001**00000 = 32
+        - subnet 3: Last Octet Binary digits: **010**00000 = 64
+        - subnet 4: Last Octet Binary digits: **011**00000 = 96
+        - subnet 5: Last Octet Binary digits: **100**00000 = 128
+        - subnet 6: Last Octet Binary digits: **101**00000 = 160
+        - subnet 7: Last Octet Binary digits: **110**00000 = 192
+        - subnet 8: Last Octet Binary digits: **111**00000 = 224
+    - Hence the subnets should be...
+        - [***000***] subnet 1: 0-31                => 200.200.100.0 ~ 200.200.100.31
+            - Subnet's network ID / network address = 200.200.100.0     = (***000***00000)
+            - This subset's first usable IP         = 200.200.100.1     = (***000***00001)
+            - This subset's last usable IP          = 200.200.100.30    = (***000***11110)
+            - Subnet's directed broadcast network   = 200.200.100.31    = (***000***11111)
+        - [***001***] subnet 2: 32-63       => 200.200.100.0 ~ 200.200.100.30
+        - [***010***] subnet 3: 64-95       => 200.200.100.0 ~ 200.200.100.30
+        - [***011***] subnet 4: 96-127      => 200.200.100.0 ~ 200.200.100.30
+        - [***100***] subnet 5: 128-159     => 200.200.100.0 ~ 200.200.100.30
+        - [***101***] subnet 6: 160-191     => 200.200.100.0 ~ 200.200.100.30
+        - [***110***] subnet 7: 192-223     => 200.200.100.0 ~ 200.200.100.30
+        - [***111***] subnet 8: 224-254     => 200.200.100.0 ~ 200.200.100.30
+            - Subnet's network ID / network address = 200.200.100.224   = (***111***00000) 
+            - This subset's first usable IP         = 200.200.100.225   = (***111***00001)
+            - This subset's last usable IP          = 200.200.100.253   = (***111***11110)
+            - Subnet's directed broadcast network   = 200.200.100.254   = (***111***11111)
+    - We create our subnet with this: Always the last one is for the router
+        - subnet 1: last IP is used for router (200.200.100.30/27), rest is for the switch (200.200.100.1~29/27)
+        - subnet 2: last IP is used for router, rest is for the switch
+        - subnet 3: last IP is used for router, rest is for the switch
+        - subnet 4: last IP is used for router, rest is for the switch
+        - subnet 5: last IP is used for router, rest is for the switch
+        - subnet 6: last IP is used for router, rest is for the switch
+        - subnet 7: last IP is used for router, rest is for the switch
+        - subnet 8: last IP is used for router(200.200.100.253/27), rest is for the switch (200.200.100.225~252/27)
+
+    - Sanity check: you can mask results within the same subnet, the masked result will be the same (within the same subnet)
+    - Sanity check: if you mask different subnets with subnet mask (i.e. 200.200.100.224) then the result is different
+
+## 5.6 VLSM = Variable length subnet mask
+- Background: What we did in 5.5 are all subnetting by equal parts, by equal parts I mean equal bits of subnetting (i.e. 3)
+- This is our topology, we have a total of 90+2+29+13 = 105 + 29 = 145 hosts in total
+- ![](../../../../../assets/images/ccna/lesson5/lesson_5_vlsm_1.jpg)
+- 
+|  Subnetting Bits   | Post Subnetting mask | # of Subnets | Host bits | # of Valid Hosts that it can support|
+|  :---: | :---:  | :---:  | :---:  | :---:  |
+| 1  | /24 + **1** = /25 | 2^**1** = 2 | 8 - **1** = 7 | 2^7 - 2 = 126 |
+| 2  | /24 + **2** = /26 | 2^**2** = 4 | 8 - **2** = 6 | 2^6 - 2 = 62 |
+| 3  | /24 + **3** = /27 | 2^**3** = 8 | 8 - **3** = 5 | 2^5 - 2 = 30 |
+| 4  | /24 + **4** = /28 | 2^**4** = 16 | 8 - **4** = 4 | 2^7 - 2 = 14 |
+| 5  | /24 + **5** = /29 | 2^**5** = 32 | 8 - **5** = 3 | 2^7 - 2 = 6 |
+| 6  | /24 + **6** = /30 | 2^**6** = 64 | 8 - **6** = 2 | 2^7 - 2 = 2 |
+
+> Note: Pre subnetting network bit is 24 bits for Class C
+> Note: They are FAIL! We need something to support 145 hosts! Hence, equal partiion of subnets or non-VLSM will not work in this case !!
+
+- Benefits of VLSM
+    - More efficient use of IP (since different # of bits for subnetting in different network segments)
+
+- How to resolve this issue?
+    - Step 1: resolve first subnet, it has 90 hosts.
+        - 2**(# of host bit)-2 = 90
+        - 2**(# of host bit) = 92
+            - (2^6 = 64 bits, 2^7=128 bits), pick the bigger option, we take 128 bits, so we take 7
+        - Number of host bins is 7
+        - Number of 8-7 = 1 subnet bit
+        - The subnet mask: /24 + ***1*** = /25 ergo (11111111.11111111.11111111.***1***0000000 = 255.255.255.128)
+    - Step 2: resolve second subnet, it has 29 hosts.
+        - 2**(# of host bit)-2 = 29
+        - 2**(# of host bit) = 31
+            - (2^4= 16 bits, 2^5 = 32 bits), pick the bigger option, we take 32 bits, so we take 5
+        - Number of host bins is 5
+        - Number of 8-5 = ***3*** subnet bits
+        - The subnet mask: /24 + ***3*** = /26 ergo (11111111.11111111.11111111.***111***00000 = 255.255.255.224)
+    - Step 3: resolve third subnet, it has 13 hosts.
+        - 2**(# of host bit)-2 = 13
+        - 2**(# of host bit) = 15
+            - (2^3= 8 bits, 2^4 = 16 bits), pick the bigger option, we take 16 bits, so we take 4
+        - Number of host bins is 4
+        - Number of 8-4 = 4 subnet bits
+        - The subnet mask: /24 + ***4*** = /28 ergo (11111111.11111111.11111111.***1111***0000 = 255.255.255.240)
+    - Step 4: resolve fourth subnet, it has 2 hosts.
+        - 2**(# of host bit)-2 = 2
+        - 2**(# of host bit) = 4
+            - (2^2 = 4 bits), pick the bigger option, we take 4 bits, so we take 2
+        - Number of host bins is 2
+        - Number of 8-2 = 6 subnet bits
+        - The subnet mask: /24 + ***6*** = /30 ergo (11111111.11111111.11111111.***111111***00 = 255.255.255.252)
+
+    - Step 5: Conclusion
+        - subnet 1: 1 bit       e.g. 192.1.1.0/24+1 = 192.1.1.0/25
+        - subnet 2: 3 bits      e.g. 192.1.1.0/24+3 = 192.1.1.0/27
+        - subnet 3: 4 bits      e.g. 192.1.1.0/24+4 = 192.1.1.0/28
+        - subnet 4: 6 bits      e.g. 192.1.1.0/24+6 = 192.1.1.0/30
+        
+- Question 1: Assume on floor 1 (= subnet 1) we have these 2 IPs 192.1.1.126 and 192.1.1.1 We want to check whether a router is needed <br/>
+AKA, we're asking to verify if these 2 IP are living in the same subnet
+
+Ans:
+- 1. Recall in subnet 1, we're using /25. Meaning we have 25 ones, our mask is 111111111.111111111.111111111.10000000 = 255.255.255.128 
