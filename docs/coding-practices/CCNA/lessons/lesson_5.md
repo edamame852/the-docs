@@ -243,8 +243,71 @@ grand_parent: Coding Practices
         - subnet 3: 4 bits      e.g. 192.1.1.0/24+4 = 192.1.1.0/28
         - subnet 4: 6 bits      e.g. 192.1.1.0/24+6 = 192.1.1.0/30
         
-- Question 1: Assume on floor 1 (= subnet 1) we have these 2 IPs 192.1.1.126 and 192.1.1.1 We want to check whether a router is needed <br/>
+- Question 1: Assume on floor 1 (= subnet 1) we have these 2 IPs 192.1.1.1 and 192.1.1.126 We want to check whether a router is needed <br/>
 AKA, we're asking to verify if these 2 IP are living in the same subnet
 
 Ans:
 - 1. Recall in subnet 1, we're using /25. Meaning we have 25 ones, our mask is 111111111.111111111.111111111.10000000 = 255.255.255.128 
+- 2. mask the first IP: 192.1.1.1 with /25, which is 255.255.255.128 
+    - 192.1.1.1             = (11000000.00000001.00000001.00000001)
+    - 255.255.255.128       = (11111111.11111111.11111111.10000000)
+    - Masked result         = (11000000.00000001.00000001.00000000) = 192.1.1.0
+
+- 3. mask the second IP: 192.1.1.126 with /25, which is 255.255.255.128 
+    - 192.1.1.126           = (11000000.00000001.00000001.01111110)
+    - 255.255.255.128       = (11111111.11111111.11111111.10000000)
+    - Masked result         = (11000000.00000001.00000001.00000000) = 192.1.1.0
+
+- 4. They have the same masked result, hence the 2 IPs can send packets without the help of a router
+
+
+
+# 6. TCP/IP
+- Facts: TCP/IP protocols cover across Layer 3 and Layer 4
+    - In Layer 4 of the OSI Model, TCP/IP protocol examples include:  TCP, UDP
+    - In Layer 3 of the OSI Model, TCP/IP protocol examples include:  IP, ARP, ICMP 
+
+## 6.1 Transmission Control Protocol (TCP) [Syll 1.5]
+
+### 6.1.1 TCP Port Numbers
+- Review: port number can be anything from 0 ~ 65535
+    - port number: 0 ~ 1023 is reserved for important apps
+        - SSH Server uses port 22
+        - Telnet Server uses port 23
+        - SMTP (Simple mail transmission protocol) uses port 25
+        - Web Server/ HTTP uses port 80
+        - Secured Web Server/ HTTPS uses port 443
+    
+- Source Port Number is found in data segments's header to help identify the applicaiton. For client app, it's usually >1024 and OS dependent.
+- Host A with IP 10.1.1.1 -> Router -> Server 20.4.4.4
+    - From Host A to Server: <br/>
+    HTTP Request + Layer 4 Header (TCP, Source Port 50000 -> Destination port 80) + Layer 3 Header (IPv4, Source IP: 10.1.1.1 -> Destination IP: 20.4.4.4) + Layer 2 Header (Ommitted)
+
+    - From Server to Host A: <br/>
+    HTTP Response + Layer 4 Header (TCP, Source Port 80 -> Destination port 50000) + Layer 3 Header (IPv4, Source IP: 20.4.4.4 -> Destination IP: 10.1.1.1) + Layer 2 Header (Ommitted)
+
+### 6.1.2 Connection oritented protocol (i.e. TCP)
+
+- Background: TCP's communication is a 3 step process.
+    - Step 1: Call Setup = using 3 TCP packets to sync connection params
+        - Packet 1: SYN = Sync only (TCP Header SYN Field = 1, TCP Header ACK Field = 0)
+        - Packet 2: SYN ACK = Sync and Acknowledge (TCP Header SYN Field = 1, TCP Header ACK Field = 1)
+        - Packet 3: ACK = Acknowledge only (TCP Header SYN Field = 0, TCP Header ACK Field = 1)
+    - Step 2: Data Transfer: After Call Setup, connection is established, the two connected host will start data transfer
+    - Step 3: Call Termination: The communication host agree to terminate the connection by sending FIN = TCP Header FIN Field is 1
+    - ![](../../../../../assets/images/ccna/lesson5/lesson_5_tcp_1.jpg)
+### 6.1.3 Reliable Protocol 
+- Background: TCP is a reliable e2e delivery protocol since TCP uses e2e devices to use ACK and windowing to perform error recovery and ensuring data is properly received
+
+- Reliability of TCP:
+    - Reliable point 1: Windowing (i.e. Transportation Layer Flow Control)
+        - Window = max data segments that can be sent per attempt (up to a certiain # of bytes)
+    - Reliable point 2: Acknowledgement/ ACK
+        - After sending window of data -> Host waits for ACK -> Before Host sends again
+    - Reliable point 3: Error Recovery
+        - Host can re-trasmit if any segment is missed
+    - Reliable point 4: Checksum
+        - Hashed value of the data being sent, similar to CRC logic we learnt before
+    - ![](../../../../../assets/images/ccna/lesson5/lesson_5_tcp_2.jpg)
+
+### 6.1.4 TCP Header Examples
