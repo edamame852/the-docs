@@ -1,5 +1,5 @@
 ---
-title: lesson_5
+title: lesson_6
 layout: default
 parent: CCNA
 grand_parent: Coding Practices

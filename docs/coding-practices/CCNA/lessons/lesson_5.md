@@ -15,7 +15,7 @@ grand_parent: Coding Practices
 
 # 0. CCNA Exam Questions
 1. Can these 2 broadcast domains networks work when they are configured under the same network/subnet IP address?
-    - ![](../../../../../assets/images/ccna/lesson5/lesson_5_subnet_4.jpg)
+    - ![](../../../../../assets/images/ccna/lesson5/lesson5_subnet_4.jpg)
     - Left port(g0/0): 192.168.1.1/24
     - Right port (g0/1): 192.168.1.2/24
     
@@ -44,6 +44,10 @@ grand_parent: Coding Practices
     - `incorrect IP address assignment`
 
 2. MC will cover VLSM
+
+3. Exam will cover Router
+4. Exam will cover Router Tables 
+5. 
 
 # 5. IP Address
 ## 5.4 Subnet Masking
@@ -74,7 +78,7 @@ grand_parent: Coding Practices
     - if yes: No router is needed :D
     - if no: Router is needed to send packet
 
-- ![](../../../../../assets/images/ccna/lesson5/lesson_5_subnet_1.jpg)
+- ![](../../../../../assets/images/ccna/lesson5/lesson5_subnet_1.jpg)
 
 - Question 4: Determine if these 2 IP are under the same internet? IP1 = 10.0.0.3 & IP2 = 10.10.1.1
     - ![](../../../../../assets/images/ccna/lesson5/lesson_5_subnet_2.jpg)
@@ -97,7 +101,7 @@ grand_parent: Coding Practices
 
 
 - Question 5: Determine if these 2 IP are under the same internet? IP1 = 10.0.0.3 & IP2 = 159.159.3.3
-    - ![](../../../../../assets/images/ccna/lesson5/lesson_5_subnet_3.jpg)
+    - ![](../../../../../assets/images/ccna/lesson5/lesson5_subnet_3.jpg)
     - Step 1: Determine classful. Ans: This is Class A. Hence the subnet mask is 255.0.0.0
     - Step 2: Mask the first IP with subnet mask
         - IP1:          10.0.0.3    (00001010.00000000.00000000.00000011)
@@ -190,7 +194,7 @@ grand_parent: Coding Practices
 ## 5.6 VLSM = Variable length subnet mask
 - Background: What we did in 5.5 are all subnetting by equal parts, by equal parts I mean equal bits of subnetting (i.e. 3)
 - This is our topology, we have a total of 90+2+29+13 = 105 + 29 = 145 hosts in total
-- ![](../../../../../assets/images/ccna/lesson5/lesson_5_vlsm_1.jpg)
+- ![](../../../../../assets/images/ccna/lesson5/lesson5_vlsm_1.jpg)
 - 
 |  Subnetting Bits   | Post Subnetting mask | # of Subnets | Host bits | # of Valid Hosts that it can support|
 |  :---: | :---:  | :---:  | :---:  | :---:  |
@@ -295,7 +299,7 @@ Ans:
         - Packet 3: ACK = Acknowledge only (TCP Header SYN Field = 0, TCP Header ACK Field = 1)
     - Step 2: Data Transfer: After Call Setup, connection is established, the two connected host will start data transfer
     - Step 3: Call Termination: The communication host agree to terminate the connection by sending FIN = TCP Header FIN Field is 1
-    - ![](../../../../../assets/images/ccna/lesson5/lesson_5_tcp_1.jpg)
+    - ![](../../../../../assets/images/ccna/lesson5/lesson5_tcp_1.jpg)
 ### 6.1.3 Reliable Protocol 
 - Background: TCP is a reliable e2e delivery protocol since TCP uses e2e devices to use ACK and windowing to perform error recovery and ensuring data is properly received
 
@@ -308,6 +312,40 @@ Ans:
         - Host can re-trasmit if any segment is missed
     - Reliable point 4: Checksum
         - Hashed value of the data being sent, similar to CRC logic we learnt before
-    - ![](../../../../../assets/images/ccna/lesson5/lesson_5_tcp_2.jpg)
+    - ![](../../../../../assets/images/ccna/lesson5/lesson5_tcp_2.jpg)
 
 ### 6.1.4 TCP Header Examples
+- 
+```bash
+TCP: .AP..., len: 247, seq: 3443570798-3443571045...
+TCP: Srouce Port = 0x11D9 # Note: 0x means it's a hexadecimal = base-16
+```
+
+## 6.2 UDP = User Datagram Protocol
+- Background: 
+    - Another Transport Layer Protocol used by TCP/IP
+    - UDP uses port numbers, same as TCP
+    - UDP is a connectionless protocol = doesn't want to establish connection
+    - UDP is simple (= not providing sequencing, ack and windowing)
+- Benefits of UDP:
+    - UDP doesn't have all the features, the overhead (= pressure) is much smaller 
+    - UDP can reduce network traffic
+    - UDP can transfer more data when compared with TCP under same window size
+- Downside of UDP:
+    - Data loss is tolerable in UDP (please recover yourself in Layer 7 using ML methods lmao)
+    - UDP transmits constantly
+
+- 
+```bash
+UDP: Src Port: Unknown, (462); Dst Port: DNS (53); Length = 55 (0x37)
+UDP: Source Port = 0x1236 #0x1236 = 4462
+UDP: Destination Port = DNS
+UDP: Total length = 55 (0x37) bytes
+```
+
+## 6.3 Internet Protocol = IP
+
+### 6.3.1 - 6.3.3 IP Address, Routers, Routing Tables
+- Important Concepts that we've been talking about
+
+### 6.3.4 Detailed IP Data Packets
