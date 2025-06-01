@@ -47,7 +47,7 @@ grand_parent: Coding Practices
 
 3. Exam will cover Router
 4. Exam will cover Router Tables 
-5. 
+5. Exam will test in ARP cache/ table and ask which IP address is local, and which is not ? Ans: Check the Age(min) field, whoever has `-` it will be the local one.
 
 # 5. IP Address
 ## 5.4 Subnet Masking
@@ -346,6 +346,171 @@ UDP: Total length = 55 (0x37) bytes
 ## 6.3 Internet Protocol = IP
 
 ### 6.3.1 - 6.3.3 IP Address, Routers, Routing Tables
-- Important Concepts that we've been talking about
+- Important Concepts that we've been talking about including these 3
 
 ### 6.3.4 Detailed IP Data Packets
+- ![](../../../../../assets/images/ccna/lesson5/lesson5_ip_1.jpg)
+- Detail flow of data packets: Assume routing entries are already connected in the table
+    - ![](../../../../../assets/images/ccna/lesson5/lesson5_ip_2.jpg)
+    - Step 1: In Host A Layer 7 data translated down to Layer 3 = Network Layer 
+    - Step 2: Host A undergoes routing, host A knows to send to IP 10.2.2.2 (which is the default gateway)
+    - Step 3:
+        - Data Link Layer converts data packet -> data frame
+        - Then adds source MAC address (= MAC address of host A)
+        - Then adds destination MAC address (= MAC address of Router on host A side)
+    - Step 4: Frame is sent to physical layer, then send to physical medium (aka Ethernet Cable)
+    - Step 5: Router can sense the signal in the physical medium, and sends frame to g0/2 port
+    - Rinse and repeat
+
+
+### 6.4 Address Resolution Protocol (= ARP, it's an L3 protocol)
+- Uses of ARP: To find default gateway's MAC address by requesting interface IP to return MAC Address
+- Background: For ARP to send out this broadcast request, it's usually in the form of a broadcast frame (with MAC Address FF-FF-FF-FF-FF-FF)
+
+- Refering to the previous diagram, the way Host A requests MAC address is through the following steps...
+    - Step 1: Host A will check ARP table/ cache for the MAC address based on the corresponding IP address 10.2.2.2
+        - Check the table using `sh arp`.
+        ```bash
+        Protocol        Address     Age(min)        Hardware Addr           Type        Interface
+        Internet        10.1.1.1            -       0000.1111.1111          ARPA        GigabitEthernet0/0
+        ``` 
+        - Note: Since we don't see the record (i.e. no 10.2.2.2) here. So we're using ARP to ask everyone (i.e. interfaces) with IP 10.2.2.2 to return the correct MAC address
+    - Step 2A: If the corresponding MAC address is found in the ARP table. Host A will use that MAC address without sending new ARP request. End.
+
+    - Step 2B: If the corresponding MAC address is NOT found in the ARP table. Host A will use ARP to ask all interfaces on the network, and ask "who is 10.2.2.2"
+    - Step 3: Router gets the ARP request, and replies as ARP stating : from 00-00-22-22-22-22 to 00-00-11-11-11-11 that the router is 10.2.2.2
+    - Step 4: ARP Request is then received by Host A, the ARP table/ cahce is UPDATED with the correct mapping on the right IP and MAC address
+        - Check the table using `sh arp`.
+        ```bash
+        Protocol        Address     Age(min)        Hardware Addr           Type        Interface
+        Internet        10.1.1.1            -       0000.1111.1111          ARPA        GigabitEthernet0/0
+        Internet        10.2.2.2            2       0000.2222.2222          ARPA        GigabitEthernet0/0
+        ```  
+        - Note: 10.1.1.1 = Host A
+        - Note: Age(min) = `-` it means it never expires, since it's also a local entry
+        - Note: The 10.2.2.2 is a dynamic entry that was learned from ARP's reply, 2 mins means it's been learned for 2 mins (NOT THE TIME OF EXPIRE)
+        - **IMPORTANT:By Default, Cicso's hold up time expires in 240 mins!! or 4 hours ! (the value can be changed)**
+
+## 6.5 Internet Control Message Protocol (ICMP)
+Background
+- ICMP is a Network layer protocol/ L3 protocol found in all TCP/IP hosts
+- ICMP can carry different message types, common ones include these 3 
+    - [1. Destination Unreachable](#651-destination-unreachable) 
+    - 2. Echo
+    - 3. Time Exceeded
+
+### 6.5.1 Destination unreachable
+The topology: Host A (IP: 192.168.11.11) --- (IP: 192.168.11.1) Router (IP: 10.200.200.200) --- Host B (IP: 10.200.222.222)
+- Step 1: Host A sends data to Router, assume connection issue with Router and Host B. Data didn't reach Host B
+- Step 2: Host A doesn't know the data didn't reach Host B, it knows data reached the Router
+- Step 3: ICMP "Desination unreachable" message is sent from Router to Host A to inform data cannot send
+
+
+### 6.5.2 Echo
+Background
+- There are 2 types of Echo, Echo Request and Echo Reply
+- Use of Echo Request and Echo Reply is to test connection between 2 hosts via command `ping`.
+- `ping` is able to use ICMP messages to troubleshoot OSI network issues
+- ![](../../../../../assets/images/ccna/lesson5/lesson5_icmp_1.jpg)
+
+Idea of `ping`:
+- `ping` is basically an echo from ICMP
+- When both echo request and echo reply are received, maens that connection is properly established
+
+Example:
+
+```bash
+ping 192.168.11.1
+
+Pinging 192.168.11.1 with 32 bytes of data:
+
+Reply from 192.168.11.1: bytes=32 time<10ms TTL=255
+Reply from 192.168.11.1: bytes=32 time<10ms TTL=255
+Reply from 192.168.11.1: bytes=32 time<10ms TTL=255
+Reply from 192.168.11.1: bytes=32 time<10ms TTL=255
+Reply from 192.168.11.1: bytes=32 time<10ms TTL=255
+```
+
+### 6.5.3 Time Exceeded
+Background of TTL = Time to live
+- TTL is the name of a field in the layer 3 header
+- TTL set time is also OS dependent
+
+TTL Concepts:
+- TTL comes in preset value, OS dependent (e.g. 64,128,255)
+- If router routes an IP packet, router minus 1 from the TTL before the packet sends out
+- Hence why when packet loops through multiple routers, TTL field will eventually be 0. When TTL becomes 0, router will drop the packet and stop routing it and send ICMP message on "Time Exceeded". = This is a safety mechanism
+
+Other uses of TTL:
+- The cisco command `traceroute` or `trace` uses ICMP time exceeded to trace the path of the packets getting routed.
+- The command `tracert <dns name>` will tell you where this packet was routed through...
+```bash
+tracert www.google.com
+
+Tracing route to www.google.com [142.250.197.68]
+over a maximum of 30 hops:
+
+  1     1 ms     1 ms     1 ms  oppowifi.com [192.168.0.1]
+  2     *        *        *     Request timed out.
+  3    29 ms    16 ms    28 ms  192.168.245.33
+  4    27 ms    17 ms    24 ms  10.145.137.100
+  5    24 ms    19 ms    28 ms  wtsam031233.netvigator.com [203.198.13.233]
+  6     *        *        *     Request timed out.
+  7    21 ms    18 ms    29 ms  72.14.219.16
+  8    36 ms    18 ms    23 ms  142.250.61.129
+  9    29 ms    34 ms    29 ms  142.251.244.225
+ 10    18 ms    26 ms    17 ms  nchkga-ah-in-f4.1e100.net [142.250.197.68]
+
+Trace complete.
+```
+
+# 7 Overview of Cisco Routers
+
+## 7.1 Memory
+- Non-volatile memory means, no power is needed to store memory. Data is intact in non-volatile memory
+- There are 4 memory types that we will talk about.<br/>
+    - ### 7.1.1 ROM (non-volatile)
+        - Has power-on diagnostic mode, allow router to perform self-test + system bootstrap code and allowing full Cisco IOS image
+    - ### 7.1.2 Flash memory (non-volatile)
+        - It stores IOS iamges, the default location for router to get IOS image during boot up
+    - ### 7.1.3 NVRAM (non-volatile)
+        - NVRAM stores startup config file. Will discuss next lesson.
+    - ### 7.1.4 RAM (is Volatile)
+        - RAM = DRAM = Dynamic RAM in Cisco router
+        - Also used in PC for memory storages
+        - In Cicso routers, DRAM has 2 usages:
+            - Primary RAM = storing running config, routing table, arp mappings (which clears every reboot)
+            - Secondary RAM = stoes incoming & outgoing data packets
+
+## 7.2 Starting/ Booting up a Router
+- Step 1: Router performs power-on self test (POST) diagnostics to verify CPU,  memeory and interface is ok
+- Step 2: System bootstrap code is ran to find Cisco IOS image, default it loads from Flash Memory
+    - FYI, if the IOS image is not found in flash, it will try to get it from the **TFTP server**
+    - If this fails again, IOS's ROMMON will be loaded from ROM !
+    - If ROMMON fails then gg, it's a physical issue
+    - Please check the source of the IOS with `sh version`.
+    ``bash
+        System iamge file is "flash:c2800nm-ad..."
+        or
+        System iamge file is "tffp://10.0.0.9/c2800nm..."
+    ```
+- Step 3: If IOS image is loaded okay, then router search for valid startup config in NVRAM
+    - if NVRAM cannot find startup config, router runs initial config dialog = Setup Mode
+    - In setup mode, you need to enter info (Host name, IP address, ...etc) during the setup = User config createion
+- High level understanding (from step 1 ~ step 3): POST -> find IOS image -> find startup conf
+
+## 7.3 Interfaces
+- Console Port
+    - similar to an ethernet port
+- Router port namings:
+    - f: 100 Mb
+    - G: 1 Gb
+    - T: 10 Gb
+- WIC-cover
+    - WAN Interface card / WIC can be inserted into Cicso 2811 router
+    - WAN-2T = one of the WAN interface Card (aka WIC)
+- Smart Serial
+    - How its done in reality, you don't need internet to connect different countries togethe
+
+- How to distinguish WIC slots: s0/0/0 = meaning bottom right module, bottom right slot, 1st port
+
