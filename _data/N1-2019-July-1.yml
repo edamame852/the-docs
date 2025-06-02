@@ -18,6 +18,31 @@ questions:
         <br/>大幅に = significantly/greatly \ 
         <br/>一気に = all at once (without resting) \ 
         <br/>思い切って = boldly/strongly/determinedly"
+
     - type: "multiple-choice"
-      question: "Qxx: <br/> ---- <b><u> ---- </u></b> ----"
+      question: "Q20: <br/> 簡素"
+      items:
+          - choice: これはボール置けるだけの簡素なゲームです.
+            correct: false
+          - choice: 鈴木さんは頑固だったけど、今は簡素にたったね。
+            correct: false
+          - choice: 田舎で食べた簡素な味の食事がわすられない。
+            correct: false
+          - choice: 以前に比べ、役所の手続きは簡素になりました。
+            correct: true
+      followup: "簡素 = (to) simplified (i.e. referring to practices, documentations) "
+
+
+    - type: "multiple-choice"
+      question: "Q21: <br/> 解明"
+      items:
+          - choice: 事態が深刻になる前に、話し合いで解決策を解明した.
+            correct: false
+          - choice: 住宅ローの申込は收入を解明する書類が必要だ。
+            correct: false
+          - choice: がんの仕組みを解明することが治癒薬の開発につながる。
+            correct: true
+          - choice: 有名人のスキヤンダルを解明した記事は良く読まれる
+            correct: false
+      followup: "解明 = (to) understand/ get to the bottom of"
 
