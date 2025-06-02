@@ -118,7 +118,7 @@ Building configuration...
 - Step 5: `sh start` to check your new config copied over ti startup-config :D
 
 ### Lab 1: Backuping configs to TFTP server
-- Topology: ![](../../../../../assets/images/ccna/lesson5/lesson6_tftp_1.jpg)
+- Topology: ![](../../../../../assets/images/ccna/lesson6/lesson6_tftp_1.jpg)
 
 - Step 1: Sanity Check from router 1: `ping 172.23.66.3`.
 ```bash
@@ -166,7 +166,7 @@ Destination filename [router1-confg]?
         - Use: Preventing CLI access to telnet connection
             - Configuring IP address on a router interface/ VLAN interface for a switch
             - Configuring password in Line config mode for telnet connection = setting VTY Password
-        - Topology: ![](../../../../../assets/images/ccna/lesson5/lesson6_telenet_1.jpg)
+        - Topology: ![](../../../../../assets/images/ccna/lesson6/lesson6_telenet_1.jpg)
         - Example:
         ```bash
         config t
@@ -234,7 +234,7 @@ Network Destination         Gateway                 Interface
 10.0.0.0/8                  directly connected      g0/0
 192.168.1.0/24              directly connected      s0/0/0
 ```
-- The topology: ![](../../../../../assets/images/ccna/lesson5/lesson6_dcn_1.jpg)
+- The topology: ![](../../../../../assets/images/ccna/lesson6/lesson6_dcn_1.jpg)
 - The setup
     - Step 1: `no shut` meaning no ip is set
     ```bash
@@ -245,10 +245,209 @@ Network Destination         Gateway                 Interface
     no shut
     end
     ```
-    - Step 2: `sh ip route`.
+    - Step 2: `sh ip route`. Note the usable IP range is 10.0.0.1 ~ 10.255.255.254
     ```bash
     Codes: I - IGRP derived, R - RIP derived, O - OSPF derived
        C - connected, S - static, E - EGP derived, B - BGP derived
        * - candidate default route, IA - OSPF inter area route
        E1 - OSPF external type 1 route, E2 - OSPF external type 2 route
+
+    Gateway of last resort is not set
+        10.0.0.0/8 is variably subnetted, 2 subnet, 2 masks
+    C   10.0.0.0/8 is directly connected, GigabitEthernet0/0
+    L   10.0.0.1/8 is directly connected, GigabitEthernet0/0
     ```
+    This route for the directly connected network (i.e. 10.0.0.1) on interface g0/0 is auto generated & found in routing table
+
+    - Note:
+        - If router goes downn, it resets and routing table is EMPTY even when IP address is assigned but interfaces are down
+        - Showing a brief summary of all assigned IP and interface status via `shop ip interface brief`
+        - status: representing L1 status, protocol: representing L2 status
+        ```bash
+        Interface           IP-Address      OK?     Method      Status                  Protocol
+        GigabitEthernet0/0  unassigned      YES     NVRAM       up                      up
+        GigabitEthernet0/1  unassigned      YES     NVRAM       adminstratively down    down
+        GigabitEthernet0/2  unassigned      YES     NVRAM       adminstratively down    down
+        GigabitEthernet0/2  unassigned      YES     NVRAM       adminstratively down    down
+        ```
+        - Note: 
+            - `up up` = `no shutdown` is used to turn on ports and up up means a proper connection is detected
+            - `adminstratively down    down`  = interface/ router is not broken, just down due to `shutdown` command
+
+## 9.2 InterVLAN Routing (Router-on-a-strick & L3) examples 
+- Single router designs with properly set up, routing can happen without extra configs
+- Multilater or L3 Switch can route IP packets based on L3 info in IP packets
+
+### 9.2.1 Configuring Routing Using a Multi-layer Switch (via L3) 
+- Topology: ![](../../../../../assets/images/ccna/lesson6/lesson6_ivlan_1.jpg)
+    - Don't forget to set the correct IP
+    - Step 1: The setup, `no switchport` will turn a port from L2 to L3
+    ```bash
+    en
+    config t
+    hostname Switch1
+    ip routing
+    int g1/1
+    no switchport
+    ip addr 10.0.0.1 255.0.0.0
+    int g0/2
+    no switchport
+    ip addr 172.16.0.1 255.255.0.0
+    ```
+    - `ip routing` enabling L3 IP routing in multi-layer switch
+    - Step 2: Perform sanity check with `show ip route`:
+        - L represents the Host Route, can be disregarded
+        ```bash
+            Codes: I - IGRP derived, R - RIP derived, O - OSPF derived
+        C - connected, S - static, E - EGP derived, B - BGP derived
+        * - candidate default route, IA - OSPF inter area route
+        E1 - OSPF external type 1 route, E2 - OSPF external type 2 route
+
+        Gateway of last resort is not set
+            10.0.0.0/8 is variably subnetted, 2 subnet, 2 masks
+        C   10.0.0.0/8 is directly connected, GigabitEthernet1/1
+        L   10.0.0.1/32 is directly connected, GigabitEthernet1/1
+
+            172.16.0.0/16 is variably subnetted, 2 subnet, 2 masks
+        C   172.16.0.0/16 is directly connected, GigabitEthernet0/2
+        L   172.16.0.1/32 is directly connected, GigabitEthernet0/2
+        ```
+    - Step 3: Configure Router 1
+    - `ip route 0.0.0.0 0.0.0.0 10.0.0.1` configure the default gate of Router 1 to 10.0.0.1 (Will go into detail next time)
+    ```bash
+    en
+    config t
+    hostname Router1
+    int g0/0
+    ip address 10.0.0.100 255.0.0.0
+    no shut
+    exit
+    ip route 0.0.0.0 0.0.0.0 10.0.0.1
+    end
+    ```
+
+    - Step 4: Configure Router 2
+    - 
+    ```bash
+    en
+    config t
+    hostname Router2
+    int g0/2
+    ip address 172.16.0.200 255.255.0.0
+    no shut
+    exit
+    ip route 0.0.0.0 0.0.0.0 172.16.0.1
+    end
+    ```
+    - Step 5: sanity check previlage mode
+    - 
+    ```bash
+    ping 10.0.0.100
+    Type escape sequence to abort.
+    Sending 5, 100-byte ICMP Echos to 10.0.0.100, timeout is 2 seconds:
+    !!!!!
+    Success rate is 100% (5/5), round-trip min/avg/max = 3/4/6 ms
+    ```
+
+    - If fail, debug with `sh ip route` 
+
+### 9.2.2 Configuring Routing Using a Multi-layer Switch (via L2, VLAN interface)
+- Topology diagram: ![](../../../../../assets/images/ccna/lesson6/lesson6_ivlan_2.jpg)
+
+- Benefit of this topology:
+    - No single point of failure
+    - no physical issue/ connections
+    - interVLAN hard to go down
+
+- Step 1: Setup Switch 1
+- `switchport mode access` gurantees there will be NO Trunk Link
+```bash
+en
+config t
+hostname Switch1
+
+vlan 2
+
+int g1/1
+switchport mode access
+switchport access vlan 1
+
+int g0/2
+switchport mode access
+switchport access vlan 2
+
+exit
+
+```
+
+- Step 2: Turn on InterVLAN routing
+- `ip routing` enable IP Routing L3 or Multi-layer switch
+```bash
+ip routing
+int vlan 1
+id address 10.0.0.1 255.0.0.0
+
+no shut
+int vlan 2
+ip address 172.16.0.1 255.255.0.0
+no shut
+end
+```
+- Note: `int vlan 1` and `int vlan 2`. The above enale routing feature and configures IP addresses
+
+- Step 3: Sanity check Switch with `sh ip route`
+-    
+```bash
+Codes: I - IGRP derived, R - RIP derived, O - OSPF derived
+    C - connected, S - static, E - EGP derived, B - BGP derived
+    * - candidate default route, IA - OSPF inter area route
+    E1 - OSPF external type 1 route, E2 - OSPF external type 2 route
+
+    Gateway of last resort is not set
+        10.0.0.0/8 is variably subnetted, 2 subnet, 2 masks
+    C   10.0.0.0/8 is directly connected, GigabitEthernet1/1
+    L   10.0.0.1/32 is directly connected, GigabitEthernet1/1
+
+        172.16.0.0/16 is variably subnetted, 2 subnet, 2 masks
+    C   172.16.0.0/16 is directly connected, GigabitEthernet0/2
+    L   172.16.0.1/32 is directly connected, GigabitEthernet0/2
+```
+
+- Step 4: setting up Router 1
+```bash
+en
+config t
+hostname Router 1
+int g0/0
+ip address 10.0.0.100 255.0.0.0
+no shut
+exit
+ip route 0.0.0.0 0.0.0.0 10.0.0.1
+end
+```
+
+- Step 5: setting up Router 2
+```bash
+en
+config t
+hostname Router2
+int g0/2
+ip address 172.16.0.200 255.255.0.0
+no shut
+exit
+ip route 0.0.0.0 0.0.0.0 172.16.0.1
+```
+
+- Step 6: Sanity Check Router 2 with `ping 10.0.0.1`.
+
+```bash
+ping 10.0.0.100
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 10.0.0.100, timeout is 2 seconds:
+!!!!!
+Success rate is 100% (5/5), round-trip min/avg/max = 3/4/6 ms
+```
+
+# Simulation 13
+- Topology diagram: ![](../../../../../assets/images/ccna/simulation/simulation_13.png)
+- Further solution: ![](../../../../../assets/images/ccna/simulation/simulation_13_2.png)
