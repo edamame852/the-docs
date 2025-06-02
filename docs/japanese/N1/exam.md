@@ -7,4 +7,4 @@ grand_parent: japanese
 
 # N1 2019 July
 ## 言語知識
-{% include quiz.html file='N1/N1-2019-July-1'%}
+{% include quiz.html file='N1-2019-July-1'%}
