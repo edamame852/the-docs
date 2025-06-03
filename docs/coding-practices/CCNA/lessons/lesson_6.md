@@ -278,7 +278,7 @@ Network Destination         Gateway                 Interface
 - Single router designs with properly set up, routing can happen without extra configs
 - Multilater or L3 Switch can route IP packets based on L3 info in IP packets
 
-### 9.2.1 Configuring Routing Using a Multi-layer Switch (via L3) 
+### 9.2.1 InterVLAN 1 -  Configuring Routing Using a Multi-layer Switch (via L3) 
 - Topology: ![](../../../../../assets/images/ccna/lesson6/lesson6_ivlan_1.jpg)
     - Don't forget to set the correct IP
     - Step 1: The setup, `no switchport` will turn a port from L2 to L3
@@ -298,10 +298,10 @@ Network Destination         Gateway                 Interface
     - Step 2: Perform sanity check with `show ip route`:
         - L represents the Host Route, can be disregarded
         ```bash
-            Codes: I - IGRP derived, R - RIP derived, O - OSPF derived
-        C - connected, S - static, E - EGP derived, B - BGP derived
-        * - candidate default route, IA - OSPF inter area route
-        E1 - OSPF external type 1 route, E2 - OSPF external type 2 route
+        Codes:  I - IGRP derived, R - RIP derived, O - OSPF derived
+                C - connected, S - static, E - EGP derived, B - BGP derived
+                * - candidate default route, IA - OSPF inter area route
+                E1 - OSPF external type 1 route, E2 - OSPF external type 2 route
 
         Gateway of last resort is not set
             10.0.0.0/8 is variably subnetted, 2 subnet, 2 masks
@@ -351,7 +351,7 @@ Network Destination         Gateway                 Interface
 
     - If fail, debug with `sh ip route` 
 
-### 9.2.2 Configuring Routing Using a Multi-layer Switch (via L2, VLAN interface)
+### 9.2.2 InterVLAN 2 - Configuring Routing Using a Multi-layer Switch (via L2, VLAN interface)
 - Topology diagram: ![](../../../../../assets/images/ccna/lesson6/lesson6_ivlan_2.jpg)
 
 - Benefit of this topology:
@@ -447,6 +447,8 @@ Sending 5, 100-byte ICMP Echos to 10.0.0.100, timeout is 2 seconds:
 !!!!!
 Success rate is 100% (5/5), round-trip min/avg/max = 3/4/6 ms
 ```
+
+> Note: Lesson ended on page 124
 
 # Simulation 13
 - Topology diagram: ![](../../../../../assets/images/ccna/simulation/simulation_13.png)

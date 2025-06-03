@@ -17,11 +17,11 @@ has_children: true
 
 # Syllubus 
 
-## Descriptions:
+# Descriptions:
 - CCNA Exam v1.1 (CCNA 200-301) is a 120-minute exam
 - Covering topics on network fundamentals, network access, IP connectivity, IP services, security fundamentals, and automation & programmability
 
-## Break down of exam topics 
+# Break down of exam topics 
 
 ### 1: Network fudementals (20%)
 - 1.1 Explain the role and function of network components
@@ -69,7 +69,7 @@ has_children: true
 ### 2: Network Access (20%)
 - 2.1 Configure and verify VLANs (normal range) spanning multiple switches
     - 2.1.a Access ports (data and voice)
-    - 2.1.b Default VLAN
+    - 2.1.b Default VLAN [1](./lessons/lesson_7.md/#923x-vlan-1-doesnt-require-setup-cuz-its-the-default-vlan)
     - 2.1.c InterVLAN connectivity
 - 2.2 Configure and verify interswitch connectivity
     - 2.2.a Trunk ports
@@ -102,7 +102,7 @@ has_children: true
     - 3.2.b Administrative distance
     - 3.2.c Routing protocol metric
 
-- 3.3 Configure and verify IPv4 and IPv6 static routing
+- 3.3 Configure and verify IPv4 and IPv6 static routing [June3](./lessons/lesson_7.md/#93-static-routing-entries)
     - 3.3.a Default route
     - 3.3.b Network route
     - 3.3.c Host route
