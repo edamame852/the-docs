@@ -48,24 +48,24 @@ grand_parent: Coding Practices
         - Note: `switchport trunk encapsulation dot1q` must come before switching to trunk mode! 
         - 
         ```bash
-        en
-        config t
+            en
+            config t
 
-        vlan 2
+            vlan 2
 
-        int g1/1
-        switchport mode access
-        switchport access vlan 1
+            int g1/1
+            switchport mode access
+            switchport access vlan 1
 
-        int g0/2
-        switchport mode access
-        switchport access vlan 2
+            int g0/2
+            switchport mode access
+            switchport access vlan 2
 
-        int g0/0
-        switchport trunk encapsulation dot1q
-        switchport mode trunk
+            int g0/0
+            switchport trunk encapsulation dot1q
+            switchport mode trunk
 
-        end
+            end
         ```
  
     - Sanity check with `do sh vlan brief`or `sh vlan brief`
@@ -75,23 +75,23 @@ grand_parent: Coding Practices
         - In VLAN 2, we don't put native VLAN obviously
         - We don't put `no shut` for both VLAN 1 and VLAN 2, as we assume the main interface is no shut by default, others should be too
         ```bash
-        en
-        config t
-        hostname Router3
+            en
+            config t
+            hostname Router3
 
-        int g0/0
-        no ip address
-        no shut
+            int g0/0
+            no ip address
+            no shut
 
-        int g0/0.1
-        encapsulation dot1q 1 native
-        ip address 10.0.0.1 255.0.0.0
+            int g0/0.1
+            encapsulation dot1q 1 native
+            ip address 10.0.0.1 255.0.0.0
 
-        int g0/0.2
-        encapsulation dot1q 2
-        ip address 172.16.0.1 255.255.0.0
+            int g0/0.2
+            encapsulation dot1q 2
+            ip address 172.16.0.1 255.255.0.0
 
-        end
+            end
         ```
         - `no shut` = Physical interfaces for g0/0 needs to be `no shut`
         - `no ip address` = If there's any IP set on the physical interface, then IP needs to be removed with this
@@ -169,7 +169,100 @@ grand_parent: Coding Practices
 ### 9.3.1 Static Routing Introduction
 - Intro:
     - Routing table contains only directly connected networks. Beyond that direct interface, it's not visable 
-    - If we refer to this topology:
+    - If we refer to this topology: ![](../../../../../assets/images/ccna/lesson7/lesson7_static1.jpg)
 
-    - Let's look at Router 1 and Router 2's Routing table
+    - Let's look at Router 1 and Router 2's Routing table before any human intervention
+        - Router 1 routing table:
+         - 
+        ```bash
+            Network Destination         Gateway                 Interface
+            ---------------------------------------------------------------
+            192.168.1.0/24              Directly Connected      s0/0/0
+            10.0.0.0/8                  Directly Connected      g0/0
+        ```
 
+        - Router 2 routing table:
+        - 
+        ```bash
+            Network Destination         Gateway                 Interface
+            ---------------------------------------------------------------
+            192.168.1.0/24              Directly Connected      s0/0/0
+            172.16.0.0/16               Directly Connected      g0/1
+        ```
+    - Issue: For networks that are NOT directly connected, and admin can manually add the routing entries ! For example...
+        - Router 1 routing table:
+        - 
+        ```bash
+            Network Destination         Gateway                 Interface
+            ---------------------------------------------------------------
+            192.168.1.0/24              Directly Connected      s0/0/0
+            10.0.0.0/8                  Directly Connected      g0/0
+            172.16.0.0                  192.168.1.2             s0/0/0
+        ```
+
+        - Router 2 routing table:
+        - 
+        ```bash
+            Network Destination         Gateway                 Interface
+            ---------------------------------------------------------------
+            192.168.1.0/24              Directly Connected      s0/0/0
+            172.16.0.0/16               Directly Connected      g0/1
+            10.0.0.0/8                  192.168.1.1             s0/0/0
+        ```
+
+### 9.3.2 Configuring static route on Router1 (will setup host route too)
+
+- Setup: Will include host route!
+- Our topology: ![](../../../../../assets/images/ccna/lesson7/lesson7_static2.jpg)
+
+- Step 1: Setup Router 1
+```bash
+en
+config t
+hostname Router1
+
+int g0/1
+ip address 10.0.0.1 255.0.0.0
+no shut
+
+int g0/0
+ip address 192.168.1.1 255.255.255.0
+no shut
+
+end
+```
+
+- Step 2: Setup Router 2
+```bash
+en
+config t
+hostname Router2
+
+int g0/0
+ip address 192.168.1.2 255.255.255.0
+no shut
+
+int g0/1
+ip address 172.16.0.2 255.255.0.0
+no shut
+
+end
+```
+
+- Step 3: Router 1 `ping 172.16.0.2`, success rate is 0 !
+    - Can also verify with `sh ip route`
+    - Due to: In router 1 doesn't have 172.16.0.2 in it's routing table D:
+
+
+- Step 4: Resolve the issue with adding a static route
+
+    - Static Route format: `ip route <dest network> <subnet mask> then <gateway access> or <outgoing ip interface>`. FYI, IPv6 static route configs are similar.
+    - 
+    ```bash
+        config t
+        ip route 172.16.0.2 255.255.0.0 192.168.1.2
+    ```
+    #### 9.3.2.x Network Route ... Static Route :D
+    Note: 192.168.1.2 is set as static route here, it's also known as a network route !
+
+- Step 5: Sanity Check on Router 1 with `sh ip route`

@@ -102,9 +102,9 @@ has_children: true
     - 3.2.b Administrative distance
     - 3.2.c Routing protocol metric
 
-- 3.3 Configure and verify IPv4 and IPv6 static routing [June3](./lessons/lesson_7.md/#93-static-routing-entries)
+- 3.3 Configure and verify IPv4 and IPv6 static routing [1](./lessons/lesson_7/#93-static-routing-entries)
     - 3.3.a Default route
-    - 3.3.b Network route
+    - 3.3.b Network route [1](./lessons/lesson_7/#932x-network-route--static-route-d)
     - 3.3.c Host route
     - 3.3.d Floating static
 
