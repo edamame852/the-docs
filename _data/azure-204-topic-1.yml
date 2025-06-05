@@ -28,7 +28,7 @@ questions:
             correct: true
           - choice: Azure Storage Account
             correct: false
-          - choice: Azure AD (Actrive Directory) Identify Protection
+          - choice: Azure AD (Active Directory) Identify Protection
             correct: false
           - choice: Access policy
             correct: true

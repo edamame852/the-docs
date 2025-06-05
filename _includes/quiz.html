@@ -1,4 +1,8 @@
-{% assign quiz = site.data[include.dir][include.file] %}
+{% if include.dir %}
+  {% assign quiz = site.data[include.dir][include.file] %}
+{% else %}
+  {% assign quiz = site.data[include.file] %}
+{% endif %}
 {% if quiz.randomize == true %}
   {% assign questions = quiz.questions | sample %}
 {% else %}
