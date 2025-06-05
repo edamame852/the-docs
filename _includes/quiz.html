@@ -1,4 +1,5 @@
-{% assign quiz = site.data[include.file] %}
+{% assign file_key = include.file | replace: '/', '.' %}
+{% assign quiz = site.data[file_key] %}
 {% if quiz.randomize == true %}{% assign questions = quiz.questions | sample %}{% else %}{% assign questions =
 quiz.questions %}{% endif %}{% if quiz.title %}<h2>{{ quiz.title }}</h2>{% endif %}{% for item in questions %}
 {% if item.type == "multiple-choice" %}{% include quiz/multiple-choice.html item=item count=forloop.index %}{% endif
