@@ -1,12 +1,30 @@
 <div class="admonition question">
-    <p class="admonition-title">{% if include.item.question %}{{ include.item.question }}{% else %}Question {{
-        include.count }}{% endif %}</p>
-    <p>{% for choice in include.item.items %}{% if choice.correct == true %}<span class="correct-{{ include.count }}">{%
-            endif %}{{ forloop.index }}. {{ choice.choice }}{% if choice.correct == true %}</span>{% endif %}<br>{%
-        endfor %}</p>
-</div><button class="btn btn-success" onclick='toggleAnswer({{ include.count }})'> Show Answer / Hide Answer</button>
-{% if include.item.followup %}<p class="well correct-more-{{ include.count }}" style="display:none">{{
-    include.item.followup }}</p>{% endif %}
+    <p class="admonition-title">
+        {% if include.item.question %}
+            {{ include.item.question | markdownify }}
+        {% else %}
+            Question {{ include.count }}
+        {% endif %}
+    </p>
+    <p>
+        {% for choice in include.item.items %}
+            {% if choice.correct == true %}
+                <span class="correct-{{ include.count }}">
+            {% endif %}
+            {{ forloop.index }}. {{ choice.choice }}
+            {% if choice.correct == true %}
+                </span>
+            {% endif %}
+            <br>
+        {% endfor %}
+    </p>
+</div>
+<button class="btn btn-success" onclick='toggleAnswer({{ include.count }})'> Show Answer / Hide Answer</button>
+{% if include.item.followup %}
+    <p class="well correct-more-{{ include.count }}" style="display:none">
+        {{ include.item.followup | markdownify }}
+    </p>
+{% endif %}
 
 <script>
     function toggleAnswer(count) {
@@ -28,5 +46,3 @@
         }
     }
 </script>
-{% if include.item.followup %}<p class="well correct-more-{{ include.count }}" style="display:none">{{
-    include.item.followup }}</p>{% endif %}
