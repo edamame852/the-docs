@@ -1,19 +1,5 @@
-{% if include.dir %}
-  {% assign quiz = site.data[include.dir][include.file] %}
-{% else %}
-  {% assign quiz = site.data[include.file] %}
-{% endif %}
-{% if quiz.randomize == true %}
-  {% assign questions = quiz.questions | sample %}
-{% else %}
-  {% assign questions = quiz.questions %}
-{% endif %}
-{% if quiz.title %}
-  <h2>{{ quiz.title }}</h2>
-{% endif %}
-{% for item in questions %}
-  {% if item.type == "multiple-choice" %}
-    {% include quiz/multiple-choice.html item=item count=forloop.index %}
-  {% endif %}
-  <br>
-{% endfor %}
+{% if include.dir %}{% assign quiz = site.data[include.dir][include.file] %}{% else %}{% assign quiz = site.data[include.file] %}{% endif %}
+{% if quiz.randomize == true %}{% assign questions = quiz.questions | sample %}{% else %}{% assign questions =
+quiz.questions %}{% endif %}{% if quiz.title %}<h2>{{ quiz.title }}</h2>{% endif %}{% for item in questions %}
+{% if item.type == "multiple-choice" %}{% include quiz/multiple-choice.html item=item count=forloop.index %}{% endif
+%}<br>{% endfor %}
