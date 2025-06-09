@@ -15,6 +15,11 @@ grand_parent: Coding Practices
 
 # 0. CCNA Exam Questions
 
+1. MC will cover Routing Entries Matching orders, 2 Questions in the past, study [this topic](./lesson_7/#934-routing-entries-matching-order) well.
+    - Distinguish between what is route and what is non-route 
+        - Those with eng characters are routes lmao
+        - We can count up the routes, in the example of pg.137 we have 7 routes in total. We include static route and default route !
+
 # 9 InterVLAN Routing 
 # 9.2 InterVLAN Routing 
 
@@ -262,7 +267,248 @@ end
         config t
         ip route 172.16.0.2 255.255.0.0 192.168.1.2
     ```
-    #### 9.3.2.x Network Route ... Static Route :D
-    Note: 192.168.1.2 is set as static route here, it's also known as a network route !
+#### 9.3.2.x Network Route ... Static Route :D
+Note: 192.168.1.2 is set as static route here, it's also known as a network route !
 
 - Step 5: Sanity Check on Router 1 with `sh ip route`
+    - The summary returned
+    ```bash
+    Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
+            D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+            N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+            E1 - OSPF external type 1, E2 - OSPF external type 2
+            i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
+            ia - IS-IS inter area, * - candidate default, U - per-user static route
+            o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+            a - application route
+            + - replicated route, % - next hop override, p - overrides from pfR
+
+    Gateway of last resort is not set
+            10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+    C           10.0.0.0/8 is directly connected, GigabitEthernet0/1
+    L           10.0.0.0/32 is directly connected, GigabitEthernet0/1
+    S       172.16.0.0/16 [1/0] via 192.168.1.2
+            192.168.1.0/24 is variably subnetted, 2 subnets, 2 masks
+    C           192.168.1.0/24 is directly connected, GigabitEthernet0/1
+    L           192.168.1.1/32 is directly connected, GigabitEthernet0/1
+    ```
+    - Note: "S" meaning a static route for the network 172.16.0.0/16
+
+- Step 6: `ping 172.16.0.2`. The packets are now well received
+```bash
+Sending 5, 100-byte ICMP Echos to 172.16.0.2, timeout is 2 seconds:
+!!!!!
+Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
+```
+
+- Step 7: Removing the static route with `conf t` & `no ip route 172.16.0.0 255.255.0.0 192.168.1.2`
+- Step 8: On Router1, set up another ip route
+    - 
+    ```bash
+    conf t
+    ip route 172.16.0.2 255.255.255.255 192.168.1.2
+    end
+    ```
+    - Logic behind the 2 parameters, let's look at the topology again: ![](../../../../../assets/images/ccna/lesson7/lesson7_static2.jpg)
+        - `172.16.0.2` since that's our target destination address (next to Router 2)
+        - `255.255.255.255` is the host route, we're using host route, since there's only 1 IP in the network 172.16.0.0
+        - `192.168.1.2` is the gateway address, it's the interface on Router1 that is closest shoot out interface from Router1
+- Step 9: Verify and sanity check:
+     - The summary returned
+    ```bash
+    Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
+            D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+            N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+            E1 - OSPF external type 1, E2 - OSPF external type 2
+            i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
+            ia - IS-IS inter area, * - candidate default, U - per-user static route
+            o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+            a - application route
+            + - replicated route, % - next hop override, p - overrides from pfR
+
+    Gateway of last resort is not set
+            10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+    C           10.0.0.0/8 is directly connected, GigabitEthernet0/1
+    L           10.0.0.0/32 is directly connected, GigabitEthernet0/1
+            172.16.0.0/32 is subnetted, 1 subnets
+    S           172.16.0.2 [1/0] via 192.168.1.2
+            192.168.1.0/24 is variably subnetted, 2 subnets, 2 masks
+    C           192.168.1.0/24 is directly connected, GigabitEthernet0/1
+    L           192.168.1.1/32 is directly connected, GigabitEthernet0/1
+    ```
+#### 9.3.2.y : Host Route
+- Note:
+    - A static route/ host route (`/32`) for network 172.16.0.2/32 can now found & now marked with "S" as static. Host Route is used since the route only has 1 IP address here. 
+    - Host Route can only access 1 IP
+
+- Step 9: `ping` the target. 
+    - 
+    ```bash
+    Sending 5, 100-byte ICMP Echos to 172.16.0.2, timeout is 2 seconds:
+    !!!!!
+    Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
+    ```
+    - ping is working now
+
+- Alternative:
+    - `ip route 172.16.0.2 255.255.255.255 g0/0`
+    - `ip route 172.16.0.2 255.255.255.255 192.168.1.2`
+    - Idea: now Router 1 can go to 172.16.0.2/32 via it's own Router1's interface g0/0
+
+### 9.3.3 Static Default Route
+
+- Background:
+    - If we have many static routes to set up for different networks
+    - Better to use a **single default route** (1 gateway for all other networks)
+    - Please note default route is also known as **gateway of last resort**
+
+- Note: we're using the same topology as 9.3.1's static route
+    - Topology:![](../../../../../assets/images/ccna/lesson7/lesson7_static2.jpg)
+
+- Step 1: Configure Router1 on int g0/1 and int g0/0
+    ```bash
+    en
+    conf t
+    hostname Route1
+
+    int g0/1
+    ip address 10.0.0.1 255.0.0.0.0
+    no shut
+
+    ip g0/0
+    ip 192.168.1.1 255.255.255.0
+    no shut
+
+    end
+    copy run start
+    ```
+- Step 2: Configure Router2 on int g0/0 and int g0/1
+
+    ```bash
+    en
+    conf t
+    hostname Router2
+
+    int g0/0
+    ip 192.168.1.2 255.255.255.0
+    no shut
+
+    int g0/1
+    ip 172.16.0.0.2 255.255.0.0
+    no shut
+
+    end
+    copy config run
+    ```
+
+- Step 3: Back to Router 1! Let's set up that default route!
+
+    - 
+    ```bash
+    conf t
+    ip route 0.0.0.0 0.0.0.0 192.168.1.2
+    end
+    copy run start
+    ```
+    - Explanation:
+        - the default route is : `0.0.0.0`
+        - the default gateway in Router 1 is set for int g0/0 on Router1's side
+        - You almost only do this when your routing table is empty
+
+- Step 4: Verify Router1's ip table with `sh ip route` 
+    - The default route will show up as `S*`
+        - Where `S` = static route
+        - Where `*` = default route
+    - The return info of `sh ip route`.
+    - Please note that the default route info is shown here as `S*`
+    ```bash
+    Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
+            D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+            N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+            E1 - OSPF external type 1, E2 - OSPF external type 2
+            i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
+            ia - IS-IS inter area, * - candidate default, U - per-user static route
+            o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+            a - application route
+            + - replicated route, % - next hop override, p - overrides from pfR
+
+    Gateway of last resort is 102.168.1.2 to network 0.0.0.0
+
+    Gateway of last resort is not set
+    S*      0.0.0.0/0 [1/0] via 192.168.1.2
+            10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+    C           10.0.0.0/8 is directly connected, GigabitEthernet0/1
+    L           10.0.0.0/32 is directly connected, GigabitEthernet0/1
+
+            192.168.1.0/24 is variably subnetted, 2 subnets, 2 masks
+    C           192.168.1.0/24 is directly connected, GigabitEthernet0/1
+    L           192.168.1.1/32 is directly connected, GigabitEthernet0/1
+    ```
+- Step 5: Try to ping the ip on Router 2's side which is 172.16.0.2 with `ping 172.16.0.2`
+    - Returned on the console we have:
+    - Packets are well received
+    ```bash
+    Sending 5, 100-byte ICMP Echos to 172.16.0.2, timeout is 2 seconds:
+    !!!!!
+    Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
+    ```
+
+ ### 9.3.4 Routing Entries Matching Order
+ - Background:
+    - Please note this topic is related to **longest prefix match**
+    - Essentially, we are sorting the importance of these 7 routes !
+
+- Step 1 : Assume we hae these 7 routes in the ip routing table
+    - 
+    ```bash
+    Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
+            D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+            N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+            E1 - OSPF external type 1, E2 - OSPF external type 2
+            i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
+            ia - IS-IS inter area, * - candidate default, U - per-user static route
+            o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+            a - application route
+            + - replicated route, % - next hop override, p - overrides from pfR
+
+    Gateway of last resort is 102.168.1.2 to network 0.0.0.0
+
+    Gateway of last resort is not set
+    S*      0.0.0.0/0 [1/0] via 192.168.1.2
+            10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+    C           10.0.0.0/8 is directly connected, GigabitEthernet0/1
+    L           10.0.0.0/32 is directly connected, GigabitEthernet0/1
+
+            192.168.1.0/24 is variably subnetted, 2 subnets, 2 masks
+    C           192.168.1.0/24 is directly connected, GigabitEthernet0/1
+    L           192.168.1.1/32 is directly connected, GigabitEthernet0/1
+
+            192.168.16.0/24 is variably subnetted, 2 subnets, 2 masks
+    S           192.168.16.0/26 [1/0] via 192.168.1.3
+    S           192.168.16.0/27 [1/0] via 192.168.1.2
+    ```
+
+- 
+```
+S*      0.0.0.0/0 [1/0] via 192.168.1.2
+C           10.0.0.0/8 is directly connected, GigabitEthernet0/1
+L           10.0.0.0/32 is directly connected, GigabitEthernet0/1
+C           192.168.1.0/24 is directly connected, GigabitEthernet0/1
+L           192.168.1.1/32 is directly connected, GigabitEthernet0/1
+S           192.168.16.0/26 [1/0] via 192.168.1.3
+S           192.168.16.0/27 [1/0] via 192.168.1.2
+```
+    
+- Step 2: Sorting most specific sub-mask to lowest, aka, /32 is the most specific, /1 is the least specific
+    - Let's sort by `/` subnet mask's size. Note the `192` and `10` has no difference in using this sort method
+    ```
+    L           192.168.1.1/32 is directly connected, GigabitEthernet0/1
+    L           10.0.0.0/32 is directly connected, GigabitEthernet0/1
+    S           192.168.16.0/27 [1/0] via 192.168.1.2
+    S           192.168.16.0/26 [1/0] via 192.168.1.3
+    C           192.168.1.0/24 is directly connected, GigabitEthernet0/1
+    C           10.0.0.0/8 is directly connected, GigabitEthernet0/1
+    S*          0.0.0.0/0 [1/0] via 192.168.1.2
+    ```
+
+- 

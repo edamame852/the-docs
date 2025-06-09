@@ -69,7 +69,7 @@ has_children: true
 ### 2: Network Access (20%)
 - 2.1 Configure and verify VLANs (normal range) spanning multiple switches
     - 2.1.a Access ports (data and voice)
-    - 2.1.b Default VLAN [1](./lessons/lesson_7.md/#923x-vlan-1-doesnt-require-setup-cuz-its-the-default-vlan)
+    - 2.1.b Default VLAN [1](./lessons/lesson_7/#923x-vlan-1-doesnt-require-setup-cuz-its-the-default-vlan)
     - 2.1.c InterVLAN connectivity
 - 2.2 Configure and verify interswitch connectivity
     - 2.2.a Trunk ports
@@ -98,14 +98,14 @@ has_children: true
     - 3.1.g Gateway of last resort
 
 - 3.2 Determine how a router makes a forwarding decision by default
-    - 3.2.a Longest prefix match
+    - 3.2.a Longest prefix match [1](./lessons/lesson_7/#934-routing-entries-matching-order)
     - 3.2.b Administrative distance
     - 3.2.c Routing protocol metric
 
 - 3.3 Configure and verify IPv4 and IPv6 static routing [1](./lessons/lesson_7/#93-static-routing-entries)
     - 3.3.a Default route
     - 3.3.b Network route [1](./lessons/lesson_7/#932x-network-route--static-route-d)
-    - 3.3.c Host route
+    - 3.3.c Host route [1](./lessons/lesson_7/#932y--host-route)
     - 3.3.d Floating static
 
 - 3.4 Configure and verify single area OSPFv2
