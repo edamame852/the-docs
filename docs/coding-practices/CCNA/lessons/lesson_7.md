@@ -511,4 +511,32 @@ S           192.168.16.0/27 [1/0] via 192.168.1.2
     S*          0.0.0.0/0 [1/0] via 192.168.1.2
     ```
 
-- 
+- A: we would assume our destination address is 192.168.16.3
+
+- Step 3a: Finding the longest prefix route by removing certain routes from this list. Assume our desination is 192.168.16.3 please
+    - the 2 L's will be dropped as they only go to 1 place (i.e. host route -> one IP). It cannot go to 192.168.16.3.
+    - Let's decide whether the 3rd one on th list will stay `192.168.16.0/27 [1/0] via 192.168.1.2`
+        - Step 1: Find the network ID and broadcast network
+            - network id: `192.168.16.0/27` -> `NA.NA.NA.`
+            - broadcast network `192.168.16.31/27`
+            - meaning the full network range is `192.168.16.0` ~ `192.168.16.31`
+        - Step 2: Conclusion:
+            - Meaning `192.168.16.3` is in range!
+
+- Step 4a: Feel free to do sanity check with `sh ip route 192.168.16.3`
+    - 
+    ```bash
+    Routing entry for 192.168.16.0/27
+        known via "static", distance 1, metric 0
+        Routing Descriptor Blocks:
+        * 192.168.1.2
+            Route metric is 0, traffic share counter is 1
+    ```
+
+
+- B: we would assume our destination address is 192.168.16.50
+
+- Step 3b: Finding the longest prefix route by removing certain routes from this list. Assume our destination is 192.168.16.50 please
+    - the 2 L's will be dropped as they only go to 1 place (i.e. host route -> one IP). It cannot go to 192.168.16.50
+    - The S will also be dropped, since the mask `/27` doesn't reach until 192.168.16.50
+    - What about the other S route
