@@ -554,5 +554,15 @@ S           192.168.16.0/27 [1/0] via 192.168.1.2
         * 192.168.1.3
             Route metric is 0, traffic share counter is 1
     ```
+### 9.3.g Handling exceptions if destination address is 1.1.1.1
+- if we check it with `sh ip route 1.1.1.1`, we'll get an error for this `Network not in table` 
+- We need to handle this with static default routes/ default routes
+- What Franco mentioned:
+    - We are forced to use the final trump card: default gateway address `0.0.0.0` (exhausting all host bits)
 
-##
+
+# 10 Dynamic Routing
+
+## 10.1 Introduction
+- Maintaining static routes in a large company with many routers and many networks... IMPOSSIBLE for network admins.
+
