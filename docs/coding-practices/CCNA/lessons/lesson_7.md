@@ -513,11 +513,11 @@ S           192.168.16.0/27 [1/0] via 192.168.1.2
 
 - A: we would assume our destination address is 192.168.16.3
 
-- Step 3a: Finding the longest prefix route by removing certain routes from this list. Assume our desination is 192.168.16.3 please
+- Step 3a: Finding the longest prefix route by removing certain routes from this list. Assume our designation is 192.168.16.3 please
     - the 2 L's will be dropped as they only go to 1 place (i.e. host route -> one IP). It cannot go to 192.168.16.3.
     - Let's decide whether the 3rd one on th list will stay `192.168.16.0/27 [1/0] via 192.168.1.2`
         - Step 1: Find the network ID and broadcast network
-            - network id: `192.168.16.0/27` -> `NA.NA.NA.`
+            - network id: `192.168.16.0/27` -> 32 - 27 = 5 host bits -> Max range is `00011111` = 16+8+4+2+1 = 31, ergo the broadcast range can go up to that.
             - broadcast network `192.168.16.31/27`
             - meaning the full network range is `192.168.16.0` ~ `192.168.16.31`
         - Step 2: Conclusion:
@@ -538,5 +538,21 @@ S           192.168.16.0/27 [1/0] via 192.168.1.2
 
 - Step 3b: Finding the longest prefix route by removing certain routes from this list. Assume our destination is 192.168.16.50 please
     - the 2 L's will be dropped as they only go to 1 place (i.e. host route -> one IP). It cannot go to 192.168.16.50
-    - The S will also be dropped, since the mask `/27` doesn't reach until 192.168.16.50
-    - What about the other S route
+    - The first S will also be dropped, since the mask `/27` doesn't reach until 192.168.16.50
+    - What about the other S route is `192.168.16.0/26` via `192.168.1.3`
+    - The available range for `192.168.16.0/26` is...
+        - 26 network bits, so 32 - 26 = 6 host bits = 32 + 31 = 63!
+        - Hence the braodcast IP can go up to 63 -> `192.168.16.63/26`
+        - So Yes, this connection can reach 192.168.16.50, no issue
+
+- Step 4: Let's verify this last IP with `sh ip route 192.168.16.50`
+    - 
+    ```bash
+    Routing entry for 192.168.16.50
+        known via "static", distance 1, metric 0
+        Routing Descriptor Blocks:
+        * 192.168.1.3
+            Route metric is 0, traffic share counter is 1
+    ```
+
+##
