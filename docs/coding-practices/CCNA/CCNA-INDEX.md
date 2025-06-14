@@ -98,17 +98,17 @@ has_children: true
     - 3.1.g Gateway of last resort
 
 - 3.2 Determine how a router makes a forwarding decision by default
-    - 3.2.a Longest prefix match [1](./lessons/lesson_7/#934-routing-entries-matching-order)
+    - 3.2.a Longest prefix match [1](../lessons/lesson_7/#934-routing-entries-matching-order)
     - 3.2.b Administrative distance
     - 3.2.c Routing protocol metric
 
-- 3.3 Configure and verify IPv4 and IPv6 static routing [1](./lessons/lesson_7/#93-static-routing-entries)
+- 3.3 Configure and verify IPv4 and IPv6 static routing [1](../lessons/lesson_7/#93-static-routing-entries)
     - 3.3.a Default route
-    - 3.3.b Network route [1](./lessons/lesson_7/#932x-network-route--static-route-d)
-    - 3.3.c Host route [1](./lessons/lesson_7/#932y--host-route)
+    - 3.3.b Network route [1](../lessons/lesson_7/#932x-network-route--static-route-d)
+    - 3.3.c Host route [1](../lessons/lesson_7/#932y--host-route)
     - 3.3.d Floating static
 
-- 3.4 Configure and verify single area OSPFv2 [Link State](./lessons/lesson_7/#1011-distance-vector-vs-link-state-routing-protocols--2-routing-protocols)
+- 3.4 Configure and verify single area OSPFv2 [Link State](../lessons/lesson_7/#1011-distance-vector-vs-link-state-routing-protocols--2-routing-protocols)
     - 3.4.a Neighbor adjacencies
     - 3.4.b Point-to-point
     - 3.4.c Broadcast (DR/BDR selection)
