@@ -99,20 +99,20 @@ has_children: true
 
 - 3.2 Determine how a router makes a forwarding decision by default
     - 3.2.a Longest prefix match [1](../lessons/lesson_7/#934-routing-entries-matching-order)
-    - 3.2.b Administrative distance
-    - 3.2.c Routing protocol metric
+    - 3.2.b Administrative distance [Hop Counts](../lessons/lesson_7/#1012-hop-counts) [AD](../lessons/lesson_7/#102-ad--administrative-distance--metric)
+    - 3.2.c Routing protocol metric [Metric](../lessons/lesson_7/#1022-metric)
 
 - 3.3 Configure and verify IPv4 and IPv6 static routing [1](../lessons/lesson_7/#93-static-routing-entries)
     - 3.3.a Default route
-    - 3.3.b Network route [1](../lessons/lesson_7/#932x-network-route--static-route-d)
-    - 3.3.c Host route [1](../lessons/lesson_7/#932y--host-route)
+    - 3.3.b Network route [7](../lessons/lesson_7/#932x-network-route--static-route-d)
+    - 3.3.c Host route [7](../lessons/lesson_7/#932y--host-route)
     - 3.3.d Floating static
 
-- 3.4 Configure and verify single area OSPFv2 [Link State](../lessons/lesson_7/#1011-distance-vector-vs-link-state-routing-protocols--2-routing-protocols)
+- 3.4 Configure and verify single area OSPFv2 [7 - Link State](../lessons/lesson_7/#1011-distance-vector-vs-link-state-routing-protocols--2-routing-protocols) [7 - Winner gets into routing table](../lessons/lesson_7/#103-ospf--open-shortest-path-first)
     - 3.4.a Neighbor adjacencies
     - 3.4.b Point-to-point
     - 3.4.c Broadcast (DR/BDR selection)
-    - 3.4.d Router ID
+    - 3.4.d Router ID [7](../lessons/lesson_7/#1031-router-id)
 
 3.5 Describe the purpose, functions, and concepts of first hop redundancy protocols
 

@@ -590,8 +590,143 @@ S           192.168.16.0/27 [1/0] via 192.168.1.2
     - Each router calculates the best path to every network into the routing table
 
 ### 10.1.2 Hop Counts
+- Topology: ![](../../../../../assets/images/ccna/lesson7/lesson7_hop_1.jpg)
 - Hop Count = # of routers the data packet needs to pass through before arriving at destination
 - Some routing protocols likes shortest hop counts, I'm talking about you `RIP`!
 
 
 ## 10.2 AD / Administrative distance & metric
+
+### 10.2.1 Administrative distance (AD)
+- Background:
+    - Please memorize this table !!!!
+    - Cisco router's AD = decides which routing protocol will be providing the route
+- Table for AD routing values on some common protocols
+| Name of Route Source    | Symbol used in Cisco `sh ip route` | Default AD Value | 
+| ----------------------- | ---------------------------------- | ---------------- |
+| Connected interface (direct)  | C                            |  0               |
+| Static Route  | S                            |  1               |
+| External BGP = eBGP  | B `will be discussed in CCNP`            |  20               |
+| Internal EIGRP  |  D            |  90               |
+| OSPF  | O            |  110               |
+| IS-IS  | i            |  115               |
+| RIP  | R            |  120               |
+| External EIGRP  | D EX            |  170               |
+| Internal BGP = iBGP  | B `will be discussed in CCNP`            |  200               |
+
+- How to make use of this table ?
+    - The network with the lowest AD value will enter the routing table and used for packet routing!
+- Let's look at this idea in action:
+    - Topology: ![](../../../../../assets/images/ccna/lesson7/lesson7_ad_1.jpg)
+    - Due to the smallest AD distance, OSPF will triumph over RIP
+    - The summary would be:
+    ```bash
+    Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
+            D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+            N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+            E1 - OSPF external type 1, E2 - OSPF external type 2
+            i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
+            ia - IS-IS inter area, * - candidate default, U - per-user static route
+            o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+            a - application route
+            + - replicated route, % - next hop override, p - overrides from pfR
+
+    Gateway of last resort is not set
+
+    O       10.0.0.0/0 [110/0] via 192.168.13.3, 00:01:16, GigabitEthernet0/2
+            192.168.12.0/24 is variably subnetted, 2 subnets, 2 masks
+    C           192.168.12.0/24 is directly connected, GigabitEthernet0/2
+    L           192.168.12.1/32 is directly connected, GigabitEthernet0/2
+
+            192.168.13.0/24 is variably subnetted, 2 subnets, 2 masks
+    C           192.168.13.0/24 is directly connected, GigabitEthernet0/2
+    L           192.168.13.1/24 is directly connected, GigabitEthernet0/2
+    ```
+    - As you can see, `[110]` is referring to OSPF's AD score and it's used here !
+
+    ### 10.2.2 Metric
+
+    - Background:
+        - If routes are in the same AD, then we determine using the lowest Metric value will enter into the routing table
+        - Note: different routing protocols has different ways of calculating Metrics!
+            - i.e. RIP metric = hop count
+            - Topology: ![](../../../../../assets/images/ccna/lesson7/lesson7_metric_1.jpg)
+            - 
+            ```bash
+            Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
+                    D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+                    N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+                    E1 - OSPF external type 1, E2 - OSPF external type 2
+                    i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
+                    ia - IS-IS inter area, * - candidate default, U - per-user static route
+                    o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+                    a - application route
+                    + - replicated route, % - next hop override, p - overrides from pfR
+
+            Gateway of last resort is not set
+
+            O       10.0.0.0/0 [120/0] via 192.168.13.3, 00:01:16, GigabitEthernet0/2
+                    192.168.12.0/24 is variably subnetted, 2 subnets, 2 masks
+            C           192.168.12.0/24 is directly connected, GigabitEthernet0/2
+            L           192.168.12.1/32 is directly connected, GigabitEthernet0/2
+
+                    192.168.13.0/24 is variably subnetted, 2 subnets, 2 masks
+            C           192.168.13.0/24 is directly connected, GigabitEthernet0/2
+            L           192.168.13.1/24 is directly connected, GigabitEthernet0/2
+            ```
+            - So we see the metric is `[120]` means the one with the lowest hop count is chosen :D
+
+    - Q: What happens if it has the same metric, same AD ? 
+    - A; then the packet flow will use each route **alternatively**. Sharing the packet load = equal cost load-balancing or equal-cost multi-path (ECMP)!
+
+        - Let's check out the topology:
+            - ![](../../../../../assets/images/ccna/lesson7/lesson7_metric_2.jpg)
+            - The summary would be:
+            - 
+            ```bash
+            Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
+                    D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+                    N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+                    E1 - OSPF external type 1, E2 - OSPF external type 2
+                    i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
+                    ia - IS-IS inter area, * - candidate default, U - per-user static route
+                    o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+                    a - application route
+                    + - replicated route, % - next hop override, p - overrides from pfR
+
+            Gateway of last resort is not set
+
+            R       10.0.0.0/0 [120/1] via 192.168.13.3, 00:01:16, GigabitEthernet0/2
+                               [120/1] via 192.168.12.2, 00:00:24, GigabitEthernet0/0
+                    192.168.12.0/24 is variably subnetted, 2 subnets, 2 masks
+            C           192.168.12.0/24 is directly connected, GigabitEthernet0/2
+            L           192.168.12.1/32 is directly connected, GigabitEthernet0/2
+
+                    192.168.13.0/24 is variably subnetted, 2 subnets, 2 masks
+            C           192.168.13.0/24 is directly connected, GigabitEthernet0/2
+            L           192.168.13.1/24 is directly connected, GigabitEthernet0/2
+            ```
+            - As you can see, both `R` are being used here! So both routes are sharing the packet flow load!
+
+## 10.3 OSPF = Open Shortest Path First
+
+- Background:
+    - OSPF = a link state dynamic routing protocol developed by IETF (i.e. the Internet Engineering Task Force).
+    - OSPF supports [VLSM](../lesson_5/#56-vlsm--variable-length-subnet-mask)
+
+### 10.3.1 Router ID
+- Router ID = identify the source of routing protocol's packets of who sent it
+- How does Router ID get chosen in Cisco Routers
+
+- Picking the Router ID:
+    - Step 1: `sh run` to check if there's any `router-id` pre-assigned value
+    - Step 2: Router ID can be manually configured with `router-id <value>`. where `value` is random, but must be unique.
+        - example:
+        - 
+        ```bash
+        conf t
+        hostname Router1
+        ospf 1
+        router-id 1.1.1.1
+        end
+        ```
