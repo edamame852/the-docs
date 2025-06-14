@@ -108,7 +108,7 @@ has_children: true
     - 3.3.c Host route [1](./lessons/lesson_7/#932y--host-route)
     - 3.3.d Floating static
 
-- 3.4 Configure and verify single area OSPFv2
+- 3.4 Configure and verify single area OSPFv2 [Link State](./lessons/lesson_7/#1011-distance-vector-vs-link-state-routing-protocols--2-routing-protocols)
     - 3.4.a Neighbor adjacencies
     - 3.4.b Point-to-point
     - 3.4.c Broadcast (DR/BDR selection)

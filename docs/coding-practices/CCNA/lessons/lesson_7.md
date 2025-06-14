@@ -542,7 +542,7 @@ S           192.168.16.0/27 [1/0] via 192.168.1.2
     - What about the other S route is `192.168.16.0/26` via `192.168.1.3`
     - The available range for `192.168.16.0/26` is...
         - 26 network bits, so 32 - 26 = 6 host bits = 32 + 31 = 63!
-        - Hence the braodcast IP can go up to 63 -> `192.168.16.63/26`
+        - Hence the broadcast IP can go up to 63 -> `192.168.16.63/26`
         - So Yes, this connection can reach 192.168.16.50, no issue
 
 - Step 4: Let's verify this last IP with `sh ip route 192.168.16.50`
@@ -566,3 +566,32 @@ S           192.168.16.0/27 [1/0] via 192.168.1.2
 ## 10.1 Introduction
 - Maintaining static routes in a large company with many routers and many networks... IMPOSSIBLE for network admins.
 
+- Using dynamic routing = network admin can maintain routing tables for routers by using routing protocol (e.g. RIP, EIGRP, OSPF, etc...) to add/remove routing entries from ip routing tables AUTOMATICALLY
+
+- Let's look at the topology: ![](../../../../../assets/images/ccna/lesson7/lesson7_dynamic_1.jpg)
+    - 1. 10.0.0.0/8 attempting to reach non-directly connected network
+    - 2. 10.0.0.0/8 is about to do so via a directly connected interface (i.e. 192.168.1.1)
+    - 3. Routing table automatically adds this entry !
+    - 4. Similarly, 172.16.0.0 is also attempting to connect to 10.0.0.0
+    - 5. 172.16.0.0 was able to do so via 192.168.1.2's interface !
+    - 6. The logic `172.16.0.0/16 via 192.168.1.2` is auto added to the routing table
+    - 7. So now, on both sides, 10.0.0.0 can properly reach 172.16.0.0
+    - 8. and 172.16.0.0 can also reach 10.0.0.0 
+
+### 10.1.1 Distance vector vs link state routing protocols = 2 Routing Protocols
+- 1. Distance Vector (e.g. RIP, IGEP or EIGRP, ...)
+    - Topology: ![](../../../../../assets/images/ccna/lesson7/lesson7_dv_1.jpg)
+    - Core idea: The mechanism ot set up routing one-by-one
+    - Distance Vector Routing Protocol = neighbor routers will continue routing and learning them into it's routing table
+
+- 2. Link state routing protocols (e.g. OSPF, IS-IS, etc...)
+    - Topology: ![](../../../../../assets/images/ccna/lesson7/lesson7_ls_1.jpg)
+    - Core idea: Mapping out the router map, exchanging topology info and calculate and conclude
+    - Each router calculates the best path to every network into the routing table
+
+### 10.1.2 Hop Counts
+- Hop Count = # of routers the data packet needs to pass through before arriving at destination
+- Some routing protocols likes shortest hop counts, I'm talking about you `RIP`!
+
+
+## 10.2 AD / Administrative distance & metric
