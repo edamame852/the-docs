@@ -69,7 +69,7 @@ has_children: true
 ### 2: Network Access (20%)
 - 2.1 Configure and verify VLANs (normal range) spanning multiple switches
     - 2.1.a Access ports (data and voice)
-    - 2.1.b Default VLAN [1](./lessons/lesson_7/#923x-vlan-1-doesnt-require-setup-cuz-its-the-default-vlan)
+    - 2.1.b Default VLAN [1](../lessons/lesson_7/#923x-vlan-1-doesnt-require-setup-cuz-its-the-default-vlan)
     - 2.1.c InterVLAN connectivity
 - 2.2 Configure and verify interswitch connectivity
     - 2.2.a Trunk ports
