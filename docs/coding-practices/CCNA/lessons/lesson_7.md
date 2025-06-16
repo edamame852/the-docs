@@ -20,6 +20,9 @@ grand_parent: Coding Practices
         - Those with eng characters are routes lmao
         - We can count up the routes, in the example of pg.137 we have 7 routes in total. We include static route and default route !
 
+2. On the exam we have [DR and BDR election](./#1035a-how-to-elect-dr) stuff, every other device is priority value = 0 
+3. [Changing OSPF priority value on CCNA exam](./#1035b-configuring-interface-priority)
+
 # 9 InterVLAN Routing 
 # 9.2 InterVLAN Routing 
 
@@ -755,6 +758,164 @@ S           192.168.16.0/27 [1/0] via 192.168.1.2
             GigabitEthernet0/1      10.0.0.1            YES     manual      up                      up
             GigabitEthernet0/2      unassigned          YES     NVRAM       administratively down   up
             GigabitEthernet0/3      unassigned          YES     NVRAM       administratively down   up
-            Loopback1                           YES     manual      up                      up
-
+            Loopback1               172.255.255.254     YES     manual      up                      up
+            Loopback2               192.0.0.1           YES     manual      up                      up
             ```
+
+    - Step 4: Let's sort out the highest IP (the non-loopback interfaces)
+        - Note: please drop the loopback, since we're interested in active physical interfaces!
+        - 
+        ```bash
+        Interface               IP-address          OK?     Method      Status                  Protocol
+        GigabitEthernet0/0      192.168.1.1         YES     manual      up                      up
+        GigabitEthernet0/1      10.0.0.1            YES     manual      up                      up
+        GigabitEthernet0/2      unassigned          YES     NVRAM       administratively down   up
+        GigabitEthernet0/3      unassigned          YES     NVRAM       administratively down   up
+        ```
+
+### 10.3.2 OSPF AD & Metric (i.e. Cost)
+- Background:
+    - Accorinding to [10.2.1](./#1021-administrative-distance-ad), the OSPF AD is 110
+    - OSPF Metric = Cost, which is calculated based on bandwiths
+- Exercise: Finding the OSPF Cost! :D
+    - Topology: ![](../../../../../assets/images/ccna/lesson7/lesson7_ospf_1.jpg)
+    - 3 steps to find the OSPF cost !
+        - Step 1: Find all outgoing interfaces (i.e only factoring in `s0/0/0` & `g0/1`). Do not calculate `g0/0` please
+        - Step 2: Vertify the bandwith values with `sh int s0/0/0` & `sh int g0/0`
+            
+            - We're interested in the `BW` value!
+
+            - Summary of `sh int s0/0/0`
+            - 
+            ```bash
+            Serial0/0/0 is up, line protocol is up
+                Hardware is GT98K Serial
+                Internet Access is 192.168.1.1/24
+                MTU 1500 Bytes, BW 1544 Kbit/sec, DLY 2000 usec,
+                    reliability 255/255, txload 1/255, rxload 1/255
+            <ommitted>
+            ```
+
+
+            - Summary of `sh int g0/0`
+            - 
+            ```bash
+            GiagbitEthernet0/1 is up, line protocol is up
+                Hardware is GT98K Serial
+                Internet Access is 192.168.1.1/24
+                MTU 1500 Bytes, BW 1000000 Kbit/sec, DLY 10 usec,
+                    reliability 255/255, txload 1/255, rxload 1/255
+            <ommitted>
+            ```
+
+        - Step 3: Calculate the metric/ cost! But there's 2 rules to follow
+            - Rule 1: 1st value is truncated to the nearest integer (basically rounded down)
+            - Rule 2: 2nd value min is 1 (basically min(1,x))
+            - The numerator is ALWAYS 100 Mb as the reference bandwith (i.e. **RoundDown(100M/x) + Min(1, 100M/y)**)
+            - In our case:
+                - x is 1.544M (= 1544Kbit/sec)
+                - y is 1000M (= 1000000 Kbit/sec)
+            - Hence the equation is 100M/1.544M + 100M/1000M = 64.766 + 0.1 = 64 + 1 = 65 **This is the OSPF Cost**
+            - Note: One should consider changing the ref bandwidth to >1000M (instead of the 100Mb) to prevent all links >100M to have same cost of 1!
+
+        - Step 4: Let's verify with `router ospf 1` to enter router interface
+
+            - 
+            ```bash
+            conf t
+            router ospf 1
+            auto-cost reference-bandwidth ?
+            ```
+
+### 10.3.3 OSPF Area
+- Note 1: We always just focuss on area 0 (a single area) for CCNA exams
+- Note 2: Area = logical collection of OSPF networks, routers, links. With hundreds of routers = achieving convergence
+- Note 3: Convergence happens when all routers have the same LDA in DB and all routing entries are recalculated (=Full State)
+
+- Let's dig deep into the ospf DB `sh ip ospf database` to display OSPF link state DB
+    - Summary returned: Don't worry too much about the details here, out syll in CCNA
+    ```bash
+                    OSPF Router with ID (192.168.1.1) (Process ID 1)
+                        Router Link States (Area 0)
+    Link ID         ADV Router          Age         Seq#            Checksum        Link Count
+    192.168.1.1     192.168.1.1         215         0x8000002       0x00491F        2
+    192.168.1.2     192.168.1.2         216         0x8000002       0x009A18        2
+                        Net Link States (Area 0)
+    Link ID         ADV Router          Age         Seq#            Checksum        
+    192.168.1.2     192.168.1.2         216         0x8000001       0x00A2E6        
+    ```
+
+- Multi-area design (in CCNP) (aka: The hierarchical design) has some benefits: (Out syll as well)
+    - 1. Faster convergence
+    - 2. Less routing overhead (less downtime)
+    - 3. Limitting network instability to single area
+    - 4. Allows extensive control routing updates (passing from 1 area to another), non-multi area cannot filter
+
+- In non-cisco specific OSPF, area 0 = backbone area for connecting other area. In normal setting, all ABRs should have link connecting to area 0
+
+### 10.3.4 OSPF Adjacency or OSPF Neighbor Relationships
+- 3 OSPF opertrations
+    - 1. Neighbor Discover (Very Important)
+    - 2. Link-state info exchange 
+    - 3. Best-path calculation
+
+- OSPF main neighbor tables with hello packets during router start up
+    - Hello packets are sent to all OSPF enabled interfaces on every 10 sec intervals
+    - If no hello packet is sent before dead interval is up (defualt it's 40 sec), OSPD neiighbor is considered dead and will be removed from the neighbor list
+    - Set up hello interval and dead interval with these `ip ospf hello-interval ?` & `ip ospf dead-interval ?`
+        - 
+        ```bash
+        conf t
+        int g0/0
+
+        ip ospf hello-interval ?
+        ip ospf dead-interval ?
+        ``` 
+
+- Requirements of forming OSPF Adjacency, there are 4
+    - 1 - Same OSPF Area ID
+    - 2 - Same OSPF Hello Intervals
+    - 3 - Same MTU = Maximum Transmission Unit, largest prootocl data unit (PDU) to communicate in single network layer transactions
+    - 4 - Outsyll other itms to be discussed in CCNP!
+
+- Good OSPF topology design
+    - ![](../../../../../assets/images/ccna/lesson7/lesson7_ospf_2.jpg)
+
+- Bad OSPF topology designs
+    - 1,2,3 - are the following
+    - ![](../../../../../assets/images/ccna/lesson7/lesson7_ospf_3.jpg)
+
+
+### 10.3.5 OSPF Network Types (Point to Point Broadcast) & Designated Router (DR)
+- Background:
+    - OSPF has different network types to affect adjacency and OSPF interface behavior
+    - CCNA will focus on 2 types of network types: **p2p (point to point)** & **broadcast**
+
+#### 10.3.5.1 Point to Point
+- Suitable Enviornment? Ans: Point to point env
+- No concept of BDR & DR
+- Default run point to point for OSPF serial interfaces
+- Topology: ![](../../../../../assets/images/ccna/lesson7/lesson7_ospf_4.jpg)
+
+#### 10.3.5.2 Broadcast
+- Suitable Enviornment? Ans: multi-point / point to multipoint env
+- Will elect and pick out BDR & DR.
+- DR = Designated Router = Collect and redistribute LDA + other info
+- BDR = Backup Designated Router = act as backup of DR
+- Topology: ![](../../../../../assets/images/ccna/lesson7/lesson7_ospf_5.jpg)
+
+#### 10.3.5.a How to elect DR
+1. Highest OSPF interface priority default is 1, if set pirority = 0 then the device gives up on being DR/ BDR
+2. Highest OSPF Router ID will be DR after priority values
+
+> Note: By default: IP 224.0.0.5 is reserved for all OSPF devices (routers), excluding Computer
+> Note: By default: IP 224.0.0.6 is reserved for all OSPF DR and BDR Devices
+
+#### 10.3.5.b Configuring interface priority
+- 
+```bash
+conf t
+int g0/0
+ip ospf priority ?
+```
+            

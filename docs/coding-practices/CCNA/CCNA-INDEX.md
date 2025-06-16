@@ -108,8 +108,8 @@ has_children: true
     - 3.3.c Host route [7](../lessons/lesson_7/#932y--host-route)
     - 3.3.d Floating static
 
-- 3.4 Configure and verify single area OSPFv2 [7 - Link State](../lessons/lesson_7/#1011-distance-vector-vs-link-state-routing-protocols--2-routing-protocols) [7 - Winner gets into routing table](../lessons/lesson_7/#103-ospf--open-shortest-path-first)
-    - 3.4.a Neighbor adjacencies
+- 3.4 Configure and verify single area OSPFv2 [7 - Link State](../lessons/lesson_7/#1011-distance-vector-vs-link-state-routing-protocols--2-routing-protocols) [7 - Winner gets into routing table](../lessons/lesson_7/#103-ospf--open-shortest-path-first) [7 - OSPF](.../lessons/lesson_7/#1033-ospf-area)
+    - 3.4.a Neighbor adjacencies [7 - OSPF Adjacency](../lessons/lesson_7/#1034-ospf-adjacency-or-ospf-neighbor-relationships)
     - 3.4.b Point-to-point
     - 3.4.c Broadcast (DR/BDR selection)
     - 3.4.d Router ID [7](../lessons/lesson_7/#1031-router-id)
