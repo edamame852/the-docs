@@ -719,7 +719,7 @@ S           192.168.16.0/27 [1/0] via 192.168.1.2
 - How does Router ID get chosen in Cisco Routers
 
 - Picking the Router ID:
-    - Step 1: `sh run` to check if there's any `router-id` pre-assigned value
+    - Step 1: `sh run` to check if there's any `router-id` pre-assigned value in the run config
     - Step 2: Router ID can be manually configured with `router-id <value>`. where `value` is random, but must be unique.
         - example:
         - 
@@ -730,3 +730,31 @@ S           192.168.16.0/27 [1/0] via 192.168.1.2
         router-id 1.1.1.1
         end
         ```
+        - `1.1.1.1` = this ip is the router ID, and it doesn't even need to be ping-able
+    - Step 3: If router ID didn't exist in run config, then highest IP among all active loopback interfaces is elected as the Router ID
+        - loopback interface = virtual interfaces that are created on the router (e.g. `int lo0` & `int lo1`)
+        - Typically, loopback interface are more stable than physical interfaces
+        - For example in the summary table...
+            - 
+            ```bash
+            conf t
+            
+            int lo1
+            ip address 172.255.255.254 255.255.255.255
+
+            int lo2
+            ip address 192.0.0.1 255.255.255.255
+            
+            end
+            ```
+            - `sh ip int brief` = to show all ip
+            - 
+            ```bash
+            Interface               IP-address          OK?     Method      Status                  Protocol
+            GigabitEthernet0/0      192.168.1.1         YES     manual      up                      up
+            GigabitEthernet0/1      10.0.0.1            YES     manual      up                      up
+            GigabitEthernet0/2      unassigned          YES     NVRAM       administratively down   up
+            GigabitEthernet0/3      unassigned          YES     NVRAM       administratively down   up
+            Loopback1                           YES     manual      up                      up
+
+            ```
