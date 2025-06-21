@@ -15,7 +15,15 @@ Lesson 8 - CCNA Fast Track (June, 2025). We left off at page 151.
 
 # 0. CCNA Exam Questions
 
-# 7. 
+# 10. Dynamic Roututing 
+## 10.3 OSPF
+### 10.3.6 Interface and OSPF network types
+
+|  | Ethernet interfaces (e.g. f0/0, g0/0, ...)   | Serial Interfaces (e.g. s0/0/0)     |
+| ----- | -------- | ----------- |
+| Commonly used in | LAN/WAN  | Usually WAN (leased line)      |
+|    Layer 2 protocols(s)   | Ethernet | HDLC/ PPP (Both are out syll) |
+|    Default OSPF Network type (Default is changable)   | Broadcast | Point-to-point |
 
 # SIMULATION 3: LAB
 - Topology Diagram: ![](../../../../../assets/images/ccna/simulation/simulation_3.jpg)
