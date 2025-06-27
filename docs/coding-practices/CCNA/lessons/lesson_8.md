@@ -15,6 +15,9 @@ Lesson 8 - CCNA Fast Track (June, 2025). We left off at page 151.
 
 # 0. CCNA Exam Questions
 
+1. Why do we need OSPF?
+- Ans: 2 reasons: To enter other networks, to resolve non-directly connected network 
+
 # 10. Dynamic Roututing 
 ## 10.3 OSPF
 ### 10.3.6 Interface and OSPF network types
@@ -24,6 +27,78 @@ Lesson 8 - CCNA Fast Track (June, 2025). We left off at page 151.
 | Commonly used in | LAN/WAN  | Usually WAN (leased line)      |
 |    Layer 2 protocols(s)   | Ethernet | HDLC/ PPP (Both are out syll) |
 |    Default OSPF Network type (Default is changable)   | Broadcast | Point-to-point |
+
+- 2 ways of configuring OSPF network:
+    - ![](../../../../../assets/images/ccna/lesson8/lesson8_ospf_1.jpg)
+
+### 10.3.7 OSPF Versioning
+Under format RFC2328, most OSPF is version 2 (v2). But version 2 only supports IPv4. This tech is from the late 90s<br/>
+If we have OSPF version 3 (v3) (specified in RFC5340) will support IPv6.
+
+## 10.4 Configuring OSPF Broadcast on Cicso Router
+
+- Let's look at the topology: ![](../../../../../assets/images/ccna/lesson8/lesson8_ospf_2.jpg)
+- Note: OSPF Area 0 is the backbone, only a single area.
+
+- Recall how to determine BR and BDR:
+    - step 1: OSPF pirority 0 / 1
+    - step 2: OSPF Highest Router ID
+
+- Recall how to determine Router ID:
+    - No pre-set router id, verify with `do sh run`
+    - No loopback int on g0/1, g0/0
+    - highest physical IP: Router 1 = `192.168.1.1` 
+
+- Router 1 setup
+```bash
+en
+conf t
+hostname Router1
+
+int g0/1
+ip address 10.0.0.1 255.0.0.0
+no shut
+
+int g0/0
+ip address 192.168.1.1 255.255.255.0
+no shut
+
+end
+```
+
+- Router 2 setup (Please note OSPF number is unique to it's own device. Different regions don't interfere w/ each other.)
+```bash
+en
+conf t
+hostname Router2
+
+int g0/1
+ip address 172.16.0.2 255.255.0.0
+no shut
+
+int g0/0
+ip address 192.168.1.2 255.255.255.0
+no shut
+
+end
+```
+
+- Router 2 
+```
+conf t
+router ospf 1
+network 192.168.1.0 0.0.0.255 area 0
+network 172.16.0.0 0.0.255.255 area 0
+
+```
+- Note 1: ospf # must specify a number, but this number can be user defined/ random
+- Note 2: Defining g0/1 so it can broadcast to other networks
+- The end goal is this: ![](../../../../../assets/images/ccna/lesson8/lesson8_ospf_3.jpg)
+- Code explaination:
+    - `router ospf 1` = turns on ospf w/ process number 1 (For CISCO IOS the range must be 1-65535)
+    - 
+
+
 
 # SIMULATION 3: LAB
 - Topology Diagram: ![](../../../../../assets/images/ccna/simulation/simulation_3.jpg)
