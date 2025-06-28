@@ -918,4 +918,15 @@ conf t
 int g0/0
 ip ospf priority ?
 ```
+- OSPF routers form full adjacency (can exchange complete routing info) to DR & BDR.
+- ADROTHER router form 2-way adjacency (can exchange complete routing information) w/ other DROTHER router.
+
+
+- Topology: ![](../../../../../assets/images/ccna/lesson7/lesson7_ospf_6.jpg)
+
+- Remark:
+    - 224.0.0.5 - Multicast address, Class D is reserved for all OSPF device
+    - 244.0.0.6 - Multicast address, Class D is reserved for all OSPF DR device
+
+
             
