@@ -688,6 +688,7 @@ end
 - Topology: ![](../../../../../assets/images/ccna/lesson8/lesson8_lab_1.jpg)
 - Step 1: Setup Sw1 (setup VLAN then setup trunk)
     - No need to create VLAN 1, since it's default. But neeed to create vlan 2
+    
     ```bash
     en
     conf t
