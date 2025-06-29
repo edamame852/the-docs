@@ -624,27 +624,28 @@ S           192.168.16.0/27 [1/0] via 192.168.1.2
     - Topology: ![](../../../../../assets/images/ccna/lesson7/lesson7_ad_1.jpg)
     - Due to the smallest AD distance, OSPF will triumph over RIP
     - The summary would be:
-    ```bash
-    Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
-            D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
-            N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
-            E1 - OSPF external type 1, E2 - OSPF external type 2
-            i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
-            ia - IS-IS inter area, * - candidate default, U - per-user static route
-            o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
-            a - application route
-            + - replicated route, % - next hop override, p - overrides from pfR
+    - 
+    ```text
+        Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
+                D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+                N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+                E1 - OSPF external type 1, E2 - OSPF external type 2
+                i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
+                ia - IS-IS inter area, * - candidate default, U - per-user static route
+                o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+                a - application route
+                + - replicated route, % - next hop override, p - overrides from pfR
 
-    Gateway of last resort is not set
+        Gateway of last resort is not set
 
-    O       10.0.0.0/0 [110/0] via 192.168.13.3, 00:01:16, GigabitEthernet0/2
-            192.168.12.0/24 is variably subnetted, 2 subnets, 2 masks
-    C           192.168.12.0/24 is directly connected, GigabitEthernet0/2
-    L           192.168.12.1/32 is directly connected, GigabitEthernet0/2
+        O       10.0.0.0/0 [110/0] via 192.168.13.3, 00:01:16, GigabitEthernet0/2
+                192.168.12.0/24 is variably subnetted, 2 subnets, 2 masks
+        C           192.168.12.0/24 is directly connected, GigabitEthernet0/2
+        L           192.168.12.1/32 is directly connected, GigabitEthernet0/2
 
-            192.168.13.0/24 is variably subnetted, 2 subnets, 2 masks
-    C           192.168.13.0/24 is directly connected, GigabitEthernet0/2
-    L           192.168.13.1/24 is directly connected, GigabitEthernet0/2
+                192.168.13.0/24 is variably subnetted, 2 subnets, 2 masks
+        C           192.168.13.0/24 is directly connected, GigabitEthernet0/2
+        L           192.168.13.1/24 is directly connected, GigabitEthernet0/2
     ```
     - As you can see, `[110]` is referring to OSPF's AD score and it's used here !
 
@@ -656,27 +657,27 @@ S           192.168.16.0/27 [1/0] via 192.168.1.2
             - i.e. RIP metric = hop count
             - Topology: ![](../../../../../assets/images/ccna/lesson7/lesson7_metric_1.jpg)
             - 
-            ```bash
-            Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
-                    D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
-                    N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
-                    E1 - OSPF external type 1, E2 - OSPF external type 2
-                    i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
-                    ia - IS-IS inter area, * - candidate default, U - per-user static route
-                    o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
-                    a - application route
-                    + - replicated route, % - next hop override, p - overrides from pfR
+            ```text
+                Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
+                        D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+                        N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+                        E1 - OSPF external type 1, E2 - OSPF external type 2
+                        i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
+                        ia - IS-IS inter area, * - candidate default, U - per-user static route
+                        o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+                        a - application route
+                        + - replicated route, % - next hop override, p - overrides from pfR
 
-            Gateway of last resort is not set
+                Gateway of last resort is not set
 
-            O       10.0.0.0/0 [120/0] via 192.168.13.3, 00:01:16, GigabitEthernet0/2
-                    192.168.12.0/24 is variably subnetted, 2 subnets, 2 masks
-            C           192.168.12.0/24 is directly connected, GigabitEthernet0/2
-            L           192.168.12.1/32 is directly connected, GigabitEthernet0/2
+                O       10.0.0.0/0 [120/0] via 192.168.13.3, 00:01:16, GigabitEthernet0/2
+                        192.168.12.0/24 is variably subnetted, 2 subnets, 2 masks
+                C           192.168.12.0/24 is directly connected, GigabitEthernet0/2
+                L           192.168.12.1/32 is directly connected, GigabitEthernet0/2
 
-                    192.168.13.0/24 is variably subnetted, 2 subnets, 2 masks
-            C           192.168.13.0/24 is directly connected, GigabitEthernet0/2
-            L           192.168.13.1/24 is directly connected, GigabitEthernet0/2
+                        192.168.13.0/24 is variably subnetted, 2 subnets, 2 masks
+                C           192.168.13.0/24 is directly connected, GigabitEthernet0/2
+                L           192.168.13.1/24 is directly connected, GigabitEthernet0/2
             ```
             - So we see the metric is `[120]` means the one with the lowest hop count is chosen :D
 
@@ -687,28 +688,28 @@ S           192.168.16.0/27 [1/0] via 192.168.1.2
             - ![](../../../../../assets/images/ccna/lesson7/lesson7_metric_2.jpg)
             - The summary would be:
             - 
-            ```bash
-            Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
-                    D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
-                    N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
-                    E1 - OSPF external type 1, E2 - OSPF external type 2
-                    i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
-                    ia - IS-IS inter area, * - candidate default, U - per-user static route
-                    o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
-                    a - application route
-                    + - replicated route, % - next hop override, p - overrides from pfR
+            ```text
+                Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
+                        D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+                        N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+                        E1 - OSPF external type 1, E2 - OSPF external type 2
+                        i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
+                        ia - IS-IS inter area, * - candidate default, U - per-user static route
+                        o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+                        a - application route
+                        + - replicated route, % - next hop override, p - overrides from pfR
 
-            Gateway of last resort is not set
+                Gateway of last resort is not set
 
-            R       10.0.0.0/0 [120/1] via 192.168.13.3, 00:01:16, GigabitEthernet0/2
-                               [120/1] via 192.168.12.2, 00:00:24, GigabitEthernet0/0
-                    192.168.12.0/24 is variably subnetted, 2 subnets, 2 masks
-            C           192.168.12.0/24 is directly connected, GigabitEthernet0/2
-            L           192.168.12.1/32 is directly connected, GigabitEthernet0/2
+                R       10.0.0.0/0 [120/1] via 192.168.13.3, 00:01:16, GigabitEthernet0/2
+                                [120/1] via 192.168.12.2, 00:00:24, GigabitEthernet0/0
+                        192.168.12.0/24 is variably subnetted, 2 subnets, 2 masks
+                C           192.168.12.0/24 is directly connected, GigabitEthernet0/2
+                L           192.168.12.1/32 is directly connected, GigabitEthernet0/2
 
-                    192.168.13.0/24 is variably subnetted, 2 subnets, 2 masks
-            C           192.168.13.0/24 is directly connected, GigabitEthernet0/2
-            L           192.168.13.1/24 is directly connected, GigabitEthernet0/2
+                        192.168.13.0/24 is variably subnetted, 2 subnets, 2 masks
+                C           192.168.13.0/24 is directly connected, GigabitEthernet0/2
+                L           192.168.13.1/24 is directly connected, GigabitEthernet0/2
             ```
             - As you can see, both `R` are being used here! So both routes are sharing the packet flow load!
 
