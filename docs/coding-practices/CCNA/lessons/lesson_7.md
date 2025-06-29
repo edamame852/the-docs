@@ -458,7 +458,7 @@ Note: 192.168.1.2 is set as static route here, it's also known as a network rout
         Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
     ```
 
- ### 9.3.4 Routing Entries Matching Order
+### 9.3.4 Routing Entries Matching Order
  - Background:
     - Please note this topic is related to **longest prefix match**
     - Essentially, we are sorting the importance of these 7 routes !
