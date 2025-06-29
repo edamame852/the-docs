@@ -45,6 +45,8 @@ Lesson 8 - CCNA Fast Track (June, 2025). We left off at page 151.
 5. What is consider a good AD (Administrative Distance)?
     - Ans: The lower the AD, the more likely it'll get picked
 
+6. MC: Quite a lot of questions on topics like InterVLAN routing ! (aka: router-on-a-stick)
+
 
 # 10. Dynamic Roututing 
 ## 10.3 OSPF
@@ -405,6 +407,7 @@ end
     - To disable **all** interfaces = `passive-interface default` on global mode
 
 ## 10.7 Floating Static Route
+- Format: `ip route <target gateway network> <wildcard mask of target gateway> <Next hop own int> <New AD Number>`
 - Intro: Floating Static Route = special static route with customized AD that is NOT 1 (recall: the default AD is 1)
     - Command: `ip route 10.0.0.0 255.0.0.0 192.168.0.2 254`. `254` here is the new updated AD. Refer to page 141! Or refer to  [AD](../lesson_7/#1021-administrative-distance-ad)
 
@@ -412,6 +415,125 @@ end
 ## 10.8 Configuring Floating Static Route as backup route for OSPF
 
 - Topology: ![](../../../../../assets/images/ccna/lesson8/lesson8_ospf_6.jpg)
+- Let's set it up... Note: No need to setup switch since we assume all the interface has the SAME VLAN !!!
+    - Step 1a: Setup R1
+        - 
+        ```bash
+        en
+        conf t
+        int g0/0
+        ip address 192.168.1.1 255.255.255.0
+        no shut
+        end
+        ```
+    - Step 1b: Setup R2
+        - 
+        ```bash
+        en
+        conf t
+
+        int g0/0
+        ip address 192.168.1.2 255.255.255.0
+        no shut
+        end
+
+        int g0/3
+        ip address 172.16.0.2 255.255.0.0
+        no shut
+        end
+        ```
+    - Step 1c: Step R3
+        - 
+        ```bash
+        en
+        conf t
+        
+        int g0/0
+        ip address 192.168.1.3 255.255.255.0
+        no shut
+        end        
+
+        int g0/3
+        ip address 172.16.0.3 255.255.0.0
+        no shut
+        end
+        ```
+    - Step 2: Enable OSPF on R1, R2, R3
+        - Step 2a: Setup R1 via wildcard mask
+            - 
+            ```bash
+            conf t
+            router ospf 1
+            network 192.16.1.0 0.0.0.255 area 0
+            end
+            ```
+        - Step 2b: Setup R2 via wildcard mask
+            - 
+            ```bash
+            conf t
+            router ospf 1
+            network 192.16.1.0 0.0.0.255 area 0
+            network 172.16.0.0 0.0.255.255 area 0
+            end
+            ```
+        - Er...we're not setting up R3
+
+        - Step 3: Setup R1 with a static route. 
+            - The format is: `ip route <target underlaying network> <normal mask for> <next hop in R3> <AD Number>`
+            - 
+            ```bash
+            conf t
+            ip route 172.16.0.0 255.255.0.0 192.168.1.3 254
+            ```
+        - Step 4: Verify AD and notice static route is hidden since it's using lowest AD. Check with `sh ip route` on R1.
+            - Lowest AD right now is 110, from default setup.
+            - Static route AD is 254, so it remains hidden
+            ```bash
+            Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
+                    D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+                    N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+                    E1 - OSPF external type 1, E2 - OSPF external type 2
+                    i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
+                    ia - IS-IS inter area, * - candidate default, U - per-user static route
+                    o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+                    a - application route
+                    + - replicated route, % - next hop override, p - overrides from pfR
+
+            Gateway of last resort is not set
+
+            O       172.16.0.0/16 [110/2] via 192.168.1.2, 00:01:19, GigabitEthernet0/0
+                    192.168.1.0/24 is variably subnetted, 2 subnets, 2 masks
+            C           192.168.11.0/24 is directly connected, GigabitEthernet0/0
+            L           192.168.1.1/32 is directly connected, GigabitEthernet0/0
+            ```
+        - Step 5: Prioritize static route on R1 please, by shutting off OSPF all together, thus allowing static route 
+            - 
+            ```bash
+            conf t
+            route ospf 1
+            shutdown
+            end
+            ```
+        - Step 6: Verify again !!
+            - Static route has cost of 0 (Note: BGP can also have cost of 0)
+            ```bash
+            Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
+                    D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+                    N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+                    E1 - OSPF external type 1, E2 - OSPF external type 2
+                    i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
+                    ia - IS-IS inter area, * - candidate default, U - per-user static route
+                    o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+                    a - application route
+                    + - replicated route, % - next hop override, p - overrides from pfR
+
+            Gateway of last resort is not set
+
+            S       172.16.0.0/16 [254/0] via 192.168.1.2, 00:01:19, GigabitEthernet0/0
+                    192.168.1.0/24 is variably subnetted, 2 subnets, 2 masks
+            C           192.168.11.0/24 is directly connected, GigabitEthernet0/0
+            L           192.168.1.1/32 is directly connected, GigabitEthernet0/0
+            ```
 
 # Simulation
 ## SIMULATION 3: LAB
@@ -426,7 +548,7 @@ end
     - Tasks:
         - Task 1: Connect SW1 LAN subnet in R2 (Router2) 
             - Solution: make a static route
-            - Recall: `ip route <destination network> <network masking> <gateway address>/<outgoing address>`
+            - Recall: `ip route <destination gateway network> <network masking> <origin int ip next hop address>`
             - That outgoing address = next-hop-IP-to-SW1 : "Replace next-hop-IP-to-SW1" with the IP address of the interface on R2 that connects to SW1, or the IP of SW1 itself if it's Layer 3 capable.
             - 
             ```bash
@@ -559,3 +681,416 @@ end
         end
         copy run start
         ```
+
+# Lab 4:
+
+## Lab 4a: InterVLAN routing / Router-on-a-stick
+- Topology: ![](../../../../../assets/images/ccna/lesson8/lesson8_lab_1.jpg)
+- Step 1: Setup Sw1 (setup VLAN then setup trunk)
+    - No need to create VLAN 1, since it's default. But neeed to create vlan 2
+    ```bash
+    en
+    conf t
+
+    vlan2
+
+    int g0/3
+    switchport mode access
+    switchport access vlan 1
+
+    int g1/1
+    switchport mode access
+    switchport access vlan2
+
+    int g0/2
+    switchport trunk encapsulation dot1q
+    switchport mode trunk
+    end
+    ```
+- Step 2: Setup R1. Reset g0/2 and setup sub interfaces
+    - Some notes:
+        - `no ip address` = Removing all IPs
+        - `int g0/2.2` are entering sub-interfaces
+    - 
+    ```bash
+    en
+    conf t
+    
+    int g0/2
+    no ip address
+    no shutdown
+
+    int g0/2.1
+    encapsulation dot1q 1 native
+    ip address 10.0.0.1 255.0.0.0
+    no shutdown
+
+    int g0/2.2
+    encapsulation dot1q 2
+    ip address 172.16.0.1 255.255.0.0
+    no shutdown
+    
+    end
+    ```
+
+- Step 3: Setup R2. Setting up port and default gateway
+    - 
+    ```bash
+    en
+    conf t
+
+    int g0/3
+    ip address 10.0.0.100 255.0.0.0
+    no shutdown
+    exit
+
+    ip route 0.0.0.0 0.0.0.0 10.0.0.1
+    end
+    ```
+
+- Step 4: Setup Sw2
+    - 
+    ```bash
+    en
+    conf t
+
+    ip routing
+
+    int g1/1
+    no switchport
+    ip address 172.16.0.200 255.255.0.0
+    no shutdown
+    exit
+
+    ip route 0.0.0.0 0.0.0.0 172.16.0.1
+    end
+    ```
+
+- Step 5: Verify on R1 `sh ip route`, can also try pining `172.16.0.200`
+    - 
+    ```bash
+    Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
+            D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+            N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+            E1 - OSPF external type 1, E2 - OSPF external type 2
+            i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
+            ia - IS-IS inter area, * - candidate default, U - per-user static route
+            o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+            a - application route
+            + - replicated route, % - next hop override, p - overrides from pfR
+
+    Gateway of last resort is not set
+            10.0.0.0/0 is variably subnetted, 2 subnets, 2 masks
+    C       10.0.0.0/8 is directly subnetted, GigabitEthernet0/2.1
+    L       10.0.0.1/32 is directly subnetted, GigabitEthernet0/2.1
+            172.16.0.0/16 is variably subnetted, 2 subnets, 2 masks
+    C           172.16.0.0/16 is directly connected, GigabitEthernet0/2
+    L           172.16.0.1/32 is directly connected, GigabitEthernet0/2
+
+    ```
+
+## Lab 4b: Setting up routing labs
+- Back to the basics ~ Let's check the topology: ![](../../../../../assets/images/ccna/lesson8/lesson8_lab_2.jpg)
+
+- Step 1: Setup R1
+    - 
+    ```bash
+    en
+    conf t
+
+    int g0/1
+    ip address 10.0.0.1 255.0.0.0
+    no shut
+
+    int g0/0
+    ip address 192.168.1.1 255.255.255.0
+    no shut
+
+    end
+    ```
+
+- Step 2: Setup R2
+    - 
+    ```bash
+    en
+    conf t
+
+    int g0/1
+    ip address 172.16.0.2 255.255.0.0
+    no shut
+
+    int g0/0
+    ip address 192.168.1.2 255.255.255.0
+    no shut
+
+    end
+    ```
+
+- Step 3: Ping from R1 to `192.168.1.2` FAILS cuz no routes have been set up yet
+
+
+## Lab 4c: Static Routing (aka `S`)
+- Using the same topology: ![](../../../../../assets/images/ccna/lesson8/lesson8_lab_2.jpg)
+
+- Step 1: Setup Static Route for R1
+    - Recall static route syntax... `ip route <destination gateway network> <network masking> <origin int ip next hop address>`
+    - 
+    ```bash
+    en
+    conf t
+    ip route 172.16.0.0 255.255.0.0 192.168.1.2
+    end
+    ```
+- Step 2: Verify with `sh ip route`
+    - 
+    ```bash
+    Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
+            D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+            N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+            E1 - OSPF external type 1, E2 - OSPF external type 2
+            i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
+            ia - IS-IS inter area, * - candidate default, U - per-user static route
+            o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+            a - application route
+            + - replicated route, % - next hop override, p - overrides from pfR
+
+    Gateway of last resort is not set
+            10.0.0.0/0 is variably subnetted, 2 subnets, 2 masks
+    C       10.0.0.0/8 is directly subnetted, GigabitEthernet0/2.1
+    L       10.0.0.1/32 is directly subnetted, GigabitEthernet0/2.1
+    S       172.16.0.0/16 [1/0] via 192.168.1.2
+            192.168.1.0/24 is variably subnetted, 2 subnets, 2 masks
+    C           192.168.1.0/24 is directly connected, GigabitEthernet0/2
+    L           192.168.1.0/32 is directly connected, GigabitEthernet0/2
+    ```
+- Step 3: NOW you can ping haha `ping 172.16.0.2`
+
+- Optional: Deleting static route with `no ip route 172.16.0.0 255.255.0.0 192.168.1.2`
+
+## Lab 4d: Staic Default Routing (aka: `0.0.0.0`, also `S*`)
+- Same topology again: ![](../../../../../assets/images/ccna/lesson8/lesson8_lab_2.jpg)
+ Recall static default route syntax... `ip route 0.0.0.0 0.0.0.0 <origin int ip next hop address>`
+
+- Step 1: Setup R1
+    - 
+    ```bash
+    en
+    conf t
+    ip route 0.0.0.0 0.0.0.0 192.168.1.2
+    ``` 
+
+- Step 2: Verify and ping
+    - 
+    ```bash
+    Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
+            D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+            N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+            E1 - OSPF external type 1, E2 - OSPF external type 2
+            i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
+            ia - IS-IS inter area, * - candidate default, U - per-user static route
+            o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+            a - application route
+            + - replicated route, % - next hop override, p - overrides from pfR
+
+    Gateway of last resort is not set
+    S*      0.0.0.0/16 [1/0] via 192.168.1.2
+            10.0.0.0/0 is variably subnetted, 2 subnets, 2 masks
+    C       10.0.0.0/8 is directly subnetted, GigabitEthernet0/2.1
+    L       10.0.0.1/32 is directly subnetted, GigabitEthernet0/2.1
+            192.168.1.0/24 is variably subnetted, 2 subnets, 2 masks
+    C           192.168.1.0/24 is directly connected, GigabitEthernet0/2
+    L           192.168.1.0/32 is directly connected, GigabitEthernet0/2
+    ```
+
+- Optional: Please remove the static default route `no ip route 0.0.0.0 0.0.0.0`
+
+## Lab 4e: Static Host Route (Also `S` same as normal staic route but with `255.255.255.255`)
+
+- Topology ![](../../../../../assets/images/ccna/lesson8/lesson8_lab_2.jpg)
+
+- Recall static route syntax... `ip route <destination ip> <32 bit network masking> <origin int ip next hop address>`
+
+- Step 1: Setup R1
+    - 
+    ```bash
+    en
+    conf t
+    ip route 172.16.0.2 255.255.255.255 192.168.1.2
+    end
+    ```
+- Step 2: Verify and ping
+    - 
+    ```bash
+    Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
+            D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+            N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+            E1 - OSPF external type 1, E2 - OSPF external type 2
+            i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
+            ia - IS-IS inter area, * - candidate default, U - per-user static route
+            o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+            a - application route
+            + - replicated route, % - next hop override, p - overrides from pfR
+
+    Gateway of last resort is not set
+            10.0.0.0/0 is variably subnetted, 2 subnets, 2 masks
+    C       10.0.0.0/8 is directly subnetted, GigabitEthernet0/2.1
+    L       10.0.0.1/32 is directly subnetted, GigabitEthernet0/2.1
+            172.16.0.0/32 is subnetted, 1 subnets
+    S       172.16.0.2 [1/0] via 192.168.1.2
+            192.168.1.0/24 is variably subnetted, 2 subnets, 2 masks
+    C           192.168.1.0/24 is directly connected, GigabitEthernet0/2
+    L           192.168.1.0/32 is directly connected, GigabitEthernet0/2
+    ```
+    - One difference I noticed is `172.16.0.0/32 is subnetted, 1 subnets` is only is static host route, not in normal static route
+
+- Optional: Please remove the static default route `no ip route 172.16.0.2 255.255.255.255`
+
+
+## Lab 4f: Configuring basic OSPFv2 Broadcast
+- Topology with OSPF Area: ![](../../../../../assets/images/ccna/lesson8/lesson8_lab_3.jpg)
+
+- Step 1: Setup R2's OSPF
+    - 
+    ```bash
+    en
+    conf t
+    router ospf 1
+
+    network 172.16.0.0 0.0.255.255 area 0
+    network 192.168.1.0 0.0.0.255 area 0
+    end
+    ```
+
+- Step 2: Setup R1's OSPF
+    - 
+    ```bash
+    en
+    conf t
+    router ospf 1
+
+    network 172.16.0.0 0.0.255.255 area 0
+    network 192.168.1.0 0.0.0.255 area 0
+    end
+    ```
+
+- Step 3: From R1, Verify with `sh ip route` / `ping 172.16.0.2` / `sh ip ospf int g0/0` / `sh ip ospf neighbor`
+    - `sh ip ospf int g0/0` returns the following:
+    -   
+    ```bash
+    GigabitEthernet0/0 is up, line protocol is up
+        Internet Address 192.168.1.1/24, Area 0, Attached via Netwro kStatement
+        Process ID 1, Router ID 191.168.1.1 Network Type BROADCAST, Cost: 1
+        Topology-MTID       Cost        Disabled        Shutdown        Topology Name
+            0                 1             no              no              Base
+        Transmit Delay is 1 sec, State BDR, Priority 1
+        Desinated Router (ID) 192.168.1.2, Interface Address 192.168.1.2
+        Backup Designated Router (ID) 192.168.1.1, Interface Address 192.168.1.1
+        Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5
+            oob-resync timeout 40
+            Hello due in 00:00:03
+        Supports Link-local SIgnaling (LLS)
+        Cisco NSF helper support enabled
+        IETF NSF helper support enabled
+        Index 1/2/2, flood queue length 0
+        Next 0x0(0)/0x0(0)/0x0(0)
+        Last flood scan length 1, maximum is 2
+        Last flood scan time is 0 msec, maximum is 0 msec
+        Neighbor Count is 1, Adjacent neighbor count is 1
+            Adjacent with neighbor 192.168.1.2  (Designated Router)
+        Suppress hello for 0 neighbor(s)  
+
+    ```
+
+## Lab 4g: Configuring OSPFv2 point-to-point routing
+- Topology with OSPF Area: ![](../../../../../assets/images/ccna/lesson8/lesson8_lab_3.jpg)
+
+- Step 1: Setup R1 with resetting OSPF (ensuring no DR and BDR)
+    - 
+    ```bash
+    en
+    conf t
+    int g0/0
+    ip ospf network point-to-point
+    end
+
+    clear ip ospf process
+    yes
+    ```
+
+- Step 2: Configure R2
+    - 
+    ```bash
+    en
+    conf t
+    int g0/0
+    ip ospf network point-to-point
+    end
+
+    clear ip ospf process
+    yes
+    ```
+
+- Step 3: Verify with `sh ip ospf int g0/0`
+    - Notice: `Router ID 1.1.1.1 Network Type POINT_TO_POINT`
+    ```bash
+    GigabitEthernet0/0 is up, line protocol is up
+        Internet Address 192.168.1.1/24, Area 0, Attached via Netwro kStatement
+        Process ID 1, Router ID 1.1.1.1 Network Type POINT_TO_POINT, Cost: 1
+        Topology-MTID       Cost        Disabled        Shutdown        Topology Name
+            0                 1             no              no              Base
+        Transmit Delay is 1 sec, State BDR, Priority 1
+        Desinated Router (ID) 192.168.1.2, Interface Address 192.168.1.2
+        Backup Designated Router (ID) 192.168.1.1, Interface Address 192.168.1.1
+        Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5
+            oob-resync timeout 40
+            Hello due in 00:00:03
+        Supports Link-local SIgnaling (LLS)
+        Cisco NSF helper support enabled
+        IETF NSF helper support enabled
+        Index 1/2/2, flood queue length 0
+        Next 0x0(0)/0x0(0)/0x0(0)
+        Last flood scan length 1, maximum is 2
+        Last flood scan time is 0 msec, maximum is 1 msec
+        Neighbor Count is 1, Adjacent neighbor count is 1
+            Adjacent with neighbor 2.2.2.2
+        Suppress hello for 0 neighbor(s)  
+
+    ```
+
+
+## Lab 4h: Floating static Routing 
+- Recall for floating static routing (`ip route <target gateway network> <wildcard mask of target gateway> <Next hop own int> <New AD Number>`)
+- Topology with OSPF Area: ![](../../../../../assets/images/ccna/lesson8/lesson8_lab_3.jpg)
+
+- Step 1: R1. Hence now OSPF is main, Static Route is floating
+    - 
+    ```bash
+    en
+    conf t
+    ip route 172.16.0.0 255.255.0.0 192.168.1.2 111
+    end
+    ```
+- Step 2: Verify with `sh ip route`. You should see `S`
+    - 
+    ```bash
+    Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
+        D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+        N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+        E1 - OSPF external type 1, E2 - OSPF external type 2
+        i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
+        ia - IS-IS inter area, * - candidate default, U - per-user static route
+        o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+        a - application route
+        + - replicated route, % - next hop override, p - overrides from pfR
+
+        Gateway of last resort is not set
+
+            10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+        C       10.0.0.0/8 is directly subnetted, GigabitEthernet0/1
+        L       10.0.0.1/8 is directly subnetted, GigabitEthernet0/1
+        S   172.16.0.0/16 [111/2] via 192.168.1.2
+            192.168.1.0/24 is variably subnetted, 2 subnets, 2 masks
+        C       192.168.1.0/24 is directly subnetted, GigabitEthernet0/0
+        L       192.168.1.1/32 is directly subnetted, GigabitEthernet0/0
+
+    ```
