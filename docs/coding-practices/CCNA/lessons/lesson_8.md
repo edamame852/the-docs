@@ -80,7 +80,7 @@ If we have OSPF version 3 (v3) (specified in RFC5340) will support IPv6.
     - highest physical IP: Router 1 = `192.168.1.1` 
 
 - Router 1 setup
--
+- 
 ```bash
 en
 conf t
@@ -98,7 +98,7 @@ end
 ```
 
 - Router 2 setup (Please note OSPF number is unique to it's own device. Different regions don't interfere w/ each other.)
--
+- 
 ```bash
 en
 conf t
@@ -116,7 +116,7 @@ end
 ```
 
 - Router 2 
--
+- 
 ```bash
 conf t
 router ospf 1
@@ -202,6 +202,7 @@ Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
     ```
 - Further Verification for Router 1: `sh ip ospf neighbor`
     - Router 1 has neighbor 192.168.1.2 which is FULL state. 192.168.1.2 is DR.
+    - 
     ```bash
     Neighbor ID     Pri     State       Dead Time       Address         Interface
     192.168.1.2     1       FULL/DR     00:00:31        192.168.1.2     GigabitEthernet0/0
@@ -210,35 +211,37 @@ Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
 
 - Further Verification for Router 2: `sh ip ospf neighbor`
     - Router 2
+    - 
     ```bash
-    Neighbor ID     Pri     State       Dead Time       Address         Interface
-    192.168.1.1     1       FULL/BDR    00:00:31        192.168.1.1     GigabitEthernet0/0
+        Neighbor ID     Pri     State       Dead Time       Address         Interface
+        192.168.1.1     1       FULL/BDR    00:00:31        192.168.1.1     GigabitEthernet0/0
     ```
 
 - Verify Router 2 with `sh ip ospf int g0/0`, showing OSPF Router IP, hello + dead interval, netwrok type, DR/BDR and OSPF Priority 
     - `State DR`
-     ```bash
-    GigabitEthernet0/0 is up, line protocol is up
-        Internet Address 192.168.1.2/24, Area 0, Attached via Netwro kStatement
-        Process ID 1, Router ID 191.168.1.2 Network Type BROADCAST, Cost: 1
-        Topology-MTID       Cost        Disabled        Shutdown        Topology Name
-            0                 1             no              no              Base
-        Transmit Delay is 1 sec, State DR, Priority 1
-        Desinated Router (ID) 192.168.1.2, Interface Address 192.168.1.2
-        Backup Designated Router (ID) 192.168.1.1, Interface Address 192.168.1.1
-        Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5
-            oob-resync timeout 40
-            Hello due in 00:00:03
-        Supports Link-local SIgnaling (LLS)
-        Cisco NSF helper support enabled
-        IETF NSF helper support enabled
-        Index 1/1/1, flood queue length 0
-        Next 0x0(0)/0x0(0)/0x0(0)
-        Last flood scan length 1, maximum is 2
-        Last flood scan time is 0 msec, maximum is 0 msec
-        Neighbor Count is 1, Adjacent neighbor count is 1
-            Adjacent with neighbor 192.168.1.1 (Backup Designated Router)
-        Suppress hello for 0 neighbor(s)  
+    - 
+    ```bash
+        GigabitEthernet0/0 is up, line protocol is up
+            Internet Address 192.168.1.2/24, Area 0, Attached via Netwro kStatement
+            Process ID 1, Router ID 191.168.1.2 Network Type BROADCAST, Cost: 1
+            Topology-MTID       Cost        Disabled        Shutdown        Topology Name
+                0                 1             no              no              Base
+            Transmit Delay is 1 sec, State DR, Priority 1
+            Desinated Router (ID) 192.168.1.2, Interface Address 192.168.1.2
+            Backup Designated Router (ID) 192.168.1.1, Interface Address 192.168.1.1
+            Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5
+                oob-resync timeout 40
+                Hello due in 00:00:03
+            Supports Link-local SIgnaling (LLS)
+            Cisco NSF helper support enabled
+            IETF NSF helper support enabled
+            Index 1/1/1, flood queue length 0
+            Next 0x0(0)/0x0(0)/0x0(0)
+            Last flood scan length 1, maximum is 2
+            Last flood scan time is 0 msec, maximum is 0 msec
+            Neighbor Count is 1, Adjacent neighbor count is 1
+                Adjacent with neighbor 192.168.1.1 (Backup Designated Router)
+            Suppress hello for 0 neighbor(s)  
     ```
 
 ## 10.5 Configuring OSPF (point-to-point) on Cisco Routers
@@ -283,6 +286,7 @@ end
 
 - Setup Router 1 point to point.
 - Note: point to point is not default, needs manual setup
+- 
 ```bash
 conf t
 int g0/0
@@ -292,6 +296,7 @@ end
 
 - Setup Router 2 point to point. Same as Router 1.
 - Note: point to point is not default, needs manual setup
+- 
 ```bash
 conf t
 int g0/0
@@ -688,7 +693,7 @@ end
 - Topology: ![](../../../../../assets/images/ccna/lesson8/lesson8_lab_1.jpg)
 - Step 1: Setup Sw1 (setup VLAN then setup trunk)
     - No need to create VLAN 1, since it's default. But neeed to create vlan 2
-    
+
     ```bash
     en
     conf t
@@ -1071,7 +1076,7 @@ end
     ip route 172.16.0.0 255.255.0.0 192.168.1.2 111
     end
     ```
-- Step 2: Verify with `sh ip route`. You should see `S`
+- Step 2: Verify with `sh ip route`. You should see `S`.
     - 
     ```bash
     Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
