@@ -754,7 +754,7 @@ Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
             
             end
             ```
-            - `sh ip int brief` = to show all ip
+            - to show all ip, use `sh ip int brief` !
             - 
             ```text
             Interface               IP-address          OK?     Method      Status                  Protocol
@@ -785,11 +785,11 @@ Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
     - Topology: ![](../../../../../assets/images/ccna/lesson7/lesson7_ospf_1.jpg)
     - 3 steps to find the OSPF cost !
         - Step 1: Find all outgoing interfaces (i.e only factoring in `s0/0/0` & `g0/1`). Do not calculate `g0/0` please
-        - Step 2: Vertify the bandwith values with `sh int s0/0/0` & `sh int g0/0`
+        - Step 2: Vertify the bandwith values with `sh int s0/0/0` & `sh int g0/0`.
             
             - We're interested in the `BW` value!
 
-            - Summary of `sh int s0/0/0`
+            - Summary of `sh int s0/0/0` is the following :D.
             - 
             ```text
             Serial0/0/0 is up, line protocol is up
@@ -801,7 +801,7 @@ Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
             ```
 
 
-            - Summary of `sh int g0/0`
+            - Summary of `sh int g0/0` is the following :D.
             - 
             ```text
             GiagbitEthernet0/1 is up, line protocol is up
@@ -866,7 +866,7 @@ Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
 - OSPF main neighbor tables with hello packets during router start up
     - Hello packets are sent to all OSPF enabled interfaces on every 10 sec intervals
     - If no hello packet is sent before dead interval is up (defualt it's 40 sec), OSPD neiighbor is considered dead and will be removed from the neighbor list
-    - Set up hello interval and dead interval with these `ip ospf hello-interval ?` & `ip ospf dead-interval ?`
+    - Set up hello interval and dead interval with these `ip ospf hello-interval ?` & `ip ospf dead-interval ?`.
         - 
         ```text
         conf t
