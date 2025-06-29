@@ -55,7 +55,7 @@ grand_parent: Coding Practices
         - Note: `switchport mode access` means this port is NEVER trunk link
         - Note: `switchport trunk encapsulation dot1q` must come before switching to trunk mode! 
         - 
-        ```bash
+        ```text
             en
             config t
 
@@ -82,7 +82,7 @@ grand_parent: Coding Practices
         - Note: `encapsulation dot1q 1 native` is considered to be the sub-interfacing step and it's connected to VLAN 1 
         - In VLAN 2, we don't put native VLAN obviously
         - We don't put `no shut` for both VLAN 1 and VLAN 2, as we assume the main interface is no shut by default, others should be too
-        ```bash
+        ```text
             en
             config t
             hostname Router3
@@ -111,7 +111,7 @@ grand_parent: Coding Practices
 
     - Step 3: Verify on Router 3 using `sh ip route`
 
-    ```bash
+    ```text
         Codes:  I - IGRP derived, R - RIP derived, O - OSPF derived
                 C - connected, S - static, E - EGP derived, B - BGP derived
                 * - candidate default route, IA - OSPF inter area route
@@ -130,7 +130,7 @@ grand_parent: Coding Practices
 
     - Step 4: Setup Router 1 as well. Note: `0.0.0.0 0.0.0.0` is the default gateway
 
-    ```bash
+    ```text
     en 
     config t
     hostname Router1
@@ -146,7 +146,7 @@ grand_parent: Coding Practices
 
     - Step 5: Setup Router 2 as well. Note: `0.0.0.0 0.0.0.0` is the default gateway
 
-    ```bash
+    ```text
     en 
     config t
     hostname Router2
@@ -161,11 +161,11 @@ grand_parent: Coding Practices
     ```
 
     - Step 6: Let's ping for sanity checks ! Please ping it from Router 2
-    ```bash
+    ```text
     ping 10.0.0.100
     ``` 
     Looking good! InterVLAN setup is up and running
-    ```bash
+    ```text
     Sending 5, 100-byte ICMP Echos to 10.0.0.100, timeout is 2 seconds:
     !!!!!
     Success rate is 100% (5/5), round-trip min/avg/max = 3/4/6 ms
@@ -182,7 +182,7 @@ grand_parent: Coding Practices
     - Let's look at Router 1 and Router 2's Routing table before any human intervention
         - Router 1 routing table:
          - 
-        ```bash
+        ```text
             Network Destination         Gateway                 Interface
             ---------------------------------------------------------------
             192.168.1.0/24              Directly Connected      s0/0/0
@@ -191,7 +191,7 @@ grand_parent: Coding Practices
 
         - Router 2 routing table:
         - 
-        ```bash
+        ```text
             Network Destination         Gateway                 Interface
             ---------------------------------------------------------------
             192.168.1.0/24              Directly Connected      s0/0/0
@@ -200,7 +200,7 @@ grand_parent: Coding Practices
     - Issue: For networks that are NOT directly connected, and admin can manually add the routing entries ! For example...
         - Router 1 routing table:
         - 
-        ```bash
+        ```text
             Network Destination         Gateway                 Interface
             ---------------------------------------------------------------
             192.168.1.0/24              Directly Connected      s0/0/0
@@ -210,7 +210,7 @@ grand_parent: Coding Practices
 
         - Router 2 routing table:
         - 
-        ```bash
+        ```text
             Network Destination         Gateway                 Interface
             ---------------------------------------------------------------
             192.168.1.0/24              Directly Connected      s0/0/0
@@ -224,7 +224,7 @@ grand_parent: Coding Practices
 - Our topology: ![](../../../../../assets/images/ccna/lesson7/lesson7_static2.jpg)
 
 - Step 1: Setup Router 1
-```bash
+```text
 en
 config t
 hostname Router1
@@ -241,7 +241,8 @@ end
 ```
 
 - Step 2: Setup Router 2
-```bash
+- 
+```text
 en
 config t
 hostname Router2
@@ -266,7 +267,7 @@ end
 
     - Static Route format: `ip route <dest network> <subnet mask> then <gateway access> or <outgoing ip interface>`. FYI, IPv6 static route configs are similar.
     - 
-    ```bash
+    ```text
         config t
         ip route 172.16.0.2 255.255.0.0 192.168.1.2
     ```
@@ -275,7 +276,7 @@ Note: 192.168.1.2 is set as static route here, it's also known as a network rout
 
 - Step 5: Sanity Check on Router 1 with `sh ip route`
     - The summary returned
-    ```bash
+    ```text
     Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
             D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
             N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
@@ -298,7 +299,7 @@ Note: 192.168.1.2 is set as static route here, it's also known as a network rout
     - Note: "S" meaning a static route for the network 172.16.0.0/16
 
 - Step 6: `ping 172.16.0.2`. The packets are now well received
-```bash
+```text
 Sending 5, 100-byte ICMP Echos to 172.16.0.2, timeout is 2 seconds:
 !!!!!
 Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
@@ -307,7 +308,7 @@ Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
 - Step 7: Removing the static route with `conf t` & `no ip route 172.16.0.0 255.255.0.0 192.168.1.2`
 - Step 8: On Router1, set up another ip route
     - 
-    ```bash
+    ```text
     conf t
     ip route 172.16.0.2 255.255.255.255 192.168.1.2
     end
@@ -318,7 +319,7 @@ Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
         - `192.168.1.2` is the gateway address, it's the interface on Router1 that is closest shoot out interface from Router1
 - Step 9: Verify and sanity check:
      - The summary returned
-    ```bash
+    ```text
     Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
             D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
             N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
@@ -346,7 +347,7 @@ Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
 
 - Step 9: `ping` the target. 
     - 
-    ```bash
+    ```text
     Sending 5, 100-byte ICMP Echos to 172.16.0.2, timeout is 2 seconds:
     !!!!!
     Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
@@ -369,7 +370,7 @@ Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
     - Topology:![](../../../../../assets/images/ccna/lesson7/lesson7_static2.jpg)
 
 - Step 1: Configure Router1 on int g0/1 and int g0/0
-    ```bash
+    ```text
     en
     conf t
     hostname Route1
@@ -387,7 +388,7 @@ Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
     ```
 - Step 2: Configure Router2 on int g0/0 and int g0/1
 
-    ```bash
+    ```text
     en
     conf t
     hostname Router2
@@ -407,7 +408,7 @@ Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
 - Step 3: Back to Router 1! Let's set up that default route!
 
     - 
-    ```bash
+    ```text
     conf t
     ip route 0.0.0.0 0.0.0.0 192.168.1.2
     end
@@ -424,7 +425,7 @@ Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
         - Where `*` = default route
     - The return info of `sh ip route`.
     - Please note that the default route info is shown here as `S*`
-    ```bash
+    ```text
     Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
             D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
             N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
@@ -450,7 +451,7 @@ Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
 - Step 5: Try to ping the ip on Router 2's side which is 172.16.0.2 with `ping 172.16.0.2`
     - Returned on the console we have:
     - Packets are well received
-    ```bash
+    ```text
     Sending 5, 100-byte ICMP Echos to 172.16.0.2, timeout is 2 seconds:
     !!!!!
     Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
@@ -463,7 +464,7 @@ Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
 
 - Step 1 : Assume we hae these 7 routes in the ip routing table
     - 
-    ```bash
+    ```text
     Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
             D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
             N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
@@ -492,27 +493,28 @@ Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
     ```
 
 - 
-```
-S*      0.0.0.0/0 [1/0] via 192.168.1.2
-C           10.0.0.0/8 is directly connected, GigabitEthernet0/1
-L           10.0.0.0/32 is directly connected, GigabitEthernet0/1
-C           192.168.1.0/24 is directly connected, GigabitEthernet0/1
-L           192.168.1.1/32 is directly connected, GigabitEthernet0/1
-S           192.168.16.0/26 [1/0] via 192.168.1.3
-S           192.168.16.0/27 [1/0] via 192.168.1.2
-```
+    ```text
+    S*      0.0.0.0/0 [1/0] via 192.168.1.2
+    C           10.0.0.0/8 is directly connected, GigabitEthernet0/1
+    L           10.0.0.0/32 is directly connected, GigabitEthernet0/1
+    C           192.168.1.0/24 is directly connected, GigabitEthernet0/1
+    L           192.168.1.1/32 is directly connected, GigabitEthernet0/1
+    S           192.168.16.0/26 [1/0] via 192.168.1.3
+    S           192.168.16.0/27 [1/0] via 192.168.1.2
+    ```
     
 - Step 2: Sorting most specific sub-mask to lowest, aka, /32 is the most specific, /1 is the least specific
     - Let's sort by `/` subnet mask's size. Note the `192` and `10` has no difference in using this sort method
-    ```
-    L           192.168.1.1/32 is directly connected, GigabitEthernet0/1
-    L           10.0.0.0/32 is directly connected, GigabitEthernet0/1
-    S           192.168.16.0/27 [1/0] via 192.168.1.2
-    S           192.168.16.0/26 [1/0] via 192.168.1.3
-    C           192.168.1.0/24 is directly connected, GigabitEthernet0/1
-    C           10.0.0.0/8 is directly connected, GigabitEthernet0/1
-    S*          0.0.0.0/0 [1/0] via 192.168.1.2
-    ```
+    - 
+        ```text
+        L           192.168.1.1/32 is directly connected, GigabitEthernet0/1
+        L           10.0.0.0/32 is directly connected, GigabitEthernet0/1
+        S           192.168.16.0/27 [1/0] via 192.168.1.2
+        S           192.168.16.0/26 [1/0] via 192.168.1.3
+        C           192.168.1.0/24 is directly connected, GigabitEthernet0/1
+        C           10.0.0.0/8 is directly connected, GigabitEthernet0/1
+        S*          0.0.0.0/0 [1/0] via 192.168.1.2
+        ```
 
 - A: we would assume our destination address is 192.168.16.3
 
@@ -528,7 +530,7 @@ S           192.168.16.0/27 [1/0] via 192.168.1.2
 
 - Step 4a: Feel free to do sanity check with `sh ip route 192.168.16.3`
     - 
-    ```bash
+    ```text
     Routing entry for 192.168.16.0/27
         known via "static", distance 1, metric 0
         Routing Descriptor Blocks:
@@ -550,7 +552,7 @@ S           192.168.16.0/27 [1/0] via 192.168.1.2
 
 - Step 4: Let's verify this last IP with `sh ip route 192.168.16.50`
     - 
-    ```bash
+    ```text
     Routing entry for 192.168.16.50
         known via "static", distance 1, metric 0
         Routing Descriptor Blocks:
@@ -728,7 +730,7 @@ S           192.168.16.0/27 [1/0] via 192.168.1.2
     - Step 2: Router ID can be manually configured with `router-id <value>`. where `value` is random, but must be unique.
         - example:
         - 
-        ```bash
+        ```text
         conf t
         hostname Router1
         ospf 1
@@ -741,7 +743,7 @@ S           192.168.16.0/27 [1/0] via 192.168.1.2
         - Typically, loopback interface are more stable than physical interfaces
         - For example in the summary table...
             - 
-            ```bash
+            ```text
             conf t
             
             int lo1
@@ -754,7 +756,7 @@ S           192.168.16.0/27 [1/0] via 192.168.1.2
             ```
             - `sh ip int brief` = to show all ip
             - 
-            ```bash
+            ```text
             Interface               IP-address          OK?     Method      Status                  Protocol
             GigabitEthernet0/0      192.168.1.1         YES     manual      up                      up
             GigabitEthernet0/1      10.0.0.1            YES     manual      up                      up
@@ -767,7 +769,7 @@ S           192.168.16.0/27 [1/0] via 192.168.1.2
     - Step 4: Let's sort out the highest IP (the non-loopback interfaces)
         - Note: please drop the loopback, since we're interested in active physical interfaces!
         - 
-        ```bash
+        ```text
         Interface               IP-address          OK?     Method      Status                  Protocol
         GigabitEthernet0/0      192.168.1.1         YES     manual      up                      up
         GigabitEthernet0/1      10.0.0.1            YES     manual      up                      up
@@ -789,7 +791,7 @@ S           192.168.16.0/27 [1/0] via 192.168.1.2
 
             - Summary of `sh int s0/0/0`
             - 
-            ```bash
+            ```text
             Serial0/0/0 is up, line protocol is up
                 Hardware is GT98K Serial
                 Internet Access is 192.168.1.1/24
@@ -801,7 +803,7 @@ S           192.168.16.0/27 [1/0] via 192.168.1.2
 
             - Summary of `sh int g0/0`
             - 
-            ```bash
+            ```text
             GiagbitEthernet0/1 is up, line protocol is up
                 Hardware is GT98K Serial
                 Internet Access is 192.168.1.1/24
@@ -823,7 +825,7 @@ S           192.168.16.0/27 [1/0] via 192.168.1.2
         - Step 4: Let's verify with `router ospf 1` to enter router interface
 
             - 
-            ```bash
+            ```text
             conf t
             router ospf 1
             auto-cost reference-bandwidth ?
@@ -836,7 +838,7 @@ S           192.168.16.0/27 [1/0] via 192.168.1.2
 
 - Let's dig deep into the ospf DB `sh ip ospf database` to display OSPF link state DB
     - Summary returned: Don't worry too much about the details here, out syll in CCNA
-    ```bash
+    ```text
                     OSPF Router with ID (192.168.1.1) (Process ID 1)
                         Router Link States (Area 0)
     Link ID         ADV Router          Age         Seq#            Checksum        Link Count
@@ -866,7 +868,7 @@ S           192.168.16.0/27 [1/0] via 192.168.1.2
     - If no hello packet is sent before dead interval is up (defualt it's 40 sec), OSPD neiighbor is considered dead and will be removed from the neighbor list
     - Set up hello interval and dead interval with these `ip ospf hello-interval ?` & `ip ospf dead-interval ?`
         - 
-        ```bash
+        ```text
         conf t
         int g0/0
 
@@ -915,7 +917,7 @@ S           192.168.16.0/27 [1/0] via 192.168.1.2
 
 #### 10.3.5.b Configuring interface priority
 - 
-```bash
+```text
 conf t
 int g0/0
 ip ospf priority ?
