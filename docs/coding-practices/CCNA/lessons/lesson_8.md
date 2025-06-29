@@ -144,30 +144,31 @@ If we have OSPF version 3 (v3) (specified in RFC5340) will support IPv6.
     end
 ```
 
-- Verify Route 1 is indeed picking up the OSPF route via `sh ip route` & `ping 172.16.0.2` from Router 1
+- Verify Route 1 is indeed picking up the OSPF route via `sh ip route` & `ping 172.16.0.2` from Router 1.
+
 - 
-```text
-    Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
-            D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
-            N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
-            E1 - OSPF external type 1, E2 - OSPF external type 2
-            i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
-            ia - IS-IS inter area, * - candidate default, U - per-user static route
-            o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
-            a - application route
-            + - replicated route, % - next hop override, p - overrides from pfR
+    ```text
+        Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
+                D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+                N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+                E1 - OSPF external type 1, E2 - OSPF external type 2
+                i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
+                ia - IS-IS inter area, * - candidate default, U - per-user static route
+                o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+                a - application route
+                + - replicated route, % - next hop override, p - overrides from pfR
 
-        Gateway of last resort is not set
+            Gateway of last resort is not set
 
-            10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
-        C       10.0.0.0/8 is directly subnetted, GigabitEthernet0/1
-        L       10.0.0.1/8 is directly subnetted, GigabitEthernet0/1
-        O   172.16.0.0/16 [110/2] via 192.168.1.2, 00:50:00, GigabitEthernet0/0
-            192.168.1.0/24 is variably subnetted, 2 subnets, 2 masks
-        C       192.168.1.0/24 is directly subnetted, GigabitEthernet0/0
-        L       192.168.1.1/32 is directly subnetted, GigabitEthernet0/0
+                10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+            C       10.0.0.0/8 is directly subnetted, GigabitEthernet0/1
+            L       10.0.0.1/8 is directly subnetted, GigabitEthernet0/1
+            O   172.16.0.0/16 [110/2] via 192.168.1.2, 00:50:00, GigabitEthernet0/0
+                192.168.1.0/24 is variably subnetted, 2 subnets, 2 masks
+            C       192.168.1.0/24 is directly subnetted, GigabitEthernet0/0
+            L       192.168.1.1/32 is directly subnetted, GigabitEthernet0/0
 
-```
+    ```
 - Explanation of the summary:
     - `O` = source of the route is OSPF
     - `[110/2]` = AD (Administrative Distance) is 110 since OSPF Route and 2 = OSPF Route Metric
@@ -175,30 +176,30 @@ If we have OSPF version 3 (v3) (specified in RFC5340) will support IPv6.
 - Ping will also work :D (Router 1 pinging `172.16.0.2`)
 
 - Verify Router 1 with `sh ip ospf int g0/0`, showing OSPF Router IP, hello + dead interval, netwrok type, DR/BDR and OSPF Priority 
-    - `State BDR`
-    ```text
-        GigabitEthernet0/0 is up, line protocol is up
-            Internet Address 192.168.1.1/24, Area 0, Attached via Netwro kStatement
-            Process ID 1, Router ID 191.168.1.1 Network Type BROADCAST, Cost: 1
-            Topology-MTID       Cost        Disabled        Shutdown        Topology Name
-                0                 1             no              no              Base
-            Transmit Delay is 1 sec, State BDR, Priority 1
-            Desinated Router (ID) 192.168.1.2, Interface Address 192.168.1.2
-            Backup Designated Router (ID) 192.168.1.1, Interface Address 192.168.1.1
-            Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5
-                oob-resync timeout 40
-                Hello due in 00:00:02
-            Supports Link-local SIgnaling (LLS)
-            Cisco NSF helper support enabled
-            IETF NSF helper support enabled
-            Index 1/2/2, flood queue length 0
-            Next 0x0(0)/0x0(0)/0x0(0)
-            Last flood scan length 1, maximum is 2
-            Last flood scan time is 0 msec, maximum is 0 msec
-            Neighbor Count is 1, Adjacent neighbor count is 1
-                Adjacent with neighbor 192.168.1.2 (Designated Router)
-            Suppress hello for 0 neighbor(s)  
-    ```
+    - `State BDR`...
+        ```text
+            GigabitEthernet0/0 is up, line protocol is up
+                Internet Address 192.168.1.1/24, Area 0, Attached via Netwro kStatement
+                Process ID 1, Router ID 191.168.1.1 Network Type BROADCAST, Cost: 1
+                Topology-MTID       Cost        Disabled        Shutdown        Topology Name
+                    0                 1             no              no              Base
+                Transmit Delay is 1 sec, State BDR, Priority 1
+                Desinated Router (ID) 192.168.1.2, Interface Address 192.168.1.2
+                Backup Designated Router (ID) 192.168.1.1, Interface Address 192.168.1.1
+                Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5
+                    oob-resync timeout 40
+                    Hello due in 00:00:02
+                Supports Link-local SIgnaling (LLS)
+                Cisco NSF helper support enabled
+                IETF NSF helper support enabled
+                Index 1/2/2, flood queue length 0
+                Next 0x0(0)/0x0(0)/0x0(0)
+                Last flood scan length 1, maximum is 2
+                Last flood scan time is 0 msec, maximum is 0 msec
+                Neighbor Count is 1, Adjacent neighbor count is 1
+                    Adjacent with neighbor 192.168.1.2 (Designated Router)
+                Suppress hello for 0 neighbor(s)  
+        ```
 - Further Verification for Router 1: `sh ip ospf neighbor`
     - Router 1 has neighbor 192.168.1.2 which is FULL state. 192.168.1.2 is DR.
     - 
