@@ -754,7 +754,7 @@ Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
             
             end
             ```
-            - to show all ip, use `sh ip int brief` !
+        - to show all ip, use `sh ip int brief` !
             - 
             ```text
             Interface               IP-address          OK?     Method      Status                  Protocol
