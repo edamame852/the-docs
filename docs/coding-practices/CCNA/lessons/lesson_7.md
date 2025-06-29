@@ -131,44 +131,45 @@ grand_parent: Coding Practices
     - Step 4: Setup Router 1 as well. Note: `0.0.0.0 0.0.0.0` is the default gateway
 
     ```text
-    en 
-    config t
-    hostname Router1
+        en 
+        config t
+        hostname Router1
 
-    int g0/0
-    ip address 10.0.0.100 255.0.0.0
-    no shut
-    exit
+        int g0/0
+        ip address 10.0.0.100 255.0.0.0
+        no shut
+        exit
 
-    ip route 0.0.0.0 0.0.0.0 10.0.0.1
-    end
+        ip route 0.0.0.0 0.0.0.0 10.0.0.1
+        end
     ``` 
 
     - Step 5: Setup Router 2 as well. Note: `0.0.0.0 0.0.0.0` is the default gateway
 
     ```text
-    en 
-    config t
-    hostname Router2
+        en 
+        config t
+        hostname Router2
 
-    int g0/2
-    ip address 176.16.0.200 255.255.0.0
-    no shut
-    exit
+        int g0/2
+        ip address 176.16.0.200 255.255.0.0
+        no shut
+        exit
 
-    ip route 0.0.0.0 0.0.0.0 172.16.0.1
-    end
+        ip route 0.0.0.0 0.0.0.0 172.16.0.1
+        end
     ```
 
     - Step 6: Let's ping for sanity checks ! Please ping it from Router 2
     ```text
-    ping 10.0.0.100
+        ping 10.0.0.100
     ``` 
     Looking good! InterVLAN setup is up and running
+    - 
     ```text
-    Sending 5, 100-byte ICMP Echos to 10.0.0.100, timeout is 2 seconds:
-    !!!!!
-    Success rate is 100% (5/5), round-trip min/avg/max = 3/4/6 ms
+        Sending 5, 100-byte ICMP Echos to 10.0.0.100, timeout is 2 seconds:
+        !!!!!
+        Success rate is 100% (5/5), round-trip min/avg/max = 3/4/6 ms
     ```
 
 
@@ -225,37 +226,37 @@ grand_parent: Coding Practices
 
 - Step 1: Setup Router 1
 ```text
-en
-config t
-hostname Router1
+    en
+    config t
+    hostname Router1
 
-int g0/1
-ip address 10.0.0.1 255.0.0.0
-no shut
+    int g0/1
+    ip address 10.0.0.1 255.0.0.0
+    no shut
 
-int g0/0
-ip address 192.168.1.1 255.255.255.0
-no shut
+    int g0/0
+    ip address 192.168.1.1 255.255.255.0
+    no shut
 
-end
+    end
 ```
 
 - Step 2: Setup Router 2
 - 
 ```text
-en
-config t
-hostname Router2
+    en
+    config t
+    hostname Router2
 
-int g0/0
-ip address 192.168.1.2 255.255.255.0
-no shut
+    int g0/0
+    ip address 192.168.1.2 255.255.255.0
+    no shut
 
-int g0/1
-ip address 172.16.0.2 255.255.0.0
-no shut
+    int g0/1
+    ip address 172.16.0.2 255.255.0.0
+    no shut
 
-end
+    end
 ```
 
 - Step 3: Router 1 `ping 172.16.0.2`, success rate is 0 !
@@ -277,41 +278,41 @@ Note: 192.168.1.2 is set as static route here, it's also known as a network rout
 - Step 5: Sanity Check on Router 1 with `sh ip route`
     - The summary returned
     ```text
-    Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
-            D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
-            N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
-            E1 - OSPF external type 1, E2 - OSPF external type 2
-            i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
-            ia - IS-IS inter area, * - candidate default, U - per-user static route
-            o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
-            a - application route
-            + - replicated route, % - next hop override, p - overrides from pfR
+        Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
+                D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+                N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+                E1 - OSPF external type 1, E2 - OSPF external type 2
+                i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
+                ia - IS-IS inter area, * - candidate default, U - per-user static route
+                o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+                a - application route
+                + - replicated route, % - next hop override, p - overrides from pfR
 
-    Gateway of last resort is not set
-            10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
-    C           10.0.0.0/8 is directly connected, GigabitEthernet0/1
-    L           10.0.0.0/32 is directly connected, GigabitEthernet0/1
-    S       172.16.0.0/16 [1/0] via 192.168.1.2
-            192.168.1.0/24 is variably subnetted, 2 subnets, 2 masks
-    C           192.168.1.0/24 is directly connected, GigabitEthernet0/1
-    L           192.168.1.1/32 is directly connected, GigabitEthernet0/1
+        Gateway of last resort is not set
+                10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+        C           10.0.0.0/8 is directly connected, GigabitEthernet0/1
+        L           10.0.0.0/32 is directly connected, GigabitEthernet0/1
+        S       172.16.0.0/16 [1/0] via 192.168.1.2
+                192.168.1.0/24 is variably subnetted, 2 subnets, 2 masks
+        C           192.168.1.0/24 is directly connected, GigabitEthernet0/1
+        L           192.168.1.1/32 is directly connected, GigabitEthernet0/1
     ```
     - Note: "S" meaning a static route for the network 172.16.0.0/16
 
 - Step 6: `ping 172.16.0.2`. The packets are now well received
 ```text
-Sending 5, 100-byte ICMP Echos to 172.16.0.2, timeout is 2 seconds:
-!!!!!
-Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
+    Sending 5, 100-byte ICMP Echos to 172.16.0.2, timeout is 2 seconds:
+    !!!!!
+    Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
 ```
 
 - Step 7: Removing the static route with `conf t` & `no ip route 172.16.0.0 255.255.0.0 192.168.1.2`
 - Step 8: On Router1, set up another ip route
     - 
     ```text
-    conf t
-    ip route 172.16.0.2 255.255.255.255 192.168.1.2
-    end
+        conf t
+        ip route 172.16.0.2 255.255.255.255 192.168.1.2
+        end
     ```
     - Logic behind the 2 parameters, let's look at the topology again: ![](../../../../../assets/images/ccna/lesson7/lesson7_static2.jpg)
         - `172.16.0.2` since that's our target destination address (next to Router 2)
@@ -320,25 +321,25 @@ Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
 - Step 9: Verify and sanity check:
      - The summary returned
     ```text
-    Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
-            D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
-            N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
-            E1 - OSPF external type 1, E2 - OSPF external type 2
-            i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
-            ia - IS-IS inter area, * - candidate default, U - per-user static route
-            o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
-            a - application route
-            + - replicated route, % - next hop override, p - overrides from pfR
+        Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
+                D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+                N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+                E1 - OSPF external type 1, E2 - OSPF external type 2
+                i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
+                ia - IS-IS inter area, * - candidate default, U - per-user static route
+                o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+                a - application route
+                + - replicated route, % - next hop override, p - overrides from pfR
 
-    Gateway of last resort is not set
-            10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
-    C           10.0.0.0/8 is directly connected, GigabitEthernet0/1
-    L           10.0.0.0/32 is directly connected, GigabitEthernet0/1
-            172.16.0.0/32 is subnetted, 1 subnets
-    S           172.16.0.2 [1/0] via 192.168.1.2
-            192.168.1.0/24 is variably subnetted, 2 subnets, 2 masks
-    C           192.168.1.0/24 is directly connected, GigabitEthernet0/1
-    L           192.168.1.1/32 is directly connected, GigabitEthernet0/1
+        Gateway of last resort is not set
+                10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+        C           10.0.0.0/8 is directly connected, GigabitEthernet0/1
+        L           10.0.0.0/32 is directly connected, GigabitEthernet0/1
+                172.16.0.0/32 is subnetted, 1 subnets
+        S           172.16.0.2 [1/0] via 192.168.1.2
+                192.168.1.0/24 is variably subnetted, 2 subnets, 2 masks
+        C           192.168.1.0/24 is directly connected, GigabitEthernet0/1
+        L           192.168.1.1/32 is directly connected, GigabitEthernet0/1
     ```
 #### 9.3.2.y : Host Route
 - Note:
@@ -348,9 +349,9 @@ Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
 - Step 9: `ping` the target. 
     - 
     ```text
-    Sending 5, 100-byte ICMP Echos to 172.16.0.2, timeout is 2 seconds:
-    !!!!!
-    Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
+        Sending 5, 100-byte ICMP Echos to 172.16.0.2, timeout is 2 seconds:
+        !!!!!
+        Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
     ```
     - ping is working now
 
@@ -371,48 +372,48 @@ Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
 
 - Step 1: Configure Router1 on int g0/1 and int g0/0
     ```text
-    en
-    conf t
-    hostname Route1
+        en
+        conf t
+        hostname Route1
 
-    int g0/1
-    ip address 10.0.0.1 255.0.0.0.0
-    no shut
+        int g0/1
+        ip address 10.0.0.1 255.0.0.0.0
+        no shut
 
-    ip g0/0
-    ip 192.168.1.1 255.255.255.0
-    no shut
+        ip g0/0
+        ip 192.168.1.1 255.255.255.0
+        no shut
 
-    end
-    copy run start
+        end
+        copy run start
     ```
 - Step 2: Configure Router2 on int g0/0 and int g0/1
 
     ```text
-    en
-    conf t
-    hostname Router2
+        en
+        conf t
+        hostname Router2
 
-    int g0/0
-    ip 192.168.1.2 255.255.255.0
-    no shut
+        int g0/0
+        ip 192.168.1.2 255.255.255.0
+        no shut
 
-    int g0/1
-    ip 172.16.0.0.2 255.255.0.0
-    no shut
+        int g0/1
+        ip 172.16.0.0.2 255.255.0.0
+        no shut
 
-    end
-    copy config run
+        end
+        copy config run
     ```
 
 - Step 3: Back to Router 1! Let's set up that default route!
 
     - 
     ```text
-    conf t
-    ip route 0.0.0.0 0.0.0.0 192.168.1.2
-    end
-    copy run start
+        conf t
+        ip route 0.0.0.0 0.0.0.0 192.168.1.2
+        end
+        copy run start
     ```
     - Explanation:
         - the default route is : `0.0.0.0`
@@ -426,35 +427,35 @@ Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
     - The return info of `sh ip route`.
     - Please note that the default route info is shown here as `S*`
     ```text
-    Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
-            D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
-            N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
-            E1 - OSPF external type 1, E2 - OSPF external type 2
-            i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
-            ia - IS-IS inter area, * - candidate default, U - per-user static route
-            o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
-            a - application route
-            + - replicated route, % - next hop override, p - overrides from pfR
+        Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
+                D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+                N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+                E1 - OSPF external type 1, E2 - OSPF external type 2
+                i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
+                ia - IS-IS inter area, * - candidate default, U - per-user static route
+                o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+                a - application route
+                + - replicated route, % - next hop override, p - overrides from pfR
 
-    Gateway of last resort is 102.168.1.2 to network 0.0.0.0
+        Gateway of last resort is 102.168.1.2 to network 0.0.0.0
 
-    Gateway of last resort is not set
-    S*      0.0.0.0/0 [1/0] via 192.168.1.2
-            10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
-    C           10.0.0.0/8 is directly connected, GigabitEthernet0/1
-    L           10.0.0.0/32 is directly connected, GigabitEthernet0/1
+        Gateway of last resort is not set
+        S*      0.0.0.0/0 [1/0] via 192.168.1.2
+                10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+        C           10.0.0.0/8 is directly connected, GigabitEthernet0/1
+        L           10.0.0.0/32 is directly connected, GigabitEthernet0/1
 
-            192.168.1.0/24 is variably subnetted, 2 subnets, 2 masks
-    C           192.168.1.0/24 is directly connected, GigabitEthernet0/1
-    L           192.168.1.1/32 is directly connected, GigabitEthernet0/1
+                192.168.1.0/24 is variably subnetted, 2 subnets, 2 masks
+        C           192.168.1.0/24 is directly connected, GigabitEthernet0/1
+        L           192.168.1.1/32 is directly connected, GigabitEthernet0/1
     ```
 - Step 5: Try to ping the ip on Router 2's side which is 172.16.0.2 with `ping 172.16.0.2`
     - Returned on the console we have:
     - Packets are well received
     ```text
-    Sending 5, 100-byte ICMP Echos to 172.16.0.2, timeout is 2 seconds:
-    !!!!!
-    Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
+        Sending 5, 100-byte ICMP Echos to 172.16.0.2, timeout is 2 seconds:
+        !!!!!
+        Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
     ```
 
  ### 9.3.4 Routing Entries Matching Order
@@ -465,55 +466,55 @@ Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
 - Step 1 : Assume we hae these 7 routes in the ip routing table
     - 
     ```text
-    Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
-            D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
-            N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
-            E1 - OSPF external type 1, E2 - OSPF external type 2
-            i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
-            ia - IS-IS inter area, * - candidate default, U - per-user static route
-            o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
-            a - application route
-            + - replicated route, % - next hop override, p - overrides from pfR
+        Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
+                D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+                N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+                E1 - OSPF external type 1, E2 - OSPF external type 2
+                i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
+                ia - IS-IS inter area, * - candidate default, U - per-user static route
+                o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+                a - application route
+                + - replicated route, % - next hop override, p - overrides from pfR
 
-    Gateway of last resort is 102.168.1.2 to network 0.0.0.0
+        Gateway of last resort is 102.168.1.2 to network 0.0.0.0
 
-    Gateway of last resort is not set
-    S*      0.0.0.0/0 [1/0] via 192.168.1.2
-            10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
-    C           10.0.0.0/8 is directly connected, GigabitEthernet0/1
-    L           10.0.0.0/32 is directly connected, GigabitEthernet0/1
+        Gateway of last resort is not set
+        S*      0.0.0.0/0 [1/0] via 192.168.1.2
+                10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+        C           10.0.0.0/8 is directly connected, GigabitEthernet0/1
+        L           10.0.0.0/32 is directly connected, GigabitEthernet0/1
 
-            192.168.1.0/24 is variably subnetted, 2 subnets, 2 masks
-    C           192.168.1.0/24 is directly connected, GigabitEthernet0/1
-    L           192.168.1.1/32 is directly connected, GigabitEthernet0/1
+                192.168.1.0/24 is variably subnetted, 2 subnets, 2 masks
+        C           192.168.1.0/24 is directly connected, GigabitEthernet0/1
+        L           192.168.1.1/32 is directly connected, GigabitEthernet0/1
 
-            192.168.16.0/24 is variably subnetted, 2 subnets, 2 masks
-    S           192.168.16.0/26 [1/0] via 192.168.1.3
-    S           192.168.16.0/27 [1/0] via 192.168.1.2
+                192.168.16.0/24 is variably subnetted, 2 subnets, 2 masks
+        S           192.168.16.0/26 [1/0] via 192.168.1.3
+        S           192.168.16.0/27 [1/0] via 192.168.1.2
     ```
 
 - 
     ```text
-    S*      0.0.0.0/0 [1/0] via 192.168.1.2
-    C           10.0.0.0/8 is directly connected, GigabitEthernet0/1
-    L           10.0.0.0/32 is directly connected, GigabitEthernet0/1
-    C           192.168.1.0/24 is directly connected, GigabitEthernet0/1
-    L           192.168.1.1/32 is directly connected, GigabitEthernet0/1
-    S           192.168.16.0/26 [1/0] via 192.168.1.3
-    S           192.168.16.0/27 [1/0] via 192.168.1.2
+        S*      0.0.0.0/0 [1/0] via 192.168.1.2
+        C           10.0.0.0/8 is directly connected, GigabitEthernet0/1
+        L           10.0.0.0/32 is directly connected, GigabitEthernet0/1
+        C           192.168.1.0/24 is directly connected, GigabitEthernet0/1
+        L           192.168.1.1/32 is directly connected, GigabitEthernet0/1
+        S           192.168.16.0/26 [1/0] via 192.168.1.3
+        S           192.168.16.0/27 [1/0] via 192.168.1.2
     ```
     
 - Step 2: Sorting most specific sub-mask to lowest, aka, /32 is the most specific, /1 is the least specific
     - Let's sort by `/` subnet mask's size. Note the `192` and `10` has no difference in using this sort method
     - 
         ```text
-        L           192.168.1.1/32 is directly connected, GigabitEthernet0/1
-        L           10.0.0.0/32 is directly connected, GigabitEthernet0/1
-        S           192.168.16.0/27 [1/0] via 192.168.1.2
-        S           192.168.16.0/26 [1/0] via 192.168.1.3
-        C           192.168.1.0/24 is directly connected, GigabitEthernet0/1
-        C           10.0.0.0/8 is directly connected, GigabitEthernet0/1
-        S*          0.0.0.0/0 [1/0] via 192.168.1.2
+            L           192.168.1.1/32 is directly connected, GigabitEthernet0/1
+            L           10.0.0.0/32 is directly connected, GigabitEthernet0/1
+            S           192.168.16.0/27 [1/0] via 192.168.1.2
+            S           192.168.16.0/26 [1/0] via 192.168.1.3
+            C           192.168.1.0/24 is directly connected, GigabitEthernet0/1
+            C           10.0.0.0/8 is directly connected, GigabitEthernet0/1
+            S*          0.0.0.0/0 [1/0] via 192.168.1.2
         ```
 
 - A: we would assume our destination address is 192.168.16.3
@@ -531,11 +532,11 @@ Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
 - Step 4a: Feel free to do sanity check with `sh ip route 192.168.16.3`
     - 
     ```text
-    Routing entry for 192.168.16.0/27
-        known via "static", distance 1, metric 0
-        Routing Descriptor Blocks:
-        * 192.168.1.2
-            Route metric is 0, traffic share counter is 1
+        Routing entry for 192.168.16.0/27
+            known via "static", distance 1, metric 0
+            Routing Descriptor Blocks:
+            * 192.168.1.2
+                Route metric is 0, traffic share counter is 1
     ```
 
 
@@ -553,11 +554,11 @@ Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
 - Step 4: Let's verify this last IP with `sh ip route 192.168.16.50`
     - 
     ```text
-    Routing entry for 192.168.16.50
-        known via "static", distance 1, metric 0
-        Routing Descriptor Blocks:
-        * 192.168.1.3
-            Route metric is 0, traffic share counter is 1
+        Routing entry for 192.168.16.50
+            known via "static", distance 1, metric 0
+            Routing Descriptor Blocks:
+            * 192.168.1.3
+                Route metric is 0, traffic share counter is 1
     ```
 ### 9.3.g Handling exceptions if destination address is 1.1.1.1
 - if we check it with `sh ip route 1.1.1.1`, we'll get an error for this `Network not in table` 
@@ -731,11 +732,11 @@ Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
         - example:
         - 
         ```text
-        conf t
-        hostname Router1
-        ospf 1
-        router-id 1.1.1.1
-        end
+            conf t
+            hostname Router1
+            ospf 1
+            router-id 1.1.1.1
+            end
         ```
         - `1.1.1.1` = this ip is the router ID, and it doesn't even need to be ping-able
     - Step 3: If router ID didn't exist in run config, then highest IP among all active loopback interfaces is elected as the Router ID
@@ -744,37 +745,37 @@ Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
         - For example in the summary table...
             - 
             ```text
-            conf t
-            
-            int lo1
-            ip address 172.255.255.254 255.255.255.255
+                conf t
+                
+                int lo1
+                ip address 172.255.255.254 255.255.255.255
 
-            int lo2
-            ip address 192.0.0.1 255.255.255.255
-            
-            end
+                int lo2
+                ip address 192.0.0.1 255.255.255.255
+                
+                end
             ```
         - to show all ip, use `sh ip int brief` !
             - 
             ```text
-            Interface               IP-address          OK?     Method      Status                  Protocol
-            GigabitEthernet0/0      192.168.1.1         YES     manual      up                      up
-            GigabitEthernet0/1      10.0.0.1            YES     manual      up                      up
-            GigabitEthernet0/2      unassigned          YES     NVRAM       administratively down   up
-            GigabitEthernet0/3      unassigned          YES     NVRAM       administratively down   up
-            Loopback1               172.255.255.254     YES     manual      up                      up
-            Loopback2               192.0.0.1           YES     manual      up                      up
+                Interface               IP-address          OK?     Method      Status                  Protocol
+                GigabitEthernet0/0      192.168.1.1         YES     manual      up                      up
+                GigabitEthernet0/1      10.0.0.1            YES     manual      up                      up
+                GigabitEthernet0/2      unassigned          YES     NVRAM       administratively down   up
+                GigabitEthernet0/3      unassigned          YES     NVRAM       administratively down   up
+                Loopback1               172.255.255.254     YES     manual      up                      up
+                Loopback2               192.0.0.1           YES     manual      up                      up
             ```
 
     - Step 4: Let's sort out the highest IP (the non-loopback interfaces)
         - Note: please drop the loopback, since we're interested in active physical interfaces!
         - 
         ```text
-        Interface               IP-address          OK?     Method      Status                  Protocol
-        GigabitEthernet0/0      192.168.1.1         YES     manual      up                      up
-        GigabitEthernet0/1      10.0.0.1            YES     manual      up                      up
-        GigabitEthernet0/2      unassigned          YES     NVRAM       administratively down   up
-        GigabitEthernet0/3      unassigned          YES     NVRAM       administratively down   up
+            Interface               IP-address          OK?     Method      Status                  Protocol
+            GigabitEthernet0/0      192.168.1.1         YES     manual      up                      up
+            GigabitEthernet0/1      10.0.0.1            YES     manual      up                      up
+            GigabitEthernet0/2      unassigned          YES     NVRAM       administratively down   up
+            GigabitEthernet0/3      unassigned          YES     NVRAM       administratively down   up
         ```
 
 ### 10.3.2 OSPF AD & Metric (i.e. Cost)
@@ -792,12 +793,12 @@ Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
             - Summary of `sh int s0/0/0` is the following :D.
             - 
             ```text
-            Serial0/0/0 is up, line protocol is up
-                Hardware is GT98K Serial
-                Internet Access is 192.168.1.1/24
-                MTU 1500 Bytes, BW 1544 Kbit/sec, DLY 2000 usec,
-                    reliability 255/255, txload 1/255, rxload 1/255
-            <ommitted>
+                Serial0/0/0 is up, line protocol is up
+                    Hardware is GT98K Serial
+                    Internet Access is 192.168.1.1/24
+                    MTU 1500 Bytes, BW 1544 Kbit/sec, DLY 2000 usec,
+                        reliability 255/255, txload 1/255, rxload 1/255
+                <ommitted>
             ```
 
 
