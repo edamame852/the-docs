@@ -605,17 +605,18 @@ S           192.168.16.0/27 [1/0] via 192.168.1.2
     - Please memorize this table !!!!
     - Cisco router's AD = decides which routing protocol will be providing the route
 - Table for AD routing values on some common protocols
-| Name of Route Source    | Symbol used in Cisco `sh ip route` | Default AD Value | 
-| ----------------------- | ---------------------------------- | ---------------- |
-| Connected interface (direct)  | C                            |  0               |
-| Static Route  | S                            |  1               |
-| External BGP = eBGP  | B `will be discussed in CCNP`            |  20               |
-| Internal EIGRP  |  D            |  90               |
-| OSPF  | O            |  110               |
-| IS-IS  | i            |  115               |
-| RIP  | R            |  120               |
-| External EIGRP  | D EX            |  170               |
-| Internal BGP = iBGP  | B `will be discussed in CCNP`            |  200               |
+
+| Name of Route Source         | Symbol used in Cisco `sh ip route` | Default AD Value |
+|:---------------------------:|:-----------------------------------:|:----------------:|
+| Connected interface (direct)| C                                   |        0         |
+| Static Route                | S                                   |        1         |
+| External BGP = eBGP         | B *(will be discussed in CCNP)*     |       20         |
+| Internal EIGRP              | D                                   |       90         |
+| OSPF                        | O                                   |      110         |
+| IS-IS                       | i                                   |      115         |
+| RIP                         | R                                   |      120         |
+| External EIGRP              | D EX                                |      170         |
+| Internal BGP = iBGP         | B *(will be discussed in CCNP)*     |      200         |
 
 - How to make use of this table ?
     - The network with the lowest AD value will enter the routing table and used for packet routing!
