@@ -804,12 +804,12 @@ Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
             - Summary of `sh int g0/0` is the following :D.
             - 
             ```text
-            GiagbitEthernet0/1 is up, line protocol is up
-                Hardware is GT98K Serial
-                Internet Access is 192.168.1.1/24
-                MTU 1500 Bytes, BW 1000000 Kbit/sec, DLY 10 usec,
-                    reliability 255/255, txload 1/255, rxload 1/255
-            <ommitted>
+                GiagbitEthernet0/1 is up, line protocol is up
+                    Hardware is GT98K Serial
+                    Internet Access is 192.168.1.1/24
+                    MTU 1500 Bytes, BW 1000000 Kbit/sec, DLY 10 usec,
+                        reliability 255/255, txload 1/255, rxload 1/255
+                <ommitted>
             ```
 
         - Step 3: Calculate the metric/ cost! But there's 2 rules to follow
@@ -826,9 +826,9 @@ Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
 
             - 
             ```text
-            conf t
-            router ospf 1
-            auto-cost reference-bandwidth ?
+                conf t
+                router ospf 1
+                auto-cost reference-bandwidth ?
             ```
 
 ### 10.3.3 OSPF Area
@@ -869,12 +869,12 @@ Success rate is 100% (5/5), round-trip min/avg/max = 1/2/4 ms
     - Set up hello interval and dead interval with these `ip ospf hello-interval ?` & `ip ospf dead-interval ?`.
         - 
         ```text
-        conf t
-        int g0/0
+            conf t
+            int g0/0
 
-        ip ospf hello-interval ?
-        ip ospf dead-interval ?
-        ``` 
+            ip ospf hello-interval ?
+            ip ospf dead-interval ?
+        ```
 
 - Requirements of forming OSPF Adjacency, there are 4
     - 1 - Same OSPF Area ID
