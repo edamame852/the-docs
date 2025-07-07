@@ -154,5 +154,17 @@ Lesson 9 - CCNA Fast Track (June, 2025). We left off at page 163.
 - Recall the classful A (/8), B (/16), C (/24) network 
 - `auto-summary` = to bunch up multiple network
 
-## 10.11 EIGRP FD, RD/AD, Successor, Fesible Successor
+## 10.11 EIGRP FD, RD/AD, Successor, Feasible Successor
 - ![](../../../../../assets/images/ccna/lesson9/lesson9_eigrp_3.jpg)
+- Background:
+    - Numbers here are **EIGRP Metrics**
+    - R3 gets the same network from R1 and R2
+- Let's talk about a few terminologies:
+    - 1 - Path Metric (PM): Cost (i.e. EIGRP Metric) to jump to backend network
+        - For example:
+            - Upper road: Next hop 192.168.13.1, PM is 256 + 256 = 512 (Wins, the lower the better)
+            - Lower road: Next hop 192.168.23.2, PM is 512 + 256 = 768
+    - 2 - Feasible Distance (FD): smallest Path Metric, hence it was the upper road
+    - 3 - Advertised or Reported Distance (AD or RD): The cost of hopping over to the next neighbor
+        - For example:
+            - 
