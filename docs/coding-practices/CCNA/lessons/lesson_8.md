@@ -156,7 +156,7 @@ If we have OSPF version 3 (v3) (specified in RFC5340) will support IPv6.
                 ia - IS-IS inter area, * - candidate default, U - per-user static route
                 o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
                 a - application route
-                + - replicated route, % - next hop override, p - overrides from pfR
+                + - replicated route, % - next hop override, p - overrides from PfR
 
             Gateway of last resort is not set
 

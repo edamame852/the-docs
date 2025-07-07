@@ -11,12 +11,14 @@ grand_parent: Coding Practices
 {:toc}
 
 ---
-Lesson 9 - CCNA Fast Track (June, 2025). We left off at page 163.
+Lesson 9 - CCNA Fast Track (June, 2025). We left off at page 163. It ends at the top of pg 186.
 
 # 0. CCNA Exam Questions
 1. MC will test which summaruzation will best summarize 3 routes at the same time. Ans = Route Summization to cover multi routes
 2. MC will provide you with multiple routes and ask you corresponding masks can cover all these routes (i.e. /8, /16, /24 ...)
 3. MC can also ask you to bunch/ summarize 4 routes into 3 routes, grouping 2 
+
+4. You will be tested on configuring BGP
 
 # 10. Dynamic Roututing 
 ## 10.9 EIGRP = Enhanced Interior Gateway Routing Protocol (Dynamic)
@@ -165,6 +167,92 @@ Lesson 9 - CCNA Fast Track (June, 2025). We left off at page 163.
             - Upper road: Next hop 192.168.13.1, PM is 256 + 256 = 512 (Wins, the lower the better)
             - Lower road: Next hop 192.168.23.2, PM is 512 + 256 = 768
     - 2 - Feasible Distance (FD): smallest Path Metric, hence it was the upper road
-    - 3 - Advertised or Reported Distance (AD or RD): The cost of hopping over to the next neighbor
+    - 3 - Advertised or Reported Distance (AD or RD): The cost of hopping over to the next neighbor (aka distance for R2 to backend network or R3 to backend network)
         - For example:
-            - 
+            - R2 next hop = 256
+            - R3 next hop = 256
+    - 4 - Feasible Successor (FS): It's kinda like a backup tbh
+        - Rule of being an FS : AD/FD must be  < FD, if yes then it's an FS
+        - Note: We can have more than 1 FS
+    - 5 - Successor  
+        - Rule of being a successor: Lowest Path Metric (aka FD)!
+        - Example:
+            - Hence, 192.168.13.1 is the successor since it is the FD
+
+- How do we verify these PM, FD, AD/RD, FS, S... we can check with `sh ip eigrp topology` + `sh ip route`.
+    - `sh ip eigrp topology`
+        - The summary will be:
+        - 
+        ```text
+            EIGRP-IPv4 Topology Table for AS(123)/ID(192.168.23.3)
+            Codes: P - Passive, A - Active, U - Update, Q - Query, R - Reply,
+                   r - reply Status, s - sia status
+
+            P   192.168.23.0/24, 1 successors, FD is 512
+                via Connected, GigabitEthernet0/3 
+            P   192.168.12.0/24, 1 successors, FD is 512
+                via 192.168.13.1 (512/256), GigabitEthernet0/2
+                via 192.168.23.2 (768/256), GigabitEthernet0/3
+            .
+            .
+            .
+        ```
+    - Meanwhile `sh ip route` will get you this
+    - The summary will be:
+    - 
+    ```bash
+        Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
+                D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+                N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+                E1 - OSPF external type 1, E2 - OSPF external type 2
+                i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
+                ia - IS-IS inter area, * - candidate default, U - per-user static route
+                o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+                a - application route
+                + - replicated route, % - next hop override, p - overrides from PfR
+        
+        D   192.168.12.0/24 [90/512] via 192.168.13.1, 00:22:38, GigabitEthernet0/2
+            192.168.13.0/24 is variably subnetted 2 subnets, 2 masks
+        C       192.168.13.0/24 is directly connected, GigabitEthernet0/2
+        L        192.168.13.3/32 is directly connected, GigabitEthernet0/2
+            192.168.23.0/24 is variably subnetted, 2 subnets, 2 masks
+        C       192.168.23.0/24 is directly connected, GigabitEthernet0/3
+        L       192.168.23.0/24 is directly connected, GigabitEthernet0/3
+    ```
+
+- `variance` command will reveal the route with he larger metric in the routing table
+    - Note again: only the **smallest AD can enter the routing table**
+    - Punch in these commands:
+    - This commands means to show route that has metric smaller than (FD * 2 = 1024) will be shown
+    - Since `768` is smaller than 1024, but bigger than 512, hence it shows up now but not before!
+    ```text
+        router eigrp 123
+        variance 2
+        end
+    ```
+    - Time to verify with `sh ip route`. You will see `[768]` now !
+    - 
+    ```text
+        Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
+                D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+                N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+                E1 - OSPF external type 1, E2 - OSPF external type 2
+                i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
+                ia - IS-IS inter area, * - candidate default, U - per-user static route
+                o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+                a - application route
+                + - replicated route, % - next hop override, p - overrides from PfR
+        
+        D   192.168.12.0/24 [90/768] via 192.168.23.2, 00:22:38, GigabitEthernet0/2
+                            [90/512] via 192.168.13.1, 00:22:38, GigabitEthernet0/2
+            192.168.13.0/24 is variably subnetted 2 subnets, 2 masks
+        C       192.168.13.0/24 is directly connected, GigabitEthernet0/2
+        L        192.168.13.3/32 is directly connected, GigabitEthernet0/2
+            192.168.23.0/24 is variably subnetted, 2 subnets, 2 masks
+        C       192.168.23.0/24 is directly connected, GigabitEthernet0/3
+        L       192.168.23.0/24 is directly connected, GigabitEthernet0/3
+    ```
+
+## 10.12 BGP = Border Gateway Protocol 
+- Background:
+    - BGP
