@@ -19,6 +19,12 @@ Lesson 9 - CCNA Fast Track (June, 2025). We left off at page 163. It ends at the
 3. MC can also ask you to bunch/ summarize 4 routes into 3 routes, grouping 2 
 
 4. You will be tested on configuring BGP
+5. You will be tested on identifying BGP numbers 
+6. There is practical for ACL, which is to filter unwanted traffic
+
+7. Some good techniques... if you see `$` in the cli, then there's more info in the summary!!
+
+8. Please also note... ACL can be applied to interfaces... as well as **VLAN**!
 
 # 10. Dynamic Roututing 
 ## 10.9 EIGRP = Enhanced Interior Gateway Routing Protocol (Dynamic)
@@ -255,4 +261,245 @@ Lesson 9 - CCNA Fast Track (June, 2025). We left off at page 163. It ends at the
 
 ## 10.12 BGP = Border Gateway Protocol 
 - Background:
-    - BGP
+    - BGP is a routing protocol used for inter-domain routing within orgs/ ISPs.
+    - Usually each orgs/ ISP has a unqiue Autonoumous System (AS) for number of identification
+    - Hence, BGP allows routing different AS's, also known as Exterior Gateway Protocol (EGP)
+    - But OSPF, EIGRP are considered as Interior Gateway Protocol(IGP)
+    - Gist:
+        - IGP = Intra-AS = Within the same AS
+        - EGP = Inter-AS = Routing between diff AS
+- Common AS in HK
+    - HSBN = AS 4515
+
+## 10.13 Basic configs of BGP
+- Topology: ![](../../../../../assets/images/ccna/lesson9/lesson9_bgp_1.jpg)
+- Setup R1
+    - 
+    ```text
+        en
+        conf t
+        hostname Router1
+
+        int g0/1
+        ip address 10.0.0.1 255.0.0.0
+        no shut
+
+        int g0/0
+        ip address 192.168.1.1 255.255.255.0
+        no shut
+
+        end
+    ```
+
+- Setup R2
+    - 
+    ```text
+        en
+        conf t
+        hostname Router1
+
+        int g0/0
+        ip address 192.168.1.2 255.255.255.0
+        no shut
+
+        int g0/1
+        ip address 172.16.0.2 255.255.0.0
+        no shut
+
+        end
+    ```
+
+- Setting up R1 for BGP. Turning on bgp with `router bgp 100`.
+    - 
+    ```text
+        conf t
+        router bgp 100
+        neighbor 192.168.1.2 remote-as 200
+        network 10.0.0.0 mask 255.0.0.0
+    ```
+    - Break down:
+        - `router bgp 100` = startup BGP + setup router in AS 100
+        - `nei 192.168.1.2 remote-as 200` = configure next hop (R2) as a neighbor with AS number of 200.
+        - `network 10.0.0.0 mask 255.0.0.0` = Configure BGP announcing 10.0.0.0/8 as neighbor/peer. This network is from R1 (own self).
+
+- Setting up R2 for BGP as well
+    - 
+    ```text
+        conf t
+        router bgp 200
+        neighbor 192.168.1.1 remote-as 100
+        network 176.16.0.0 mask 255.255.0.0
+    ```
+    - Break down:
+        - `router bgp 100` = startup BGP + setup router in AS 200
+        - `nei 192.168.1.2 remote-as 200` = configure next hop (R1) as a neighbor with AS number of 100.
+        - `network 10.0.0.0 mask 255.0.0.0` = Configure BGP announcing 176.16.0.0/16 as neighbor/peer for propagation. This network is from R2 (own self).
+
+- Verify with `sh ip route`, you can also `ping 172.16.0.2` (ping the real IP)
+    - `B` here means `BGP` btw
+    - 
+    ```text
+        Codes:  L - local, C - connected, s - static, R - RIP, M - mobile, B - BGP
+                D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+                N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+                E1 - OSPF external type 1, E2 - OSPF external type 2
+                i - IS-IS, su - IS-IS summary, L1 - IS-IS level 1, L2 - IS-IS level 2
+                ia - IS-IS inter area, * - candidate default, U - per-user static route
+                o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+                a - application route
+                + - replicated route, % - next hop override, p - overrides from PfR
+        
+            10.0.0.0/8 is variably subnetted 2 subnets, 2 masks
+        C       10.0.0.0/8 is directly connected, GigabitEthernet0/1
+        L       10.0.0.1/8 is directly connected, GigabitEthernet0/1
+        B   172.16.0.0/16 [20/0] via 192.168.1.2, 00:00:17
+            192.168.1.0/24 is variably subnetted, 2 subnets, 2 masks
+        C       192.168.1.0/24 is directly connected, GigabitEthernet0/0
+        L       192.168.1.1/24 is directly connected, GigabitEthernet0/0
+    ```
+    - We will study what the `0` means in `[20/0]` in CCNP
+
+
+# 11. Access Control Lists (ACL)
+
+- Background:
+    - By deafult, router routes data to other devices
+    - To enhance routing security and reducing routing network traffic = **USE A FILTER**
+    - Gist: ACL = filtering unwanted traffic
+
+## 11.1 Rules fo ACL
+
+- Command: `sh access list 1` to check what ACL rules are already present
+- Important facts:
+    - 1 ACL has 1 or more ACL rules
+    - 1 ACL rule = a condition + an action 
+    - Something like this ... topology ![](../../../../../assets/images/ccna/lesson9/lesson9_acl_1.jpg)
+    - The rule conditions contain parameters, e.g. IP address, TCP/UDP port number..., if the parameters condition is matched -> action is executed. Packet is denied/ allowed :D
+- Let's look at AL logic gate in action !
+    - topology: ![](../../../../../assets/images/ccna/lesson9/lesson9_acl_2.jpg)
+
+## 11.2 IP Standed, extended ACL !
+
+- 2 different ACL/ Access List:
+    - (IP) Standard Access List = Simpler, fewer parameters (usually only Source IP address + IP wildcard mask)
+    - (IP) Extended Access List = Complex, more params 
+        - params can include...
+            - TCP/IP protocol type (TCP, UDP, ICMP, IP, ... etc)
+            - Source IP address and source IP wildcard mask
+            - Source port number for TCP/UDP
+            - Destination IP address & destination IP wildcard mask
+            - Destination port number
+            - etc...
+
+## 11.3 Access List numbering
+- Background:
+    - The numbering can help determine the type, kind of access list
+    - Typically speaking:
+        - ACL number 1-99 = (IP) Standard Access List
+        - ACL number 100-199 = (IP) Extended Access List
+
+## 11.4 ACL for inbound + outbound data
+- Uses of ACL = filter data flowing into/out of a specific direction
+- Terminology:
+    - In-bound data = data flowing from network into router
+    - Out-bound data = data flowing from router out to network
+
+## 11.5 Examples of configuring IP access lists
+
+- Applying it in real life, goal is to block/allow traffic into R1 !
+
+- Let's look at the topology: ![](../../../../../assets/images/ccna/lesson9/lesson9_acl_3.jpg)
+
+- Step 1: R1 setup
+    - 
+    ```text
+        en
+        conf t
+        hostname R1
+
+        int g0/0
+        ip address 192.168.1.1 255.255.255.0
+        no shut
+    ```
+
+- Step 2: R2 setup
+    - 
+    ```text
+        en
+        conf t
+        hostname R2
+
+        int g0/0
+        ip address 192.168.1.2 255.255.255.0
+        no shut
+    ```
+
+- Step 3: R1 setting up the first rule - to setup the deny thing
+    - 
+    ```text
+        conf t
+        access-list 100 deny tcp 0.0.0.0 255.255.255.255 192.168.1.1 0.0.0.0 eq 23
+        end
+    ```
+    - Let's break it down
+        - `access-list 100 deny tcp 0.0.0.0 255.255.255.255 192.168.1.1 0.0.0.0 eq 23`, let's break it down further
+            - `access-list 100` = if ACL number is larger than 100, then it's IP Extended Access list
+            - `deny tcp` = denying TCP protocol (it's important to note `telnet` = tcp port 23)
+            - `0.0.0.0 255.255.255.255` = The source IP address and source IP wildcard mask = meaning ALL ADDRESSESSSS
+            - `192.168.1.1 0.0.0.0` = The destination IP address and the destination IP wildcard mask = targeting only `192.168.1.1`
+            - `eq 23` = This tag placed after the destination means destination port number 23 (port number for telnet server)
+
+- Step 4: R1 setting up the second rule, allowing anything else!
+
+    - 
+    ```text
+        en
+        conf t
+        access-list 100 permit ip any any
+    ```
+    - Let's break it down
+        - `ip` means ALL TCP/IP protocol
+        - `any` = is the same as `0.0.0.0 255.255.255.255` = any is the source IP address and source IP wildcard mask
+        - `any` = is the same as `0.0.0.0 255.255.255.255` = any is the destination IP address and destination IP wildcard mask
+
+- Step 5: Now the 2 rules are configured, time to activate them!
+    - 
+    ```text
+        conf t
+        int g0/0
+
+        ip access-group 100 in
+
+        end
+    ```
+    - `ip access-group 100 in` means ACL number 100 on int g0/0 will filter inbound data (works for VLAN too!)
+    - BTW `in` means implementing the access group !
+    - Note: ACL number is also found in L3 headers!
+
+- Step 6: Attempt to send a telnet from R2 to R1
+    - In R2 try `telnet 192.168.1.1`, it should fail as expected since the application of the access list 100 to intg0/0 is to filter inbound data
+
+- Step 7: Let's check what rules and verify the 2 rules in R1, `sh access-list`
+    - The summary should contain the 2 ACL rules we have set. Note the `(1 match)` means someone tried to attack this rule before
+    - 
+    ```text
+        Extended IP Access list 100
+            10 deny tcp any host 192.168.1.1 eq telnet (1 match)
+            20 permit ip any any
+    ``` 
+
+- Step 8: We can also verify the ACL rules that is imposed on the interface directly through `sh ip int g0/0`
+    - Summary table:
+        - Note: Outbound has NO filter, Inbound is ACL and has 2 rules !
+        ```text
+            GigabitEthernet0/0 is up, line protocol is up
+                Internet address is 192.168.1.1/24
+                Broadcast address is 255.255.255.255
+                Address determined by setup command
+                MTU is 1500 bytes
+                Helper address is not set
+                Directed broadcast forwarding is disabled
+                Outgoing access list is not set
+                Inbound access list is 100
+                Proxy ARP is enabled
+        ```
