@@ -26,6 +26,9 @@ Lesson 9 - CCNA Fast Track (June, 2025). We left off at page 163. It ends at the
 
 8. Please also note... ACL can be applied to interfaces... as well as **VLAN**!
 
+9. You will be tested [Named Access List](./#117-named-access-list) praticals
+10. You will be tested [Dynamic NAT](./#122-dynamic-nat-with-overload) pratical
+
 # 10. Dynamic Roututing 
 ## 10.9 EIGRP = Enhanced Interior Gateway Routing Protocol (Dynamic)
 - Intro:
@@ -487,6 +490,7 @@ Lesson 9 - CCNA Fast Track (June, 2025). We left off at page 163. It ends at the
             10 deny tcp any host 192.168.1.1 eq telnet (1 match)
             20 permit ip any any
     ``` 
+    - IMPORTANT note: The order of these rules are VERY IMPORTANT, top one gets filtered first !! For example, if we switch the order, everything is allowed and nothing is blocked... GG 
 
 - Step 8: We can also verify the ACL rules that is imposed on the interface directly through `sh ip int g0/0`
     - Summary table:
@@ -503,3 +507,63 @@ Lesson 9 - CCNA Fast Track (June, 2025). We left off at page 163. It ends at the
                 Inbound access list is 100
                 Proxy ARP is enabled
         ```
+
+- Step 9: `ping 192.168.1.1`, ping is not telnet so it is allowed through ACL list
+
+
+## 11.6 Second Example for Data traffic filtering
+
+- Topology: ![](../../../../../assets/images/ccna/lesson9/lesson9_acl_4.jpg)
+
+- Background of this topology:
+    - We wish to filter going into Server A from host in the subnet of 192.168.2.0/26. We will setup 2 rules:
+        - Rule 1: No ping !
+        - Rule 2: Allowing other protocols through
+
+- Step 1: `access-list 100 deny icmp 192.168.2.0 0.0.0.63 10.10.1.1 0.0.0.0 echo`
+    - Note! `eq` is NOT Required before `echo`
+    - Note! You can replace the last part `... 10.10.1.1 0.0.0.0 ... ` into `... host 0.0.0.0 ... `
+    - Recall subnet mask vs wilcard mask
+        - subnet mask: `/26` -> `11111111.11111111.11111111.11000000`
+        - wildcard mask: inverted `/26` (Hence 32-26 so it's `/6` bits) `00000000.00000000.00000000.00111111` = `0.0.0.63`
+- Step 2: `access-list 100 permit ip any any` = permitting other protocol!
+
+## 11.7 Named Access List
+- Background: Besides creating a numbered access list (100, 200...) you can create a **NAMED** one to see the ACL better :D
+- `extended dropTelnet` = the new ACL group name
+```text
+    en
+    conf t
+    
+    ip access-list extended dropTelnet
+
+    deny tcp any any eq 23
+    permit ip any any
+
+    intg0/0
+    ip access-group dropTelnet in
+    end
+```
+
+# 12. NAT =  Network Address Translation
+
+## 12.1 Public IP Address and Private IP Address
+- Background:
+    - For a computer host to communicate with other host, a public IP address is needed (of course, this is not free)
+
+- Private IP Address ranges:
+    - `10.0.0.0` - `10.255.255.255` (all IP that starts with `10.x.x.x` are private IP address)
+    - `172.16.0.0` - `172.31.255.255`
+    - `192.168.0.0` - `192.168.255.255` = Our usual private IP address
+    - Note: Private IP can be used without internet!
+
+- IANA = Internet Assigned Numbers Authority
+    - In charge of Public IP and supplying BGP AS numbers!
+    - Does NOT supply and apply IP address
+    - Routers on the internet has no responsiblity to route data packets for private IP address
+
+## 12.2 Dynamic NAT with overload
+- Background:
+    - Dynamic NAT overload is good at bunching up 
+    - Via public network, allowing a single IP to be shared by multiple devices (this involves port number translation). This is why Dynamic NAT is also known as **Port Address Translation(PAT)**
+    
