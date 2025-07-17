@@ -562,8 +562,89 @@ Lesson 9 - CCNA Fast Track (June, 2025). We left off at page 163. It ends at the
     - Does NOT supply and apply IP address
     - Routers on the internet has no responsiblity to route data packets for private IP address
 
+- Topology: ![](../../../../../assets/images/ccna/lesson9/lesson9_nat_1.jpg)
+
 ## 12.2 Dynamic NAT with overload
 - Background:
     - Dynamic NAT overload is good at bunching up 
     - Via public network, allowing a single IP to be shared by multiple devices (this involves port number translation). This is why Dynamic NAT is also known as **Port Address Translation(PAT)**
-    
+
+## 12.4 Configuration of Dynamic NAT with overloadding
+
+- Topology: ![](../../../../../assets/images/ccna/lesson9/lesson9_nat_2.jpg)
+
+- Setup walkthrough:
+    - Step 1: Properly setup R1
+        - 
+        ```text
+            en
+            conf t
+            hostname R1
+
+            int g0/2
+            ip address 192.168.1.1 255.255.255.0
+            no shut
+
+            int g0/0
+            ip address 210.17.166.28 255.255.255.0
+            no shut
+
+            end
+        ```
+    - Step 2: Properly setup R2
+        - 
+        ```text
+            en
+            conf t
+            hostname R2
+
+            int g0/0
+            ip address 210.17.166.25 255.255.255.0
+            no shut
+            end
+        ```
+
+    - Step 3: Properly setup R3
+        - Note: Currently no NAT configs, R3 with private IP can only access 192.168.1.1 but not the internet!
+        - Currently: default gateway is pointing to 192.168.1.1
+        - 
+        ```text
+            en
+            conf t
+            hostname R3
+
+            int g0/2
+            ip address 192.168.1.3 255.255.255.0
+            no shut
+
+            exit
+
+            ip route 0.0.0.0 0.0.0.0 192.168.1.1
+            
+            end
+        ```
+
+    - Step 4: trying `ping`-ing in R3
+     - 
+     ```text
+        ping 192.168.1.1
+        !!!!!
+        Success rate is 100 percent
+
+        ping 210.17.166.25
+        .....
+        Success rate is 0 percent
+     ```
+
+    - Step 5: R1 activate Dynamic NAT on the int, first entering int g0/0 `ip nat outside` = connecting to outside network (i.e. internet)
+    - Step 6: R1 activate Dynamic NAT on the int, first enter int g0/2 `ip nat inside` = connecting to inside network (i.e. private network where NAT clients are located)
+    - Step 7: Do this on R1
+        - 
+        ```text
+            access-list 100 permit ip 192.168.1.1 0.0.0.255 any
+        ```
+    - Step 8: Define which public IP can be included in NAT, The NAT pool name = public ip pool `ip nat pool public-ip-pool 210.17.166.28 210.17.166.28 netmask 255.255.255.0`
+        - pool start ip: `210.17.166.28`
+        - pool end IP public: `210.17.166.28`
+        - Only 1 IP can play NAT
+    - Step 9: Verify with `do sh run | inc ip nat`
