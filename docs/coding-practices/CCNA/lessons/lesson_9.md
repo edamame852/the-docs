@@ -643,8 +643,20 @@ Lesson 9 - CCNA Fast Track (June, 2025). We left off at page 163. It ends at the
         ```text
             access-list 100 permit ip 192.168.1.1 0.0.0.255 any
         ```
-    - Step 8: Define which public IP can be included in NAT, The NAT pool name = public ip pool `ip nat pool public-ip-pool 210.17.166.28 210.17.166.28 netmask 255.255.255.0`
-        - pool start ip: `210.17.166.28`
-        - pool end IP public: `210.17.166.28`
+    - Step 8: Define which public IP can be included in NAT, The NAT pool name = pool of public ip addresses `ip nat pool public-ip-pool 210.17.166.28 210.17.166.28 netmask 255.255.255.0`
+        - pool start ip: `210.17.166.28` = the starting IP address of the address pool
+        - pool end IP public: `210.17.166.28` = This is also the ending IP address of the address pool
         - Only 1 IP can play NAT
+        - This range of public IPs (aka the range here although only has 1 IP) can be shared by multiple hosts in private networks for NAT translations
+        - `255.255.255.0` = This is the subnet mask assigned by ISP
     - Step 9: Verify with `do sh run | inc ip nat`
+
+    - Step 10: Tell NAT router to do NAT translatoin for private address in `access list 100` using public address from address prool `public-ip-pool`
+        - 
+        ```text
+            ip nat inside source list 100 pool public-ip-pool overload
+        ```
+        - Breakdown:
+            - Alerts the NAT Router 
+            - The origin of the packet = "inside network" + "source address from access list 100"
+            - NAT router shd translate
