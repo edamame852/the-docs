@@ -659,4 +659,22 @@ Lesson 9 - CCNA Fast Track (June, 2025). We left off at page 163. It ends at the
         - Breakdown:
             - Alerts the NAT Router 
             - The origin of the packet = "inside network" + "source address from access list 100"
-            - NAT router shd translate
+            - NAT router should ... 
+                - source address -> public address (from address pool's "public-ip-pool") via dunamic NAT overload
+    - NOTE: Dynamic NAT = PAT 
+    - NOTE: Non-overloading is out-syllbus
+
+    - Step 11a: Verify from R3 with `ping 210.17.166.25`
+        - Meaning behind it... NAT Router translates R3's private address to public address (aka 210.17.166.28) and that's why we have communication from and back in R2
+        - NOTE: we can also do `echo reply` now 
+    - Step 11b: Verify with `sh ip nat translations`
+        - Summary: Please ignore Outside local and Outside global since they are out syll
+        - 
+        ```text
+            Pro Inside global       Inside local        Outside local       Outisde global
+            210.17.166.28:6         192.168.1.3:6       210.17.166.25:6     i don't care.
+        ```
+        - We have port number 6 here, if we have tcp/udp then it would be a different port number
+        - Use of `sh ip nat translations` = view and verify the NAT translation performed by NAT router. All active NAT translaion will be shown
+        - "Iniside Global" = Real IP = Public IP is registered address, inside local address = inside host address (i.e. private IP address)
+        
