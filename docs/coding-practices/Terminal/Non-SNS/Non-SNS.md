@@ -54,7 +54,7 @@ bold=$(tput bold);
 reset=$(tput sgr0);
 
 
-PS1+="\[${blue}\]\u";
+PS1="\[${blue}\]\u";
 PS1+="\[${white}\]:";
 PS1+="\[${orange}\]\h";
 PS1+="\[${black}\] ";
@@ -77,6 +77,7 @@ Just type this into your terminal, no need to source
 ```bash
 git config --global user.email "your@email.com"
 ```
+Note, if you wanna do git operations via HTTPS connection, you can do so by requesting a personal access token + adding that info to ` ~/.gitconfig`
 
 # Setting up git sudo users (under sudoers)
 ## /etc/sudoers.d
