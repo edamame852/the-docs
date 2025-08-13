@@ -14,6 +14,15 @@
 
 https://user-images.githubusercontent.com/85418632/211225192-7e5d1116-2f4f-4305-bb9b-437fe47df071.mp4 -->
 
+## Adding docker-compose capability to host app locally
+1. Download docker compose `sudo apt install docker-compose`
+2. Sanity Check `docker compose --version`
+3. Enabling docker `sudo systemctl start docker`
+4. Sanity Check with `sudo systemctl status docker`
+5. Add user to the docker group `sudo usermod -aG docker $USER`
+6. 
+
+
 ## Quiz feature added!
 
 Heavily inspired by [mkdocs-jekyll](https://github.com/vsoch/mkdocs-jekyll) please check them out
