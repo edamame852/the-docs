@@ -14,13 +14,30 @@
 
 https://user-images.githubusercontent.com/85418632/211225192-7e5d1116-2f4f-4305-bb9b-437fe47df071.mp4 -->
 
-## Adding docker-compose capability to host app locally
-1. Download docker compose `sudo apt install docker-compose`
-2. Sanity Check `docker compose --version`
-3. Enabling docker `sudo systemctl start docker`
-4. Sanity Check with `sudo systemctl status docker`
-5. Add user to the docker group `sudo usermod -aG docker $USER`
-6. 
+## Adding docker-compose capability to host app locally (on localhost:8000)
+~~1. Download docker compose `sudo apt install docker-compose`~~
+~~2. Sanity Check `docker compose --version`~~
+~~3. Enabling docker `sudo systemctl start docker`~~
+~~4. Sanity Check with `sudo systemctl status docker`~~
+~~5. Add user to the docker group `sudo usermod -aG docker $USER`~~
+6. `sudo apt remove python3-apt`
+7. 
+
+```bash
+sudo apt update
+sudo apt install ca-certificates curl gnupg
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt update
+```
+
+8. `sudo apt install docker-compose-plugin`
+
+9. `docker compose up` since it's Docker Compose V2
 
 
 ## Quiz feature added!
