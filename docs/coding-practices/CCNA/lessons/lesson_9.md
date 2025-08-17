@@ -29,6 +29,8 @@ Lesson 9 - CCNA Fast Track (June, 2025). We left off at page 163. It ends at the
 9. You will be tested [Named Access List](./#117-named-access-list) praticals
 10. You will be tested [Dynamic NAT](./#122-dynamic-nat-with-overload) pratical
 
+11. `K9` in an image means it has encrption capabilties and can be ssh into.
+
 # 10. Dynamic Roututing 
 ## 10.9 EIGRP = Enhanced Interior Gateway Routing Protocol (Dynamic)
 - Intro:
@@ -569,7 +571,7 @@ Lesson 9 - CCNA Fast Track (June, 2025). We left off at page 163. It ends at the
     - Dynamic NAT overload is good at bunching up 
     - Via public network, allowing a single IP to be shared by multiple devices (this involves port number translation). This is why Dynamic NAT is also known as **Port Address Translation(PAT)**
 
-## 12.4 Configuration of Dynamic NAT with overloadding
+## 12.3 Configuration of Dynamic NAT with overloadding
 
 - Topology: ![](../../../../../assets/images/ccna/lesson9/lesson9_nat_2.jpg)
 
@@ -672,9 +674,112 @@ Lesson 9 - CCNA Fast Track (June, 2025). We left off at page 163. It ends at the
         - 
         ```text
             Pro Inside global       Inside local        Outside local       Outisde global
-            210.17.166.28:6         192.168.1.3:6       210.17.166.25:6     i don't care.
+            210.17.166.28:6         192.168.1.3:6       i don't care.       i don't care.
         ```
         - We have port number 6 here, if we have tcp/udp then it would be a different port number
         - Use of `sh ip nat translations` = view and verify the NAT translation performed by NAT router. All active NAT translaion will be shown
-        - "Iniside Global" = Real IP = Public IP is registered address, inside local address = inside host address (i.e. private IP address)
-        
+        - "Iniside Global" = Real IP = Public IP is registered address
+        - "Inside local" = fake IP = inside host address (i.e. private IP address)
+
+    - Remark:
+        - The int (i.e. g0/0) that is facing outside network can be specified too like : `ip nat instide sourcfe list 100 int g0/0 overload`. This is much simplier.
+            - Since the IP address used by g0/0 will be treated as an "inside global" address = public IP address by NAT, which is exactly what NAT pool neede4d
+            - This command is useful in that g0/0 is using a public IP, where it's typically dynamically given from the ISP directly !
+            - Dynamic IP = If you have 1, 2 shall follow, it will die until it expires from the routing table!
+        - Rather that the usual pool method which is: `ip nat source list 100 pool public-ip pool overload` found [here](./#step-10-tell-nat-router-to-do-nat-translatoin-for-private-address-in-access-list-100-using-public-address-from-address-prool-public-ip-pool)
+        - Uses of Private IP:
+            - Preventing device from directly reaching the outside internet by conserving IPv4 public address!
+
+
+
+## 12.4 Configuring Static NAT
+- Clarifications and setting the record straight
+    - Dynamic NAT with overload:
+        - = Public IP address + port number is mapped dynamically when NAT client starts/initiates an internet connection by sending data out
+        - Initiation begins at NAT Client, connecting to Internet
+    - Static NAT:
+        - = Static NAT is need for connecting to web server on private network 
+        - Initiation begins at hosts in the Internet, connecting to NAT client / web server on private network 
+        - Static NAT offers permanent entry and mapping to the NAT translation table, where a public IP address port number is statically mapped to a NAT client 
+
+- Diagram for Static NAT
+    - Topology: ![](../../../../../assets/images/ccna/lesson9/lesson9_nat_3.jpg) 
+
+- Steps to setup static NAT...
+    - Step 1: Use global config command `ip nat inside source static tcp 192.168.1.3:80 210.17.166.28:80` (Note: 192.168.1.3 is a web server in a private network)
+        - Router 1. REALLY UNSURE WHY It's `de` and not `ip nat inside`
+        ```text
+            config t
+            ip nat inside source static tcp 192.168.1.3:80 210.17.166.28:80
+        ```
+        - Step 2: Santiy check on R1. `tr` means translations btw
+        ```text
+            sh ip nat tr
+
+            Pro Inside global           Inside local
+            tcp 210.17.166.28:80        192.168.1.3:80
+        ```
+
+# 13 SSH : Secure SHell
+
+## 13.1 Intro
+- Telnet data is non-encrptyed
+- SSH has telnet features, but this time with encrption (espically in SSHv2), connecting to CLI of any routers/ switches is better
+- Remark: If the image has `k9` as a prefix, it supports ssh and has encrption capabilities.
+
+- In companies and softwares like Wireshark...  they follow the tcp stream
+
+- Demo on ssh between routers
+    - Topology: ![](../../../../../assets/images/ccna/lesson9/lesson9_ssh.jpg) 
+    - Step 1: Steup R1 and R2 accordingly
+        - Setup R1 first
+        ```text
+            en
+            conf t
+            hostname R1
+            int g0/0
+            ip address 192.168.1.1 255.255.255.0
+            no shut
+            end
+        ```
+        - Then setup R2
+        - 
+        ```text
+            en
+            conf t
+            hostname R1
+            int g0/0
+            ip address 192.168.1.2 255.255.255.0
+            no shut
+            end
+        ```
+    - Step 2: R1 setup rsa encrption. `systematic.com` is for setting the domain name. `rsa` is an encryption algo
+        - 
+        ```text
+            conf t
+            ip domain-name systematic.com
+            crypto key generate rsa
+            1024
+            end
+        ```
+        - Afer `crypto key generate rsa` = 
+        ```text
+            Chose the size of the key modulus in the range of 360 to 4096 for your
+                General Purpose Keys. Chooing a key modulus greater than 512 may take a few minues
+            How many bits in the modulus [512]: 1024
+            % Generating 1024 bit RSA keys, keys will be non-exportable...
+            [OK] (elapsed time was 0 seconds)
+
+        ```
+    
+## 13.2 Understanding the relation between rsa and ssh
+- Before Router can be an ssh server, host names + domain names must be configured first for the rsa keys to be generated (must for ssh servers)
+- SSH defaults to using 512 bit keys, you're free to choose from 360 bits to 2048 bits. Longer bits = more processing power
+- If you don't config hostnames and domain names on your Router before generating rsa keys...
+    - Consequence: 
+    ```text
+        % Please define a hostname other than Router
+        or
+        % Please define a domain-name firsst
+    ```
+
