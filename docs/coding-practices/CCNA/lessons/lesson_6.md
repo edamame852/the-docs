@@ -3,6 +3,7 @@ title: lesson_6
 layout: default
 parent: CCNA
 grand_parent: Coding Practices
+nav_order: 6
 ---
 ## Table of contents
 {: .no_toc .text-delta }
