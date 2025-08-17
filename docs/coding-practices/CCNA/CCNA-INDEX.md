@@ -47,8 +47,8 @@ has_children: true
 - 1.5 Compare TCP to UDP
 - 1.6 Configure and verify IPv4 addressing and subnetting
 - 1.7 Describe private IPv4 addressing
-- 1.8 Configure and verify IPv6 addressing and prefix
-- 1.9 Describe IPv6 address types
+- 1.8 Configure and verify IPv6 addressing and prefix [lesson10-IPv6]
+- 1.9 Describe IPv6 address types [lesson10-IPv6](../lessons/lesson_10/#14-ipv6)
     - 1.9.a Unicast (global, unique local, and link local)
     - 1.9.b Anycast
     - 1.9.c Multicast
