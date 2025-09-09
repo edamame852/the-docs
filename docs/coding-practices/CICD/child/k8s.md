@@ -8,12 +8,13 @@ has_children: true
 
 # Terminologies
 1. `kubectl` = The k8s command line tool
-2. container = 
-3. service = 
+2. container = container runs inside of pods!
+    - Containers are lightweight, standalone 
+3. service = a k8s resource that provides stable network endpoint (IP & DNS Name) to access a set of pods, enabling communication between pods/ with outside network
 4. k8s (API) resources = all k8s objects, entites manged by API resources (e.g. deployments, pods, services...etc)
-5. k8s API server = kubectl commands go to here; it's the centeral management component in the k8s cluster, the frontend of the k8s control plane 
+5. k8s API server = kubectl commands go to here; API Server = centeral management component in the k8s cluster = frontend of the k8s control plane 
 6. Ingress vs Egress
-    - Similarity: Both are used to describe flow of network traffic from pods to someone else/ some other resources (e.g. pod/ services)
+    - Similarity: Both are used to describe flow of network traffic from pods to someone else/ some other resources (e.g. pod/ services) 
     - Difference:  
         - ingress: incoming traffic (from external to pod) = who can talk to your pod = into cluster/pod/services
             - example:
@@ -50,6 +51,8 @@ Cluster
 ```
 
 # Questions
+33. 
+
 34. Which of the following CANNOT be performed with network policies in k8s?
 - 5 Options:
     - Only accepting connections from frontend pods
