@@ -51,7 +51,16 @@ Cluster
 ```
 
 # Questions
-33. 
+33. Which of the following are valid reasons for using k8s?
+- Options:
+    - k8s automates high avaliability and DR (Disater Recovery)
+    - :heavy_check_mark: k8s automates the scheduling, starting, stopping, and updating of containers
+        - Explanation: k8s auto start, stop, scale, update containerized apps and makes deployment easy :D
+    - :heavy_check_mark: All apps deployed to k8s can be scaled by deafult, based on memory and cpu consumption
+        - Explanation: k8s has horizontal scaling (e.g. on mem and cpu  usages) handling muliple workloads without manual involvement
+    - :heavy_check_mark: K8s automates container patching + ensures the latest common vulns exposures (CVE) are fixed
+        - Explanation: k8s has features like auto rolling updates = to patch security loopholes and update containers. k8s has eco-system to include tools and vlun scanning and monitoring
+    - Containers deployed to k8s are automatically secured.
 
 34. Which of the following CANNOT be performed with network policies in k8s?
 - 5 Options:
