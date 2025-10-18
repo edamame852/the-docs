@@ -15,6 +15,8 @@ I intend to log the things I learn for the following languages/framework/ on my 
 - CICD 
     - YAML data serial-ization language (i.e. Github Action)
     - Jenkins
+    - Terraform
+    - Ansible
 - Frontend
     - React
     - Redux
