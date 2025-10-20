@@ -54,4 +54,32 @@ has_children: true
 
 1. Logics in ansible
      - Ansible will always look for a config file, default look up location is `/etc/ansible/ansible.cfg`
-     - 
+     - Ansible config file governs and controls the default behavior using a set of params
+     - For introduction, here are 7 common Ansible section types
+          - `[defaults]` = locations to modules (libs), roles, logs, plugins...
+               - Example
+               ```yaml
+                    [defaults]
+                    
+                    inventory           = /etc/ansible/hosts
+                    log_path            = /var/log/ansible.log
+
+                    library             = /usr/share/my_modules/
+                    roles_path          = /etc/ansible/roles
+                    action_plugins      = /usr/share/ansible/plugins/action
+                    
+                    gathering           = implicit # Whether Ansible should be gathering facts as default. Implicit is yes, explicit is no
+
+                    timeout             = 10 # How long before giving up an ssh connection
+                    forks               = 5  # How many hosts should ansible target when executing playbooks
+               ```
+          - `[inventory]` = can enable certain inventory plugins, rest will discuss later
+               - Example
+               ```yaml
+                    [inventory]
+               ```
+          - `[privilage_esclation]`
+          - `[paramiko_connection]`
+          - `[ssh_connection]`
+          - `[persistent_connection]`
+          - `[colors]`
