@@ -60,7 +60,7 @@ has_children: true
                - Example
                ```yaml
                     [defaults]
-                    
+
                     inventory           = /etc/ansible/hosts
                     log_path            = /var/log/ansible.log
 
@@ -77,9 +77,50 @@ has_children: true
                - Example
                ```yaml
                     [inventory]
+
+                    enable_plugins      = host_list, virtualbox, yaml, constructed
                ```
           - `[privilage_esclation]`
           - `[paramiko_connection]`
           - `[ssh_connection]`
           - `[persistent_connection]`
           - `[colors]`
+
+     2. Overriding ansible default vars
+     - Overriding config doesn't require one to contain all values/sections, just having the overriding parts is GOOD ENOUGH. Non-overriding parts will be picked up from the next config file in the priority chain (so smart lol)
+     - Default location of the ansible config is `/etc/ansible/ansible.cfg`
+     - These values inside the default cfg will be considered even when the ansible executed ANYWHERE on the box
+     - Example use case 1: Overriding default params with new config under same playbook dir
+          - I have default ansible config at /etc/ansible/ansible.cfg
+          - 3 different types of playbooks: web, db, network
+               - web - just regular default config (/opt/web-playbook/)
+               - db - excluding color (path: /opt/db-playbooks/)
+               - network - extend default ssh timeout (path: /opt/network-playbooks/)
+          - Solution: Making a copy of the original config file into each of the dirs. AKA 3 .cfg files in (/opt/xxxx/ansible.cfg) and customize each of it. Very slow solution.
+
+     - Example use case 2: Override default configs with .cfg outside the playbook dir, maybe on parent level. AKA we're considering taking ansible-web.cfg from `/opt/web-playbooks/ansible-web.cfg` to `/opt/ansible-web.cfg`
+          - Set new ansible path using env vars: `$ANSIBLE_CONFIG=/opt/ansible-web.cfg ansible-playbook.yml`
+          - Default path is now `/opt/ansible-web.cfg` instead of `/etc/ansible/ansible.cfg`
+
+     - Quick summary: total of 3 methods introduced just now to trigger ansible playbooks
+          - Run as default, targeting config file `/etc/ansible/ansible.cfg` (4th priority)
+          - Have .cfg file in any sub-dir or nested dirs (2nd priority)
+          - Specifying env vars `ANSIBLE_CONFIG` (1st priority)
+
+     3. Ansible config hierarchy logic (There's 4 in total)
+          - 1st priority - env var `ANSIBLE_CONFIG`
+          - 2nd priority - current dir's ansible.cfg (/current/ansible.cfg)
+          - 3rd priority - ansible.cfg on home (/home/user/ansible.cfg)
+          - 4th priority - Default `/etc/ansible/ansible.cfg`
+
+     4. New use case, Example use case 3: Got new playbooks but don't want custom configs for all
+          - Solution: 
+               - set gathering facts from implicit to explicit
+               - Have all ansible.cfg gather facts with default config instead of creating anew .cfg in playbook's directory
+          - Issue:
+               - Default /etc/ansible/ansible.cfg has the following content
+               - 
+               ```yaml
+                    gathering           = implicit
+               ```
+          - Workaround 
