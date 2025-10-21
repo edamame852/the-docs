@@ -123,4 +123,113 @@ has_children: true
                ```yaml
                     gathering           = implicit
                ```
-          - Workaround 
+          - Workaround:
+               - env vars plus commands `ANSIBLE_GATHERING=explicit ansible-playbook playbook.yml`. Single playbook execution, single command
+               - Persist it throughout the session `export ANSIBLE_GATHERING=explicit` then `ansible-playbook playbook.yml`
+               - Best way, works in all shells, all sessions for all users. Just change this line in `/opt/web-playbooks/ansible.cfg`
+               
+               ```yaml
+                    gathering           = implicit
+               ```
+     5. 3 ways of viewing config
+          - `ansible-config list` - list all diff configs, their default values, and values you set
+          - `ansible-config view` - view the currently active ansible.cfg
+          - `ansible-config dump` - post specifying different env vars, mix of config files, then view all that stuff that's already picked up by ansible (favorite command). Returns comprehensive list that contain the current settings Ansible has picked up, and where it picked up from
+               - Example use case 4:
+                    - Set env var to let facts gathering become explicit
+                    - Then use the `dump` command to look for keyword `GATHERING`
+                    - 
+                    ```yaml
+                         export ANSIBLE_GATHERING=explicit
+
+                         ansible-config dump | grep GATHERING
+                    ```
+                    - It returns: `DEFAULT_GATHERING(env:ANSIBLE_GATHERING)=explicit`. Nice
+                    - VERY VERY useful when debugging config isuses
+     
+     6. Intro to YAML for ansible
+          - All playbooks are written in yaml and yamls are representation of configuration data
+          - Playbooks are also config files
+          - Data example:
+               - Data at simplest form = key-value pair
+                    - Example
+                    ```text
+                         Fruit: Apple
+                         Vegetable: Carrot
+                         Liquid: Water
+                    ```
+               - Array/ Lists
+                    - Example
+                    ```text
+                         Fruits:
+                         - orange
+                         - apple
+
+                         Vegetables:
+                         - carrot
+                         - tomato
+                    ```
+               - Dict/ Map
+                    - Example
+                    ```text
+                         Banana:
+                              Calories: 105
+                              Fat: 0.4g
+                         Grapes:
+                              Calories: 62
+                              Fat: 0.3 g
+                    ```
+                    - Indentation can dictate whether values will become new properties, but this is not allowed in dict since mapping values are not allowed here, throw syntax error. Workaround is to set direct value or hashmap
+          - In YAML, spaces are KEY. Must be in the right form.
+
+          - Let's take a up a notch, where we have list containing dicts containing lists
+               - Example
+               - Elements of list are Banana and Grape. Individual fruits has contains it's own nutritional descriptions 
+               ```text
+                    Fruits:
+                         - Banana:
+                              Calories: 105
+                              Fat: 0.4g
+                         - Grape:
+                              Calories: 62
+                              Fat: 0.3g
+               ```
+
+          - When to use dict, list & list of dicts ?
+               - Ans: 
+                    - Storing different info/ properties of a single object = dict
+                    - if splitting the params further up in a dict = dict in dict
+                    - Multiple items of the same type of object (multi object) = list/array of strings
+                    - Each objects contains its own property = list of dict
+
+          - Dict vs List
+               - Dictionary - unordered collection (= properties can be defined in any order)
+               - List - ordered collection (= order of items matter!)
+
+          - (#) Hashes are comments !
+
+          - Lab exercise:
+               - Converting a dict to list
+
+               ```yaml
+                    #Before
+                    employee:
+                         name: john
+                         gender: male
+                         age: 24
+
+                    #After
+                    employees:
+                         -    name: john
+                              gender: male
+                              age: 24
+
+                    # Note under (-) is one object
+                    # An array of object should be 
+                    -    key1: value1
+                         key2: value2
+                    -    key3: value3
+                         key4: value4
+
+               ```
+
