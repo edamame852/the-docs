@@ -6,8 +6,9 @@ grand_parent: Coding Practices
 has_children: true
 ---
 
-# 0. File structure
-# 1. .github/
+# Asia's Intra Structure as Code (IaC)
+## 0. File structure
+## 1. .github/
 - workflows/
      - dependabot.yml
 - CODEOWNERS
@@ -46,7 +47,7 @@ updates:
         type
 ```
 
-# 2. .vscode/
+## 2. .vscode/
 - settings.json (only 1 file under this dir)
 - 
 ```
@@ -75,7 +76,7 @@ updates:
 ```
 
 
-# 3. ansible/
+## 3. ansible/
 - Only 1 file, and that is called `cloud-user.yml`
 - content:
 
@@ -100,7 +101,7 @@ updates:
         validate: 'sh -c "cat /etc/sudoers %s | visudo -cf-"'
 
 ```
-# 4. corvil/ (lots of conf inside)
+## 4. corvil/ (lots of conf inside)
 - hkgcor.conf
 - labcor.conf
 - ...
@@ -117,7 +118,7 @@ no session "Application and Network Analysis"
 .
 
 ```
-# 5. jira/
+## 5. jira/
 - test.py (There's only 1 file)
 - 
 ```python
@@ -163,9 +164,9 @@ for project_key in ["RTMAASIA","ASIAFEED","MAPRD"]:
           admin_role.add_user(to_add_admins)
 ```
 
-# 6. pyinfra/
-# 7. terraform/
-# 8. .gitignore
+## 6. pyinfra/
+## 7. terraform/
+## 8. .gitignore
 
 - 
 ```gitignore
@@ -173,7 +174,7 @@ for project_key in ["RTMAASIA","ASIAFEED","MAPRD"]:
 *.retry
 ```
 
-# 9. .groovylintrc.json
+## 9. .groovylintrc.json
 
 - 
 ```json
@@ -195,7 +196,7 @@ for project_key in ["RTMAASIA","ASIAFEED","MAPRD"]:
 ```
 
 
-# 10. Jenkinsfile.asia
+## 10. Jenkinsfile.asia
 
 - 
 ```groovy
@@ -239,7 +240,7 @@ pipeline {
 
 ```
 
-# 11. Jenkinsfile.admin
+## 11. Jenkinsfile.admin
 
 - 
 ```groovy
@@ -346,14 +347,14 @@ pipeline {
 }
 ```
 
-# 12. README.md
+## 12. README.md
 
 ```markdown
 [![Build Status](https://....world.company/buildStatus/icon?style=flat-square&job=...)](https://.../job/xxx_admin/job/infra)
 
 ```
 
-# 13. pyproject.toml
+## 13. pyproject.toml
 
 - 
 
@@ -372,12 +373,12 @@ profile = "black"
 
 ```
 
-# 14. requirements-jfrog.txt
+## 14. requirements-jfrog.txt
 - 
 ```txt
 hvac==2.3.0
 ``` 
-# 15. requirements-pyinfra.txt
+## 15. requirements-pyinfra.txt
 - 
 ```txt
 aiohttp[speedups]==3.11.14
@@ -387,7 +388,7 @@ pyinfra==3.2.0
 packaging==24.2
 gevent=
 ```
-# 16. requirements-reconnect.txt
+## 16. requirements-reconnect.txt
 - 
 ```txt
 aiohttp[speedups]==3.11.14
@@ -399,15 +400,15 @@ gevent==24.11.1
 rtma_infra==25.13
 ```
 - Actually they removed everything except rtma_infra
-# 17. requirements-terraform.txt
+## 17. requirements-terraform.txt
      - 
      ```txt 
      hvac==2.3.0
      ```
 
-# 14-17 SKIPPED since it's already written out
+## 14-17 SKIPPED since it's already written out
 
-# 18. tox.ini
+## 18. tox.ini
 
 ```tox
 
@@ -486,7 +487,7 @@ commands =
      reconnect_build_agents {posargs}
 ```
 
-# 19. with_secrets.py
+## 19. with_secrets.py
 
 - 
 ```python
