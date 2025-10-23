@@ -233,3 +233,6 @@ has_children: true
 
                ```
 
+
+## Section 3: Ansible Inventories Configuring
+1. 
