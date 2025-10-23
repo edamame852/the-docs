@@ -235,4 +235,71 @@ has_children: true
 
 
 ## Section 3: Ansible Inventories Configuring
-1. 
+1. Ansible can work with 1 or multi systems in your infra via ssh connection (in Linux) and powershell remoting (in Windows) (i.e. winrm) = Agentless = no extra software needed
+- Pros: Agentless, unlike other orchestration tools that require agents before any automation workflow can be triggered
+
+2. Ansible's target systems information are stored in an **inventory file** (written in .ini)
+     - If no inventory file is under the playbook dir, it uses the default inventory.ini which is in `/etc/ansible/hosts`
+     - Example of inventory.ini containing all the servers (FYI we're adding group logics to it)
+     - 
+     ```ini
+          server1.company.com
+          server2.company.com
+
+          # You can do a group
+          [mail]
+          server3.company.com
+          server4.company.com
+
+          # Multiple group works as well
+          [db.APAC]
+          server5.company.com
+
+          [db.EMEA]
+          server6.company.com
+
+          # Parent group with child groups, syntax is always [parent_group:children]
+          [all_regions:children]
+          db.APAC
+          db.EMEA
+     ``` 
+
+     - Example use case 1: Adding alias for servers, achievable with keyword `ansbile_host` (which is a param in inventory.ini that specifies in FQDN or IP address of a server)
+
+          - 
+          ```ini
+               web  ansible_host=server1.company.com
+               db   ansible_host=server2.company.com
+               mail ansible_host=server3.company.com
+               web2 ansible_host=server4.company.com
+          ```
+
+3. Other common inventory params:
+     - `ansible_connection` = i.e. ssh(for linux host) / winrm (for windows host) / lost
+     - `ansible_port` = i.e. 22 or 5986
+     - `ansible_user` = Server root/admin/other users
+     - `ansible_ssh_pass` = server password
+
+     - What's the difference between `ansible_ssh_pass` and `ansible_password`
+          - `ansible_ssh_pass` = for linux/unix ssh
+          - `ansible_password` = for windows WinRM
+     
+     - Example of different inventory params:
+     - 
+     ```ini
+          #Defaults to port 22 for ssh
+          # ansible_user defaults to root for linux machines
+
+          web  ansible_host=server1.company.com ansible_connection=ssh ansible_user=admin
+          db   ansible_host=server2.company.com ansible_connection=ssh ansible_ssh_pass=adminpass_in_linux
+          web  ansible_host=server3.company.com ansible_connection=winrm ansible_password=adminpass_in_windows
+
+          #If you don't have multiple boxes and want to work locally
+          localhost ansible_connection=localhost
+     ```
+
+     - Saving ssh passwords in text format is extremely not ideal. Better practice would be passwords auth between servers
+
+     - Lab will focus on setting up basic username and password without spending time configuring and debugging security issues
+     
+     - More advance topics in the future: Security related and Ansible vaults
