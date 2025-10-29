@@ -15,8 +15,12 @@ I intend to log the things I learn for the following languages/framework/ on my 
 - CICD 
     - YAML data serial-ization language (i.e. Github Action)
     - Jenkins
+    - Github Action
+    - JFrog
     - Terraform
-    - Ansible
+    - (Server) Orchestration
+        - Ansible
+        - Chef
 - Frontend
     - React
     - Redux
@@ -29,5 +33,9 @@ I intend to log the things I learn for the following languages/framework/ on my 
 - Cloud
     - Azure
         - VM Partion
+        - HTTPS cert auto renewal
+        - 
+    - AWS
+        - S3 bucket for .tf state 
 - Linux distro servers (i.e. Ubuntu)
 {: .fs-2 .fw-300 }
