@@ -290,9 +290,9 @@ has_children: true
           #Defaults to port 22 for ssh
           # ansible_user defaults to root for linux machines
 
-          web  ansible_host=server1.company.com ansible_connection=ssh ansible_user=admin
+          web1  ansible_host=server1.company.com ansible_connection=ssh ansible_user=admin
           db   ansible_host=server2.company.com ansible_connection=ssh ansible_ssh_pass=adminpass_in_linux
-          web  ansible_host=server3.company.com ansible_connection=winrm ansible_password=adminpass_in_windows
+          web2  ansible_host=server3.company.com ansible_connection=winrm ansible_password=adminpass_in_windows
 
           #If you don't have multiple boxes and want to work locally
           localhost ansible_connection=localhost
@@ -303,3 +303,287 @@ has_children: true
      - Lab will focus on setting up basic username and password without spending time configuring and debugging security issues
      
      - More advance topics in the future: Security related and Ansible vaults
+
+4. Ansible Inventory format:
+     - Q: Why do we need different inventory formats?
+     - A: Think of a use case of 2 companies: start up vs hedge fund
+          - start up: simple server setup for web hosting and DB management --> Simple inventory.ini is good enough (since not a lot of people and departments)
+          - hedge fund: 100+ servers on the planet, lots of server functionaries: e-commerce, customer support, data analysis... (lots of structuring for different hierarchy, different inventory formats offering flexibility) --> using YAML is better
+          - Inventory Formats (.ini & .yaml)
+               - pros (2 things):
+                    - Flexibility: grouping server based on roles (e.g. web servers, strictly DB, app servers)
+                    - Geo-location: e.g. APAC, EU, AMEA
+          - 2 types of inventory formats that ansible supports:
+               - INI: Good for smaller projects (simple and straight forward)
+                    - Example INI file:
+                    - 
+                    ```ini
+                         [webservers]
+                         web1.example.com
+                         web2.example.com
+
+                         [dbservers]
+                         db1.example.com
+                         db2.example.com
+                    ```
+               - YAML: Treat it as a file for complex org chart with diff departments and inventory formats that offers flexibility:
+                    - Example YAML file:
+                    - 
+                    ```yaml
+                         all:
+                              children:
+                                   webservers:
+                                        hosts:
+                                             web1.example.com
+                                             web2.example.com
+                                   dbservers:
+                                        hosts:
+                                             db1.example.com
+                                             db2.example.com
+                    ```
+5. Grouping and child-parent relationship
+- Real life example:
+     - As an IT admin in a multi-national org, we house 100+ servers spread across diff regions serving different purposes (some web servers, some db, some app servers). Handling all servers 1 by 1 is TEDIOUS, lots of manual labor (e.g. manual select and pick servers is time consuming and human  error prone) --> Considerations for a Solution:
+          - I. Categorize servers based on labels (e.g. roles, locations, environments)
+          - II. Targeting one tag and so one change = applying across all other servers = **ansible grouping features**
+     - Quick real life challenge: If web servers are spread across diff regions and each servers needs to have some locale specific configs?
+          - Ans: Creating different groups for web servers in each region
+               - Parent Group: web servers on global level
+               - Child group: web servers in EACH location
+                    - WebServer_US
+                    - WebServer_EU
+                    - WebServer_APAC
+               - Define common config at parent level and child level can be only responsible for location specifics configs = much more efficient 
+               - Example INI:
+                    - Using the `parent:child` suffix system!
+                    ```ini
+                         [webservers:children]
+                         webservers_us
+                         webservers_eu
+
+                         [webservers_us]
+                         server1_us.com ansible_host=192.168.8.101
+                         server2_us.com ansible_host=192.168.8.102
+
+                         [webservers_eu]
+                         server1_eu.com ansible_host=10.12.0.101
+                         server2_eu.com ansible_host=10.12.0.102
+                    ```
+               
+               - Example YAML:
+                    - `webservers_us` & `webservers_eu` are child groups of a parent group which is parent is webserver
+                    ```yaml
+                         all:
+                              children:
+                                   webservers:
+                                        children:
+                                             webservers_us:
+                                                  hosts:
+                                                       server1_us.com:
+                                                            ansible_host: 192.168.8.101
+                                                       server2_us.com:
+                                                            ansible_host: 192.168.8.102
+                                             webserers_eu:
+                                                  hosts:
+                                                       server1_eu.com:
+                                                            ansible_host: 10.12.0.101
+                                                       server2_eu.com:
+                                                            ansible_host: 10.12.0.102
+                    ```
+
+### Section 4: Ansible Variables
+
+1. Defining ansible variables
+
+- What are ansible variables ???
+     - Ans: Same like other programming languages, variables are used to store values (e.g. single playbook for multiple servers)
+          - We've worked with variables inside inventory files before
+          - We can define as many vars as we like in the inventory.ini
+          ```ini
+               web1  ansible_host=server1.company.com ansible_connection=ssh ansible_user=admin
+          db   ansible_host=server2.company.com ansible_connection=ssh ansible_ssh_pass=adminpass_in_linux
+          web2  ansible_host=server3.company.com ansible_connection=winrm ansible_password=adminpass_in_windows
+          ```
+          - We can define the variables in ansible in 2 ways : playbook yaml or separate var file
+          - Method 1: with playbook yaml
+          
+          ```yaml
+               - 
+                    name: Add DNS Server to resolv.conf
+                    hosts: localhost
+                    #To define vars, add this
+
+                    vars:
+                         dns_server: 10.1.250.10
+                    tasks:
+                         - lineinfile:
+                              path: /etc/resolv.conf
+                              line: 'nameserver 10.1.250.10'
+          ```
+
+          - Method 2: with separate var file
+
+          ```yaml
+               variable1: value1
+               variable2: value2
+          ```
+
+2. Using ansible variables
+
+- Example 1: Using hard coded values within playbook with a var name, enclosed in curly brackets `{{ like this}}`.
+     - Ansible directly applies that variable and replaces it with the stored variable value
+     - The updated example playbook with curly brackets are like this:
+     - 
+     ```yaml
+          - 
+               name: Add DNS server to resolv.conf
+               hosts: localhost
+               # To define a variable, simply add this
+
+               vars:
+                    dns_server: 10.1.250.10
+               tasks:
+                    - lineinfile:
+                         path: /etc/resolv.conf
+                         line: 'nameserver {{ dns_server }}'
+     ```
+
+- Example 2: Setting up multiple firewall using a longer playbook
+     - original playbook:
+     ```yaml
+          name: Set firewall configs
+          hosts: web
+          tasks:
+          - firewalld:
+               service: https
+               permanent: true
+               state: enabled
+          - firewalld:
+               port: 8081/tcp
+               permanent: true
+          - firewalld:
+               port: 161-162/udp
+               permanent: true
+               state: disabled
+          - firewalld:
+               source: 192.0.2.0/24
+               Zone: internal
+               state: enabled 
+     ```
+     
+
+     - Updated playbook
+     ```yaml
+          name: Set firewall configs
+          hosts: web
+          tasks:
+          - firewalld:
+               service: https
+               permanent: true
+               state: enabled
+          - firewalld:
+               port: '{{ http_port }}'/tcp
+               permanent: true
+          - firewalld:
+               port: '{{ snmp_port }}'/udp
+               permanent: true
+               state: disabled
+          - firewalld:
+               source: '{{ inter_ip_range }}'/24
+               Zone: internal
+               state: enabled 
+     ```
+
+     You can pass the variables using a inventory file
+     ```ini
+     Web http_port=8081 snmp_port=161-162 inter_ip_range=192.0.2.0
+     ```
+     <br/>
+
+     or better yet, create a new variable file called `web.yaml` <br/>
+     This is now a host variable file, all values in this web.yaml file is available for the playbook when the playbook is ran
+
+     ```yaml
+     http_port: 8081
+     snmp_port: 161-162
+     inter_ip_range: 192.0.2.0
+     ```
+
+     - Jinja2 templating is exactly referring to this `'{{ }}'` ideology 
+     - Remember when using Jinja 2 templating to not forget about your quotes !! `'{{}}'`
+     - This rule is however nullified is the Jinja 2 templating is set in between lines
+
+     - Example yaml code for explaining Jinja2 templates
+     ```yaml
+          # Correct
+          source: '{{ inter_ip_range }}'
+          # Incorrect - missing quotes
+          source: {{ inter_ip_range }}
+
+          # Correct - nullified rule due to in between quotes
+          source: hello {{ inter_ip_range }} world
+     ```
+
+3. Ansible Variable types
+- String variables = sequences of chars
+     - Can be used in 3 ways: defined in playbook, defined in inventory, passed as arguments from command line
+     - Example
+     ```yaml
+          user: 'admin' # admin is the string
+     ```
+- Number variables = holds int or floating point values
+     - Can be used with math operations
+     ```yaml
+          max_connections: 100
+     ```
+- Boolean variables = holds `true` or `false` values
+     - Often used in conditional statements
+     ```yaml
+          debug_mode: true 
+
+          # True - these all work btw 
+
+          True 
+          'true'
+          't'
+          'yes'
+          'y'
+          'on'
+          '1'
+          1
+          1.0
+
+          # False - these all work btw
+          False
+          'false'
+          'f'
+          'no'
+          'n'
+          'off'
+          '0'
+          0
+          0.0
+     ```
+
+- List variables = hold collection of values (of any type)
+     - Example, `packages` act as a list variable that holds 3 string values
+          ```yaml
+               packages:
+                    - nginx
+                    - postgresql
+                    - git 
+          ```
+     - You can later refer these values individually or as a collection through something like
+     ```yaml
+
+     # Individually - using index
+     msg: "This is the name of the first package {{ packages[0] }}"
+     .
+     .
+     .
+     # Collection
+     loop: "{{ packages }}"
+     ```
+
+- dictionary variables = holds collection of key pair values
+
