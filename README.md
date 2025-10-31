@@ -56,6 +56,15 @@ I followed their [PR](https://github.com/vsoch/mkdocs-jekyll/commit/bcdae2d5b86f
 
 note: both rvm and asdf are dependencies managing tools 
 
+## Fix dependabot issue:
+
+```
+bundle update <CVE vuln app version>
+bundle install
+
+git gogogo 'feat(fix): dependabot'
+```
+
 ### Reference  from (https://gorails.com/setup/ubuntu/24.04)
 
 1. Install all Ruby deps: <br/>
