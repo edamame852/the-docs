@@ -430,7 +430,7 @@ has_children: true
 
 2. Using ansible variables
 
-- Example 1: Using hard coded values within playbook with a var name, enclosed in curly brackets "{{ LIKE THIS}}".
+- Example 1: Using hard coded values within playbook with a var name, enclosed in curly brackets.
      - Ansible directly applies that variable and replaces it with the stored variable value
      - The updated example playbook with curly brackets are like this:
      - 
