@@ -504,13 +504,13 @@ has_children: true
      This is now a host variable file, all values in this web.yaml file is available for the playbook when the playbook is ran
 
      ```yaml
-     http_port: 8081
-     snmp_port: 161-162
-     inter_ip_range: 192.0.2.0
+          http_port: 8081
+          snmp_port: 161-162
+          inter_ip_range: 192.0.2.0
      ```
 
-     - Jinja2 templating is exactly referring to this `'{{ }}'` ideology 
-     - Remember when using Jinja 2 templating to not forget about your quotes !! `'{{}}'`
+     - Jinja2 templating is exactly referring to this `single Quote curly brackets, curly brackets, single quotes` ideology 
+     - Remember when using Jinja 2 templating to not forget about your quotes !! `single Quote curly brackets, curly brackets, single quotes`
      - This rule is however nullified is the Jinja 2 templating is set in between lines
 
      - Example yaml code for explaining Jinja2 templates
