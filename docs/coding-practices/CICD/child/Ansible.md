@@ -430,7 +430,10 @@ has_children: true
 
 2. Using ansible variables
 
-- Example 1: Using hard coded values within playbook with a var name, enclosed in curly brackets `{{ like this}}`.
+- Example 1: Using hard coded values within playbook with a var name, enclosed in curly brackets 
+     ```text
+          {{ like this }}
+     ```
      - Ansible directly applies that variable and replaces it with the stored variable value
      - The updated example playbook with curly brackets are like this:
      - 
@@ -525,6 +528,7 @@ has_children: true
      ```
 
 3. Ansible Variable types
+- Recall: Variables are used to associate information to hosts!
 - String variables = sequences of chars
      - Can be used in 3 ways: defined in playbook, defined in inventory, passed as arguments from command line
      - Example
@@ -585,5 +589,82 @@ has_children: true
      loop: "{{ packages }}"
      ```
 
-- dictionary variables = holds collection of key pair values
+- dictionary variables = holds collection of key pair values (keys and values can be of any type)
+     ```yaml
+          # user is a dictionary variable hold 2 value pairs
+          user:
+               name: "admin" # Use double curly brackets please
+               password: "secret"
+     ```
+     - You can later access these values by invoking the key accordingly like this
+     ```yaml
+          - name: Access specific value in the dictionary
+               debug:
+               msg: "Username: {{ user.name }}, Password: {{ user.password }}"
+     ```
 
+4. Registering variables + Variables Precedence
+
+- What is variable precedence??
+     - Ans: Think when you have 2 variables defined in 2 places.
+          - File1: `/etc/ansible/hosts`
+               - 
+               ```ini
+                    # ansible_host is a host variable
+                    web1 ansible_host=172.20.1.100
+                    web2 ansible_host=172.20.1.101
+                    web3 ansible_host=172.20.1.102
+                    
+                    # I have a host group called web servers
+                    # I know all hosts in my group are configured under the same DNS server
+                    [web_servers]
+                    web1
+                    web2
+                    web3
+                    
+                    # So this common dns server IP was set
+                    [web_servers:vars]
+                    dns_server=10.5.5.3
+               ```
+               - When Ansible playbook is ran
+                    - Ansible create these host objects in memeory
+                    - Ansible then define which group of hosts it belongs to (e.g. web1, web2, web3)
+                         - Each host gets his own set of variables
+                         - Then this will be the outcome:
+                              - Group 1 = web1:
+                              ```ini
+                                   dns_server=10.5.5.3
+                              ```
+                              - Group 2 = web2
+                              ```ini
+                                   dns_server=10.5.5.3
+                              ```
+                              - Group 3 = web3
+                              ```ini
+                                   dns_server=10.5.5.3
+                              ```
+                    - Scenario 1: Say I added dns_server in the inventory for web2!
+                    - 
+                         ```ini
+                              # ansible_host is a host variable
+                              web1 ansible_host=172.20.1.100
+                              web2 ansible_host=172.20.1.101     dns_server=10.5.5.4
+                              web3 ansible_host=172.20.1.102
+                              
+                              # I have a host group called web servers
+                              # I know all hosts in my group are configured under the same DNS server
+                              [web_servers]
+                              web1
+                              web2
+                              web3
+                              
+                              # So this common dns server IP was set
+                              [web_servers:vars]
+                              dns_server=10.5.5.3
+                         ```
+                    - Then the outcome of the ansible groups would be:
+                         - 
+                         ```ini
+
+
+                         ```
