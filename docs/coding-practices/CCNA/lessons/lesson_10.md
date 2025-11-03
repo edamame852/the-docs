@@ -19,7 +19,7 @@ Lesson 9 - CCNA Fast Track (June, 2025). We left off at page 163. It ends at the
 
 # 13 SSH : Secure SHell
 
-## 13.3 Setting up hostnames and domain names !
+## 13.3 Setting up hostname and domain names !
 - Recall, this is our topology: ![](../../../../../assets/images/ccna/lesson9/lesson9_ssh.jpg) 
 - Method 1: Please perform the following on R1
 ```text

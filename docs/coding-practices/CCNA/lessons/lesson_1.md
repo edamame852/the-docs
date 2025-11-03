@@ -243,25 +243,25 @@ Ehternet II, Src: Cisco_85...
     - Type `en` or `enable` to promote to Privilege Exec Mode (`#`)
         - i.e. 
         ```bash
-        Switch>en
-        Switch#
+            Switch>en
+            Switch#
         ```
 
 
     - Promote again to Global Configuration mode by doing `config t` or `config terminal`
         - i.e. 
         ```bash
-        Switch#config t
-        Enter Configuration commands...
-        Switch(config)#
+            Switch#config t
+            Enter Configuration commands...
+            Switch(config)#
         ```
         - Now you can configure the switch as a whole!
 
     - Change hostname of the switch `hostname NewSwitchName`
         - i.e. 
         ```bash
-        Switch(config)# hostname Switch100
-        Switch100(config)#
+            Switch(config)# hostname Switch100
+            Switch100(config)#
         ```
 
     - To quit
@@ -275,13 +275,13 @@ Ehternet II, Src: Cisco_85...
     - Starting up a router = you need interface configuration mode:
         - i.e. 
         ```bash
-        Router>en
-        Router#config t
-        Router(config) #hostname Router1
-        Router1(config) #int g0/0
-        Router1(config-if) #no shutdown
-        Router(config-if) #end
-        Router1#
+            Router>en
+            Router#config t
+            Router(config) #hostname Router1
+            Router1(config) #int g0/0
+            Router1(config-if) #no shutdown
+            Router(config-if) #end
+            Router1#
         ```
 
     - BTW The `shutdown` command to shutdown interface, vice versa, we use `no shutdown`
