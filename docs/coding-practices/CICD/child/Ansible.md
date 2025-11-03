@@ -383,7 +383,7 @@ has_children: true
                                                             ansible_host: 192.168.8.101
                                                        server2_us.com:
                                                             ansible_host: 192.168.8.102
-                                             webserers_eu:
+                                             webservers_eu:
                                                   hosts:
                                                        server1_eu.com:
                                                             ansible_host: 10.12.0.101
@@ -627,7 +627,7 @@ has_children: true
                     dns_server=10.5.5.3
                ```
                - When Ansible playbook is ran
-                    - Ansible create these host objects in memeory
+                    - Ansible create these host objects in memory
                     - Ansible then define which group of hosts it belongs to (e.g. web1, web2, web3)
                          - Each host gets his own set of variables
                          - Then this will be the outcome:
@@ -650,7 +650,7 @@ has_children: true
                               web1 ansible_host=172.20.1.100
                               # Note, even when you do this, ansible considers the host variables before associating with group variables!
                               
-                              # dns_server=10.5.5.4 is a host variable! So it's piroritized
+                              # dns_server=10.5.5.4 is a host variable! So it's prioritized
                               web2 ansible_host=172.20.1.101     dns_server=10.5.5.4
                               web3 ansible_host=172.20.1.102
                               
@@ -672,7 +672,7 @@ has_children: true
                          ```
                          - web1
                          ```ini
-                              # Piroirtizing host variable first!
+                              # Prioritizing host variable first!
                               dns_server=10.5.5.4
                          ```
                          - web1
@@ -694,17 +694,17 @@ has_children: true
                     - Then the outcome of the ansible groups would be:
                          - web1
                          ```ini
-                              # Piroirtizing play variable!!!
+                              # Prioritizing play variable!!!
                               dns_server=10.5.5.5
                          ```
                          - web1
                          ```ini
-                              # Piroirtizing play variable!!!
+                              # Prioritizing play variable!!!
                               dns_server=10.5.5.5
                          ```
                          - web1
                          ```ini
-                              # Piroirtizing play variable!!!
+                              # Prioritizing play variable!!!
                               dns_server=10.5.5.5
                          ```
                - Scenario 3: Using `--extra-vars` to pass variables via command line
@@ -866,12 +866,12 @@ has_children: true
             - debug:
                msg: "{{ dns_server }}"
      ```
-     - Question... Does the dns_server variable work for the other hosts, aka web1 and web3 ? Since they don't have any pre-defined dns_server params in in the inventory ?
-     - Ans:  NO, and it will return `VARIABLE IS NOT DEFINED!`. Since the variable is defined under the host scope only
+     - Question... Does the dns_server (defined within web2 in the inventory) variable work for the other hosts, aka web1 and web3 ? Since they don't have any pre-defined dns_server params in in the inventory ?
+     - Ans:  NO, and if you return these, they will return `VARIABLE IS NOT DEFINED!`. Since the variable is defined under the host scope only
 
      - Different scope levels...
           - Whether it be on the parent group, on the host, on the play...
           - We will only focus on these scopes
-               - 1 - Host scope (defined on )
+               - 1 - Host scope (defined on the inventory.ini (line by line (= line per host)))
                - 2 - Play scope (defined on playbook.yaml)
                - 3 - Global scope (as extra variables)
