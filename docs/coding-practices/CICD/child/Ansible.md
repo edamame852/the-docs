@@ -602,10 +602,13 @@ has_children: true
 
 4. Registering variables + Variables Precedence
 
+- Registering variables will be addressed in point 5
+- Variable precedence: Extra Variables > Play variables > Host Variables > Group Variables
+
 - What is variable precedence??
      - Ans: Think when you have 2 variables defined in 2 places.
           - File1: `/etc/ansible/hosts`
-               - 
+               - This is our base case
                ```ini
                     # ansible_host is a host variable
                     web1 ansible_host=172.20.1.100
@@ -640,11 +643,14 @@ has_children: true
                               ```ini
                                    dns_server=10.5.5.3
                               ```
-                    - Scenario 1: Say I added dns_server in the inventory for web2!
+                    - Scenario 1: Say I added dns_server in the inventory for web2! Then which one will be considered by Ansible ???
                     - 
                          ```ini
                               # ansible_host is a host variable
                               web1 ansible_host=172.20.1.100
+                              # Note, even when you do this, ansible considers the host variables before associating with group variables!
+                              
+                              # dns_server=10.5.5.4 is a host variable! So it's piroritized
                               web2 ansible_host=172.20.1.101     dns_server=10.5.5.4
                               web3 ansible_host=172.20.1.102
                               
@@ -660,8 +666,212 @@ has_children: true
                               dns_server=10.5.5.3
                          ```
                     - Then the outcome of the ansible groups would be:
-                         - 
+                         - web1
                          ```ini
-
-
+                              dns_server=10.5.5.3
                          ```
+                         - web1
+                         ```ini
+                              # Piroirtizing host variable first!
+                              dns_server=10.5.5.4
+                         ```
+                         - web1
+                         ```ini
+                              dns_server=10.5.5.3
+                         ```
+               - Scenario 2: Variables defined within a playbook
+                    - Playbook defining a different value for dns servers. AKA defining variables at play level
+                         ```yaml
+                              ---
+                              - name: Configure DNS Server
+                                hosts: all
+                                vars::
+                                  dns_server: 10.5.5.5
+                                tasks:
+                                - nsupdate:
+                                   server: '{{ dns_server }}'
+                         ```
+                    - Then the outcome of the ansible groups would be:
+                         - web1
+                         ```ini
+                              # Piroirtizing play variable!!!
+                              dns_server=10.5.5.5
+                         ```
+                         - web1
+                         ```ini
+                              # Piroirtizing play variable!!!
+                              dns_server=10.5.5.5
+                         ```
+                         - web1
+                         ```ini
+                              # Piroirtizing play variable!!!
+                              dns_server=10.5.5.5
+                         ```
+               - Scenario 3: Using `--extra-vars` to pass variables via command line
+                    - Example:
+                    ```bash
+                         ansible-playbook playbook.yml --extra-vars "dns_server=10.5.5.6"
+                    ```
+- These are just a few scenario to pass in vars
+     - The full list is [here](https://docs.ansible.com/ansible/2.5/user_guide/playbooks_variables.html)
+     - But roughly the hierarchy is as follows
+     - Role Defaults < Group Vars < Host Vars < Host Facts < Play Vars < Role Vars < Include Vars < Set Facts < Extra Vars
+
+
+5. REGISTERD variables - Passing variables for later use (= concepts of registering variables)
+- Little workflow playbook example to print the file etc/hosts on a server
+     - Example output
+     ```bash
+          PLAY [Check /etc/host file] ***************************************
+
+          TASK [shell] ***********************************************
+          changed: [web1]
+          changed: [web2]
+
+          PLAY RECAP ************************************************
+          web1      : ok=1 changed=1 unreachable=- failed=0 skipped=0 rescued=0 ignored=0
+          web2      : ok=1 changed=1 unreachable=- failed=0 skipped=0 rescued=0 ignored=0
+     ```
+- Now: We would like to add an extra command to capture the output of the first command and then pass it to the second command = solution: using the debug module
+
+     - playbook.yml
+     ```yaml
+          # Note: Different module returns results in different format
+          ---
+          - name: Check /etc/hosts file
+            hosts: all
+            tasks:
+            - shell: cat /etc/hosts # 1st command, using the shell module
+            # Using the register directive to store the output value, don't forget to specify the variable name
+              register: result
+
+            - debug: 
+               var: result # Specify the var in the 2nd command as var
+
+     ```
+     - The shell module returns the output as the following
+          - the `rc` paramter is 0 if the command runs successfully
+          - the `delta` param indicates the time it takes to run the command into completion
+          - the `stdout` param to indicate the standard out of the commands
+          - 
+          ```json
+               ok:[web2] => {
+                    "output" : {
+                         "ansible_facts": {
+                              "discovered_interpreter_python":"/usr/bin/python"
+                         },
+                         "changed": true,
+                         "cmd":"cat /etc/hosts",
+                         "failed": false,
+                         "rc":0,
+                         "start": "xxxxxxxxxxxx",
+                         "xxx":"xxxxxx so on and so forth", 
+                    }
+               }
+          ```
+          - Thing to consider...
+               - We're only interested in the contents of the `/etc/hosts` file, we're only interested in the contents of `stdout` and `stdout_lines`
+               - We can update our playbook's second part !!
+               - UPDATED playbook.yml
+               ```yaml
+                    # Note: Different module returns results in different format
+                    ---
+                    - name: Check /etc/hosts file
+                    hosts: all
+                    tasks:
+                         - shell: cat /etc/hosts # 1st command, using the shell module
+                    # Using the register directive to store the output value, don't forget to specify the variable name
+                           register: result
+
+                         - debug: 
+                           var: result.stdout # Specify the var in the 2nd command as var
+               ```
+
+               - Scope of the registered variable `result` for web1 and web2
+                    - web1
+                         - 
+                         ```yaml
+                              result
+                         ```
+                    - web2
+                         - 
+                         ```yaml
+                              result
+                         ```
+                    - Since it's under the host scope, they can still be used in the next play if required
+
+                    - So this playbook.yaml is valid
+                    ```yaml
+                         # Note: Different module returns results in different format
+                         ---
+                         - name: Check /etc/hosts file
+                         hosts: all
+                         tasks:
+
+                         - shell: cat /etc/hosts 
+                           register: result
+
+                         - debug: 
+                           var: result.rc
+
+                         - name: Play2
+                           hosts: all
+                           tasks:
+                           - debug:
+                              var: result.rc # Can only be used within the scope of the host
+                    ```
+
+- Side quest: Another way to visualize the contents of /etc/hosts without using the module
+     - Solution: passing the `-v` option while triggering the playbook
+     - playbook.yaml
+     ```yaml
+          ---
+          - name: Check /etc/hosts file
+            hosts: all
+            tasks:
+            - shell: cat /etc/hosts
+     ```
+     - `ansible-playbook -i inventory playbook.yaml -v`
+
+     - This will be your output:
+     ```bash
+          PLAY [localhost] ***************************************
+
+          TASK [Gathering Facts] ***********************************************
+          ok: [localhost]
+
+          TASK [shell] ***********************************************
+          changed: [localhost] => {"changed": true , "cmd" : "cat /etc/hosts", "delta": "0:00:00.282432", "end" : "2019-09-24 07:37:26.440478", "rc" : 0, "start" : "xxxxxxxx"}
+
+
+          PLAY RECAP ************************************************
+          localhost      : ok=2 changed=1 unreachable=0 failed=0
+     ```
+
+6. Variable Scoping
+- What's a scope of a variable in Ansible ?
+     - Say in this inventory file under `/etc/ansible/hosts`
+     ```ini
+          web1 ansible_host=172.20.1.100
+          web2 ansible_host=172.20.1.101 dns_server=10.5.5.4
+          web3 ansible_host=172.20.1.102
+     ```
+
+     - And we also have this playbook
+     ```yaml
+          ---
+          - name: printing dns server
+            hosts: all
+            tasks:
+            - debug:
+               msg: "{{ dns_server }}"
+     ```
+     - Question... Does the dns_server variable work for the other hosts, aka web1 and web3 ? Since they don't have any pre-defined dns_server params in in the inventory ?
+     - Ans:  NO, and it will return `VARIABLE IS NOT DEFINED!`. Since the variable is defined under the host scope only
+
+     - Different scope levels...
+          - Whether it be on the parent group, on the host, on the play...
+          - We will only focus on these scopes
+               - 1 - Host scope (defined on )
+               - 2 - Play scope (defined on playbook.yaml)
+               - 3 - Global scope (as extra variables)
