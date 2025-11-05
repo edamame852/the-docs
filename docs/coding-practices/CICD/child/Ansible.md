@@ -850,6 +850,7 @@ has_children: true
 
 6. Variable Scoping
 - What's a scope of a variable in Ansible ?
+     - Long story short... a scope defines the accessibility/visibility of a variable
      - Say in this inventory file under `/etc/ansible/hosts`
      ```ini
           web1 ansible_host=172.20.1.100
@@ -872,6 +873,404 @@ has_children: true
      - Different scope levels...
           - Whether it be on the parent group, on the host, on the play...
           - We will only focus on these scopes
-               - 1 - Host scope (defined on the inventory.ini (line by line (= line per host)))
+               - 1 - Host scope (defined on host level under the inventory lines or group variable, or group of group of variables, ultimately when play is triggered, it just lives in the host scopes)
+                    
                - 2 - Play scope (defined on playbook.yaml)
+                    - Example playbook
+                    ```yaml
+                         ---
+                         - name: Play1
+                           hosts: web1
+                           vars:
+                              ntp_server: 10.1.1.1
+                           tasks:
+                           - debug:
+                              var: ntp_server
+                         
+                         - name: Play2
+                           hosts: web1
+                           tasks:
+                           - debug:
+                              var: ntp_server # variable not avaliable in 2nd play, since scope of variable ntp_server is only within the 2st play
+                    ```
+                    - Output
+                    ```bash
+                         PLAY [Play1] ***************************************
+
+                         TASK [debug] ************************************
+                         ok: [web1] => {
+                              "ntp_server": "10.1.1.1"
+                         }
+
+                         PLAY [Play2] ***************************************
+
+                         TASK [debug] ************************************
+                         ok: [web1] => {
+                              "ntp_server": "VARIABLE IS NOT DEFINED!"
+                         }
+
+                    ```
                - 3 - Global scope (as extra variables)
+                - Example: 
+                ```bash
+                    ansible-playbook playbook.yaml --extra-vars "ntp_server=10.1.1.1"
+                ```
+     - Scope is import for understanding the concept of **Magic Variables**
+
+7. Magic Variables in Ansible
+     - Revist: Variable Scopes = 
+          - host variables associated with each host
+          - For example, when this inventory file is ran
+          ```ini
+               web1 ansible_host=172.20.1.100
+               web2 ansible_host=172.20.1.101 dns_server=10.5.5.4
+               web3 ansible_host=172.20.1.102
+          ```
+          - And we also have this playbook
+          ```yaml
+               ---
+               - name: printing dns server
+               hosts: all
+               tasks:
+               - debug:
+                    msg: "{{ dns_server }}"
+          ```
+          - It creates 3 streams of sub-processes when playbook starts sourcing from the inventory file
+               - web1
+               - web2
+               - web3
+          - Before the tasks are ran on each host, ansible goes through **variable interpoliation** stage, where ansible attmepts to pick up variables from different places and associate thems with different host.
+
+          - Each variable is only associated with it's defined host, so it's unavaliblable to others (as we talked about in variable scope)
+
+          - You can't get it for other hosts lolol, end of story...or is that it? How can one Ansible subprocess running task for one host gaet variables that is only defined on another host
+          - In our example, the example would be: "How can web1 and web3 pick up the dns_server variable that is only defined in web2" ==> Solution: Using magic variables!!
+
+     - One of the great magic variables: `hostvars`, can get variables defined on a different host
+          - And we can update this playbook with `hostvars` by sourcing the var directly from web2 to be used in other hosts!
+          ```yaml
+               ---
+               - name: printing dns server
+               hosts: all
+               tasks:
+               - debug:
+                    msg: "{{ hostvars['web2'].dns_server }}"
+          ```
+          - Other common (default) magic variables
+               - ` hostvars['web2'].ansible_host ` = to get hostname or IP of the other host
+               - If facts are gathered... you can access additional facts about other hosts: Any facts can be retrived like this 
+                    - ` hostvars['web2'].ansible_facts.architecture `
+                    - ` hostvars['web2'].ansible_facts.devices `
+                    - ` hostvars['web2'].ansible_facts.mounts `
+                    - ` hostvars['web2'].ansible_facts.processor `
+          - Note: Magic variables can be accessed using brackets or single quotes!
+               - ` hostvars['web2']['ansible_facts']['architecture'] `
+               - ` hostvars['web2']['ansible_facts']['devices'] `
+
+
+     - Another useful magic variable: `groups`, which returns all hosts under a given group
+          - in `/etc/ansible/hosts`
+          ```ini
+               web1 ansible_host=172.20.1.100
+               web2 ansible_host=172.20.1.101
+               web3 ansible_host=172.20.1.102
+
+               [web_servers]
+               web1
+               web2
+               web4
+
+               [americas]
+               web1
+               web2
+
+               [apac]
+               web3
+          ```
+
+          - If we use `groups`
+          ```yaml
+
+               msg: '{{ groups['americas'] }}'
+
+          ```
+
+          - The output would be 
+
+          ```bash
+               web1
+               web2
+          ```
+
+     - Magic variable `group_names` is the other way around, it returns all the groups that the current host is a part of 
+          - in `/etc/ansible/hosts`
+          ```ini
+               web1 ansible_host=172.20.1.100
+               web2 ansible_host=172.20.1.101
+               web3 ansible_host=172.20.1.102
+
+               [web_servers]
+               web1
+               web2
+               web4
+
+               [americas]
+               web1
+               web2
+
+               [apac]
+               web3
+          ```
+
+          - If we use `groups_names`
+          ```yaml
+
+               msg: '{{ groups_names }}' # On host web1
+
+          ```
+
+          - The output would be the following when you trigger a play
+
+          ```bash
+               web_servers
+               americas
+          ```
+          - Returning the groups that this host is a part of
+
+     - Magic variable `inventory_hostname` gives you the name configured for the host in the inventory file and not the host name or FQDN
+          - in `/etc/ansible/hosts`
+          ```ini
+               web1 ansible_host=172.20.1.100
+               web2 ansible_host=172.20.1.101
+               web3 ansible_host=172.20.1.102
+
+               [web_servers]
+               web1
+               web2
+               web4
+
+               [americas]
+               web1
+               web2
+
+               [apac]
+               web3
+          ```
+
+          - If we use `inventory_hostname`
+          ```yaml
+
+               msg: '{{ inventory_hostname }}' # On host web1
+
+          ```
+
+          - The output would be the following
+
+          ```bash
+               web1 # Not the hostname nor FQDN
+          ```
+
+8. Ansible Facts
+
+- Logic flow of how Ansible works
+     - Ansible connects to a target machine
+     - Step 1: Collects information of the target machine (i.e. host's network connectivity)
+          - e.g. basic system info
+          - e.g. system architecture
+          - e.g. version of os
+          - e.g. processor details
+          - e.g. memory details
+          - e.g. serial numbers
+          - Particular information (i.e. ***Ansible Facts**)
+               - e.g. host's network connectivity
+               - e.g. Different interfaces
+               - e.g. IP Addresses, FQDN
+               - e.g. MAC Address
+               - e.g. device information (e.g. different disk, volume, mounts, amount of space avaliable)
+               - e.g. date & time on the system
+     - Step 2: Ansible facts gather facts using the setup module while using a playbook, fyi the setup module runs automatically
+
+- Example 1: using ansible to print a message
+
+     - playbook.yaml
+     ```yaml
+          ---
+          - name: Print Hello Message
+            hosts: all
+            tasks:
+            - debug:
+              msg: Hello from Ansible!
+     ```
+
+     - In the ouput, you can see it's running 2 tasks...
+     ```bash
+          PLAY [Print Hello Message] ******************************
+
+          TASK [Gathering Facts] ******************************
+          ok: [web2]
+          ok: [web1]
+
+          TASK [debug] ******************************
+          ok: [web1] => {
+               "msg": "Hello from Ansible!"
+          }
+          ok: [web2] => {
+               "msg": "Hello from Ansible!"
+          }
+     ```
+
+- But how do you see the FACTS? Ans: They're stored under a variable called `ansible_facts`
+     - You can adjust the playbook this way to print all the facts!
+
+     - updated playbook.yaml
+     ```yaml
+          ---
+          - name: Print Hello Message
+            hosts: all
+            tasks:
+            - debug:
+              var: ansible_facts
+     ```
+
+     - This is the output that should entail about the host's IP, system bit (64/32), flavor, DNS server configs, CPU process chip type,  
+     ```bash
+          PLAY [Reset nodes to previous state] *********************************
+
+          TASK [Gathering Facts] ********************************
+          ok: [web2]
+          ok: [web1]
+
+          TASK [debug] ********************************
+          ok: [web1] => {
+               "ansible_facts": {
+               "all_ipv4_address": [
+                    "172.20.1.100"
+               ],
+               "architecture": "x86_64",
+               "date_time": {
+                    "date": "2019-09-07",
+               },
+               "distribution":"Ubuntu",
+               "distribution_file_variety":"Debian",
+               "distribution_major_version":"16",
+               "distribution_release":"xenial",
+               "distribution_version":"16.04",
+               "dns":[
+                    "nameservers":[
+                         "127.0.0.11"
+                    ],
+               ],
+               "fqdn":"web1",
+               "interfaces":[
+                    "lo",
+                    "eth0"
+               ],
+               "machine":"x86_64",
+               "memfree_mb":72,
+               "memory_mb": {
+                    "real":(
+                         "free": 72,
+                         "total": 985,
+                         "used":913
+                    ),
+               },
+               "memtotal_mb":985,
+               "module_setup":true,
+               "mounts":[
+                    {
+                         "block_available": 45040,
+                         "block_size": 409G,
+                         "block_total":2524608,
+                         "block_used":2479668
+                    },
+               ],
+               "nodename":"web1",
+               "os_family":"Debian",
+               "processor":[
+                    "O",
+                    "GenuineIntel",
+                    "Intel(R)Core(TM)i9 9980HK CPU 2.40GHz",
+               ],
+               "processor_cores":2,
+               "processor_count":1,
+               "processor_threads_per_core":1,
+               "processor_vcpus":2,
+               "product_name": "VirtualBox",
+               "product_serial":"U",
+               "product_uuid":"18A111 222 DAC9 1321 54643155",
+               "product_version":"1.2"
+          }
+     ```
+
+     - These details are super useful as you're configuring devices and logical volume on your nodes, you can make certain decisions based on the information about the target disk/host that all information are gathered as facts.
+
+- Example 2: Assume you don't want any gathered facts, so you wish to disable athering facts
+     - You can do so via `gather_facts: no`
+     - playbook example:
+     ```yaml
+          ---
+          - name: Print Hello Message
+            hosts: all
+            gather_facts: no
+            tasks:
+            - debug:
+              var: ansible_facts
+     ```
+
+     - output would be only but a single task
+     ```bash
+          PLAY [Print Hello Message] ******************************
+
+
+          TASK [debug] ******************************
+          ok: [web1] => {
+               "ansible_facts":{}
+          }
+          ok: [web2] => {
+               "ansible_facts":{}
+          }
+     ```
+
+- Note: Ansible gather facts is also dictated by a default setting in the ansible confg
+     - If you reacll...in our `/etc/ansible/ansible.cfg`
+     - 
+     ```ini
+          # plays will gather facts by default, which contain information about
+          # smart - gather by default, by don't regather if already gathered
+          # implicit - gather by default, turn off with gather_facts: False
+          # explicit - do not gather by default, must say gather_facts: True
+
+          gathering      = implicit # Meaning ansible defaults to gathering facts 
+
+          # if set to "explicit", it's default to not gather facts but can be regather via the playbook (i.e. gather_facts: yes)
+
+     ```
+
+     - Scenario: What happens if you have CONFLICTING setup for the playbook as well as the .cfg file ?
+     - Ans: As you recall, the playbook settings ALWAYS take pirority (so the playbook.yaml takes no matter what)
+
+     > Really important note: Ansible only gather facts against the hosts that are part of the playbook!
+
+     - Example to explain what it means...
+          - playbook example:
+          ```yaml
+               ---
+               - name: Print Hello Message
+               hosts: all
+               tasks:
+               - debug:
+               var: ansible_facts
+          ```
+          - in `/etc/ansible/hosts` inventory file
+          ```ini
+               web1
+               web2
+          ```
+
+          - Outcome: In this case, facts will only be gathered for web1. 
+          - If at anytimes, when facts are unavailable for some hosts...very likely could be that you haven't targeted those hosts in your playbooks and inventory files!
+
+
+### Lab 3: Ansible variables and facts
+
+1. 
