@@ -685,7 +685,7 @@ has_children: true
                               ---
                               - name: Configure DNS Server
                                 hosts: all
-                                vars::
+                                vars:
                                   dns_server: 10.5.5.5
                                 tasks:
                                 - nsupdate:
@@ -1273,4 +1273,395 @@ has_children: true
 
 ### Lab 3: Ansible variables and facts
 
-1. 
+1. Question... just know the following setups lol
+```text
+     In this lab exercise you will use below hosts. Please note down some details about these hosts as given below :
+
+
+     student-node :- This host will act as an Ansible master node where you will create playbooks, inventory, roles etc and you will be running your playbooks from this host itself.
+
+
+     node01 :- This host will act as an Ansible client/remote host where you will setup/install some stuff using Ansible playbooks. Below are the SSH credentials for this host:
+
+
+     User: bob
+     Password: caleston123
+
+
+     node02 :- This host will also act as an Ansible client/remote host where you will setup/install some stuff using Ansible playbooks. Below are the SSH credentials for this host:
+
+
+     User: bob
+     Password: caleston123
+
+
+     Note: Please type exit or logout on the terminal or press CTRL + d to log out from a specific node.
+```
+
+- I see there are 3 files under `~/playbooks/`:
+     - ansible.cfg
+     ```bash
+          -bash-5.1$ cat ansible.cfg 
+          [defaults]
+          host_key_checking = False
+     ```
+
+     - inventory
+     ```bash
+          -bash-5.1$ cat inventory 
+          localhost ansible_connection=local nameserver_ip=8.8.8.8 snmp_port=160-161
+          node01 ansible_host=node01 ansible_ssh_pass=caleston123
+          node02 ansible_host=node02 ansible_ssh_pass=caleston123
+          [web_nodes]
+          node01
+          node02
+
+          [all:vars]
+          app_list=['vim', 'sqlite', 'jq']
+     ```
+
+
+     - playbook.yaml
+     ```bash
+
+          -bash-5.1$ cat playbook.yaml 
+          ---
+          - name: 'Add nameserver in resolv.conf file on localhost'
+          hosts: localhost
+          become: yes
+          tasks:
+          - name: 'Add nameserver in resolv.conf file'
+               lineinfile:
+               path: /tmp/resolv.conf
+               line: 'nameserver 8.8.8.8'
+     ```
+
+2. Can we define variables in an Ansible inventory file?
+     - Ans: Yes
+3. Can we define variables in an Ansible inventory file?
+    - Ans: Yes
+
+4. Which of the following formats is used to call a variable in an Ansible playbook?
+     - Ans: 
+     ```text
+          This is my answer is this ---> '{{ my_answer }}'
+     ```
+
+5. Question + Setup; The playbook located at /home/bob/playbooks/playbook.yaml is designed to add a name server entry in the sample file /tmp/resolv.conf on localhost. The name server information is already defined as a variable named nameserver_ip within the /home/bob/playbooks/inventory file.
+
+Your task is to replace the hardcoded IP address of the name server in the playbook with the value from the nameserver_ip variable specified in the inventory file.
+
+
+Note: You need not to execute this playbook as of now.
+- Ans: Modified playbook.yaml. Swipping out the hard coded `nameserver 8.8.8.8`
+     ```bash
+          -bash-5.1$ cat playbook.yaml 
+          ---
+          - name: 'Add nameserver in resolv.conf file on localhost'
+          hosts: localhost
+          become: yes
+          tasks:
+          - name: 'Add nameserver in resolv.conf file'
+               lineinfile:
+               path: /tmp/resolv.conf
+               line: 'nameserver {{  nameserver_ip  }}'
+          - name: 'Disable SNMP Port'
+               firewalld:
+               port: '160-161'
+               permanent: true
+               state: disabled 
+
+     ```
+
+
+6. We have updated the /home/bob/playbooks/playbook.yaml playbook to include a new task for disabling the SNMP port on localhost. However, the port number is currently hardcoded. Please update the playbook to replace the hardcoded value of the SNMP port with the value from the variable named snmp_port, which is defined in the inventory file.
+
+- Ans: Modified playbook.yaml. Swipping out the hard coded `nameserver 8.8.8.8`
+     ```bash
+          -bash-5.1$ cat playbook.yaml 
+          ---
+          - name: 'Add nameserver in resolv.conf file on localhost'
+          hosts: localhost
+          become: yes
+          tasks:
+          - name: 'Add nameserver in resolv.conf file'
+               lineinfile:
+               path: /tmp/resolv.conf
+               line: 'nameserver {{  nameserver_ip  }}'
+          - name: 'Disable SNMP Port'
+               firewalld:
+               port: '{{ snmp_port }}'
+               permanent: true
+               state: disabled 
+
+     ```
+
+Note: You need not to execute this playbook as of now.
+
+
+
+7. We have reset the /home/bob/playbooks/playbook.yaml playbook. It is currently printing some personal information of an employee.
+Move the car_model, country_name, and title values to variables defined at the play level.
+Add three new variables named car_model, country_name, and title under the play and use these variables within the tasks to remove the hardcoded values.
+
+- This is my current 
+     - playbook.yaml
+
+     ```bash
+          -bash-5.1$ cat playbook.yaml 
+          ---
+          - hosts: localhost
+          tasks:
+          - command: 'echo "My car is BMW M3"'
+          - command: 'echo "I live in the USA"'
+          - command: 'echo "I work as a Systems Engineer"'
+     ```
+
+     - inventory file
+
+     ```bash
+          -bash-5.1$ cat inventory 
+          localhost ansible_connection=local nameserver_ip=8.8.8.8 snmp_port=160-161
+          node01 ansible_host=node01 ansible_ssh_pass=caleston123
+          node02 ansible_host=node02 ansible_ssh_pass=caleston123
+          [web_nodes]
+          node01
+          node02
+
+          [all:vars]
+          app_list=['vim', 'sqlite', 'jq']
+          user_details={'username': 'admin', 'password': 'secret_pass', 'email': 'admin@example.com'}
+               
+     ```
+
+
+- This is my updated 
+
+     - playbook.yaml (Double Quotes doesn't work !???) (use single quotes I guess)
+
+     ```bash
+          -bash-5.1$ cat playbook.yaml 
+          ---
+          - hosts: localhost
+          vars:
+               car_model: 'BMW M3'
+               country_name: USA
+               title: 'System Engineer'
+          tasks:
+               - command: 'echo "My car is {{ car_model }}"'
+               - command: 'echo "I live in the {{ country_name }}"'
+               - command: 'echo "I work as a {{ title }}"'
+     ```
+     - inventory file = NO CHANGE
+     - Then run the playbook:
+          - 
+          ```bash
+               -bash-5.1$ ansible-playbook -i inventory playbook.yaml 
+
+               PLAY [localhost] ****************************************************************************************************************************************************
+
+               TASK [Gathering Facts] **********************************************************************************************************************************************
+               ok: [localhost]
+
+               TASK [command] ******************************************************************************************************************************************************
+               changed: [localhost]
+
+               TASK [command] ******************************************************************************************************************************************************
+               changed: [localhost]
+
+               TASK [command] ******************************************************************************************************************************************************
+               changed: [localhost]
+
+               PLAY RECAP **********************************************************************************************************************************************************
+               localhost                  : ok=4    changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+          ```
+
+8. The /home/bob/playbooks/app_install.yaml playbook is responsible for installing a list of packages on remote server(s). The list of packages to be installed is already added to the /home/bob/playbooks/inventory file as a list variable called app_list.
+
+
+
+Right now the list of packages to be installed is hardcoded in the playbook. Update the /home/bob/playbooks/app_install.yaml playbook to replace the hardcoded list of packages to use the values from the app_list variable defined in the inventory file. Once updated, please run the playbook once to make sure it works fine.
+
+- Current setup:
+     - 
+     ```bash
+          [bob@student-node playbooks]$ ls
+          ansible.cfg  app_install.yaml  inventory  playbook.yaml
+          [bob@student-node playbooks]$ cat inventory 
+          localhost ansible_connection=local nameserver_ip=8.8.8.8 snmp_port=160-161
+          node01 ansible_host=node01 ansible_ssh_pass=caleston123
+          node02 ansible_host=node02 ansible_ssh_pass=caleston123
+          [web_nodes]
+          node01
+          node02
+
+          [all:vars]
+          app_list=['vim', 'sqlite', 'jq']
+          user_details={'username': 'admin', 'password': 'secret_pass', 'email': 'admin@example.com'}
+          [bob@student-node playbooks]$ cat app_install.yaml 
+          ---
+          - hosts: web_nodes
+          become: yes
+          tasks:
+          - name: Install applications
+               yum:
+               name: "{{ item }}"
+               state: present
+               with_items:
+               - vim
+               - sqlite
+               - jq
+     ```
+
+- Updated version:
+     - This is not the right answer btw
+     ```bash
+          -bash-5.1$ ansible-playbook -i inventory app_install.yaml 
+
+          PLAY [web_nodes] ****************************************************************************************************************************************************
+
+          TASK [Gathering Facts] **********************************************************************************************************************************************
+          ok: [node02]
+          ok: [node01]
+
+          TASK [Install applications] *****************************************************************************************************************************************
+          changed: [node02] => (item=vim)
+          changed: [node01] => (item=vim)
+          changed: [node02] => (item=sqlite)
+          changed: [node01] => (item=sqlite)
+          changed: [node02] => (item=jq)
+          changed: [node01] => (item=jq)
+
+          PLAY RECAP **********************************************************************************************************************************************************
+          node01                     : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+          node02                     : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+          -bash-5.1$ cat app_install.yaml 
+          ---
+          - hosts: web_nodes
+          become: yes
+          tasks:
+          - name: Install applications
+               yum:
+               name: "{{ item }}"
+               state: present
+               with_items:
+               - "{{ app_list[0] }}"
+               - "{{ app_list[1] }}"
+               - "{{ app_list[2] }}"
+     ```
+     - This is the right answer
+     ```bash
+          -bash-5.1$ cat app_install.yaml 
+          ---
+          - hosts: web_nodes
+          become: yes
+          tasks:
+          - name: Install applications
+               yum:
+               name: "{{ item }}"
+               state: present
+               with_items:
+               - "{{ app_list }}"
+     ```
+
+
+9. The /home/bob/playbooks/user_setup.yaml playbook is responsible for setting up a new user on a remote server(s). The user details like username, password, and email are already added to the /home/bob/playbooks/inventory file as a dictionary variable called user_details.
+
+
+
+Right now the user details is hardcoded in the playbook. Update the /home/bob/playbooks/user_setup.yaml playbook to replace the hardcoded values to use the values from the user_details variable defined in the inventory file. Once updated, please run the playbook once to make sure it works fine.
+
+- Current setup:
+```bash
+     -bash-5.1$ cat inventory 
+     localhost ansible_connection=local nameserver_ip=8.8.8.8 snmp_port=160-161
+     node01 ansible_host=node01 ansible_ssh_pass=caleston123
+     node02 ansible_host=node02 ansible_ssh_pass=caleston123
+     [web_nodes]
+     node01
+     node02
+
+     [all:vars]
+     app_list=['vim', 'sqlite', 'jq']
+     user_details={'username': 'admin', 'password': 'secret_pass', 'email': 'admin@example.com'}
+     -bash-5.1$ cat user_setup.yaml 
+     ---
+     - hosts: all
+     become: yes
+     tasks:
+     - name: Set up user
+          user:
+          name: "admin"
+          password: "secret_pass"
+          comment: "admin@example.com"
+          state: present
+```
+
+- Updated setup:
+```bash
+     -bash-5.1$ cat user_setup.yaml 
+     ---
+     - hosts: all
+     become: yes
+     tasks:
+     - name: Set up user
+          user:
+          name: "{{ user_details['username'] }}"
+          password: "{{ user_details['password'] }}"
+          comment: "{{ user_details['email'] }}"
+          state: present
+     -bash-5.1$ ansible-playbook -i inventory user_setup.yaml 
+
+     PLAY [all] **********************************************************************************************************************************************************
+
+     TASK [Gathering Facts] **********************************************************************************************************************************************
+     ok: [localhost]
+     ok: [node02]
+     ok: [node01]
+
+     TASK [Set up user] **************************************************************************************************************************************************
+     [WARNING]: The input password appears not to have been hashed. The 'password' argument must be encrypted for this module to work properly.
+     changed: [localhost]
+     changed: [node02]
+     changed: [node01]
+
+     PLAY RECAP **********************************************************************************************************************************************************
+     localhost                  : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+     node01                     : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+     node02                     : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0 
+```
+
+- Answer with dot notation... Actually works better in ansible-playbook
+     ```bash
+          -bash-5.1$ cat user_setup.yaml 
+          ---
+          - hosts: all
+          become: yes
+          tasks:
+          - name: Set up user
+               user:
+               name: "{{ user_details.username }}"
+               password: "{{ user_details.password' }}"
+               comment: "{{ user_details.email }}"
+               state: present
+          -bash-5.1$ ansible-playbook -i inventory user_setup.yaml 
+
+          PLAY [all] **********************************************************************************************************************************************************
+
+          TASK [Gathering Facts] **********************************************************************************************************************************************
+          ok: [localhost]
+          ok: [node02]
+          ok: [node01]
+
+          TASK [Set up user] **************************************************************************************************************************************************
+          [WARNING]: The input password appears not to have been hashed. The 'password' argument must be encrypted for this module to work properly.
+          changed: [localhost]
+          changed: [node02]
+          changed: [node01]
+
+          PLAY RECAP **********************************************************************************************************************************************************
+          localhost                  : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+          node01                     : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+          node02                     : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0 
+     ```
