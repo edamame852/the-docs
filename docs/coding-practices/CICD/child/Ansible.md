@@ -15,9 +15,9 @@ has_children: true
 5. Public Cloud (e.g. Amazon, Azure)
 6. Private Cloud (e.g. VMAre)
 
-## Udemy - Intro to Ansible
+### Udemy - Intro to Ansible
 
-### Objectives
+## Objectives
 1. Intro to Ansible
 2. Ansible Configs
 3. Ansible Inventory
@@ -28,7 +28,7 @@ has_children: true
 8. Ansible Templates
 9. Reusing ansible content
 
-### Section 1: Intro to Ansible
+## Section 1: Intro to Ansible
 1. Ansible takes away repetitive tasks & long boring commands. As it helps with the following
      - Resource Provision (migration, applying patches, sizing, creating new hosts, compliance, security audits)
      - Config management
@@ -391,7 +391,7 @@ has_children: true
                                                             ansible_host: 10.12.0.102
                     ```
 
-### Section 4: Ansible Variables
+## Section 4: Ansible Variables
 
 1. Defining ansible variables
 
@@ -1665,3 +1665,130 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
           node01                     : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
           node02                     : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0 
      ```
+
+## Section 5: Ansible Playbook
+1. Idea of Ansible playbook = set of instruction you provide ansible to work its magic
+     - Playbook extensiveness
+          - A single playbook could be running a set/ series of command on multiple servers (i.e. restarting servers in a particualr order)
+          - A complex one could be to deploy hundreds of VMs across public and private cloud infras, provision storage to said VMs and adding in cluster configs and configuring apps on them (i.e. db server, web server), then setup load balaning, monitoring, installing backup clients, and updating configs with infos about the new VMs...
+
+2. Playbooks are written as a single YAML file (in YAML format)
+     - Playbook = a yaml containing a set of plays 
+     - Play = set of activities to be run on a single/group of hosts
+     - Task = single action to be performed on a host
+          - Examples of tasks:
+               - Execute a command
+               - Running a script
+               - Installing a package
+               - Shutting down or restarts
+
+     - Simple Playbook example: (FYI, goal of this play is to run a set of task on a local host, one after the other)
+     ```yaml
+          - 
+               name: Play1
+               hosts: localhost # the host is defined at play level
+               # This could be anything from the inventory file
+
+               tasks:
+                    - name: Task 1 - Execute command 'date'
+                      command: date
+                    - name: Task 2 - Execute script on server
+                      script: test_script.sh
+                    - name: Task 3 - Install httpd service/ pacakge
+                      yum:
+                         name: httpd
+                         state: present
+                    - name: Task 4 - Start web server # using the service module
+                      service:
+                         name: httpd
+                         state: started
+     ```
+
+     - Let's slightly modify this playbook and split it up into 2 sections = Now 2 plays
+          - 
+          ```yaml
+               - 
+                    name: Play1
+                    hosts: localhost # the host is defined at play level
+                    # This could be anything from the inventory file
+
+                    tasks:
+                         - name: Task 1 - Execute command 'date'
+                         command: date
+                         - name: Task 2 - Execute script on server
+                         script: test_script.sh
+
+               -
+                    name: Play2
+                    hosts: localhost
+                    tasks:
+                         - name: Task 3 - Install httpd service/ pacakge
+                         yum:
+                              name: httpd
+                              state: present
+                         - name: Task 4 - Start web server # using the service module
+                         service:
+                              name: httpd
+                              state: started
+          ```
+          - Note: Playbooks are list of dictionaries in YAML terms. Also, each play is a dictionary that has a set of properties called name, hosts, and tasks. Hence the order doesn't matter (i.e. if you swap order of `name` and `hosts` the play is still valid )
+
+          - Tasks however, is a list/ array, where order of entries matters ! List oare ordered collections.
+
+          - YAML syntax must be obeyed and extra attention is needed to the indentaion and strcture of the file
+
+
+     - `host` param = indicates which host to run it with, is always set against a play level
+
+          - For the example playbook.yaml. It's set to run on host = localhost
+          ```yaml
+               - 
+                    name: Play1
+                    hosts: localhost # the host is defined at play level
+                    # This could be anything from the inventory file
+
+                    tasks:
+                         - name: Task 1 - Execute command 'date'
+                         command: date
+                         - name: Task 2 - Execute script on server
+                         script: test_script.sh
+                         - name: Task 3 - Install httpd service/ pacakge
+                         yum:
+                              name: httpd
+                              state: present
+                         - name: Task 4 - Start web server # using the service module
+                         service:
+                              name: httpd
+                              state: started
+          ```
+          - inventory. Be sure to customize this first before you trigger any runbooks
+          ```ini
+               localhost
+               
+               server1.company.com
+               server2.company.com
+
+               [mail]
+               server3.company.com
+               server4.comapny.com
+
+               [db]
+               server5.company.com
+               server6.company.com
+
+               [web]
+               server7.comapny.com
+               server8.company.com
+          ```
+
+     - Modules in ansible playbook
+          - Different actions run by tasks are known as **Ansible modules** (e.g. command, script, yum, service)
+          - There are hundreds more with it come to ansible modules
+          - Check out the official doc for more or... run this on the cli `ansible-doc -l`
+
+3. Running / Executing the playbook
+     - Syntax to run it would be: `ansible-playbook playbook.yml` aka `ansible-playbook <playbook file name>`
+     - To know more, run `ansible-playbook --help`
+
+4. Verifying a playbook
+     - Real life example
