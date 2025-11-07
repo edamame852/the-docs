@@ -1791,4 +1791,88 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
      - To know more, run `ansible-playbook --help`
 
 4. Verifying a playbook
-     - Real life example
+     - Real life example: Writing an platbook and using it directly on production, but there was a bug in the code. Instead of updating software, it auto shuts down all services on the server = significant down time 
+     - Hence, please for the love of god, verify your playbook. Espically for prod envs, it's a cruical practice = rehersal to help rectify any errors or unexpected behaviors in a controlled place
+     - Without verification = harder and more time consuming to resolve and risk seeing unforeseen issues, such as 
+          - System down time
+          - Data loss
+     - Verification is good for:
+          - ensuring reliability of your systems
+          - maintain the stability of systems
+
+     - Ansible has different modes for playbook verification!!
+          - 1 - Check Mode (i.e. `--check`)
+               - = dry-run mode = Ansible executing the playbook without making any changes on the host
+               - Allows to see the upcoming changes WITHOUT actually applying it
+               - Example: installing nginx on web server called `install_nginx.yaml`
+               ```yaml
+                    ---
+
+                    - hosts: webservers
+                      tasks:
+                        - name: Ensure nginx is installed
+                          apt: 
+                              name: nginx
+                              state: present
+                          become: yes
+               ```
+
+               - If you run `ansible-playbook install_nginx.yaml --check`, the output would be the following
+               ```bash
+                    - PLAY [webservers] **********************
+
+                      TASK [Gathering Facts] *************************
+                      ok:[webserver1]
+
+                      TASK [Ensure nginx is installed] *************************
+                      changed:[webserver1]
+
+                      PLAY RECAP
+                      **************************************
+                      webserver1: ok=2 changed=1 unreachable=0 failed=0 skipped=0 rescued=0 ignored=0
+
+               ```
+               - The output shows that ansible COULD change the state of the webserver
+               > Note: not all Ansible modules support check mode, unsupported check mode in tasks could be SKIPPED when you run the playbook
+
+          - 2 - Diff Mode (i.e. `--diff`)
+               - Often used alongside with check mode !!
+               - Providing a before and after comparision of playbook changes = helps to understand and verify the impact of playbook before and after applying them
+               - example yaml to check if a speicifc line would be present in a config file, called `configure_nginx.yml`
+
+               ```yaml
+                    ---
+
+                    - hosts: webservers
+                      tasks:
+                        - name: Ensure the configuration line is present
+                          lineinfile:
+                            path: /etc/nginx/nginx.conf
+                            line: 'client_max_body_size 100M;'
+                           become: yes
+               ```
+               - If you run `ansible-playbook configure_nginx.yaml --check --diff`
+               - This would be the output
+
+               ```bash
+                    - PLAY [webservers] ***********************
+                      TASK [Gathering Facts] *************************
+                      ok:[webserver1]
+                      TASK[Ensure the configuration line is present]**********
+                      --- before: /etc/nginx/nginx.conf (content)
+                      +++ after: /etc/nginx/nginx.conf (content)
+                      @@ -20,3 +20,4 @@
+                      # some existing config lines
+                      # more config lines
+                      #
+                      +client_max_body_size 100M;
+                      changed: [webserver1]
+                      PLAY RECAP
+                      *********************************************
+
+                      webserver1: ok-2 changed=1 unreachable=0 failed=0 skipped=0 rescured=0 ignored=0
+               ```
+               - Explaination:
+                    - the `+` symbol shows that `client_max_body_size 100M` would be added to the file
+
+          - 3 - Syntax check mode 
