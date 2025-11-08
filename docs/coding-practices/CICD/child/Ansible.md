@@ -1653,9 +1653,9 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
           tasks:
           - name: Set up user
                user:
-               name: {% raw %}"{{ user_details.username }}"{% endraw %}
-               password: {% raw %}"{{ user_details.password' }}"{% endraw %}
-               comment: {% raw %}"{{ user_details.email }}{"% endraw %}
+               name: {% raw %}{{ user_details.username }}{% endraw %}
+               password: {% raw %}{{ user_details.password }}{% endraw %}
+               comment: {% raw %}{{ user_details.email }}{% endraw %}
                state: present
           -bash-5.1$ ansible-playbook -i inventory user_setup.yaml 
 
