@@ -1645,7 +1645,7 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
 ```
 
 - Answer with dot notation... Actually works better in ansible-playbook
-     ```text
+     ```yaml
           -bash-5.1$ cat user_setup.yaml 
           ---
           - hosts: all
