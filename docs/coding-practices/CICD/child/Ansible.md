@@ -1645,7 +1645,7 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
 ```
 
 - Answer with dot notation... Actually works better in ansible-playbook
-     ```yaml
+     ```bash
           -bash-5.1$ cat user_setup.yaml 
           ---
           - hosts: all
@@ -1653,7 +1653,7 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
           tasks:
           - name: Set up user
                user:
-               name: "{{ user_details.username }}"
+               name: {% raw %}"{{ user_details.username }}"{% endraw %}
                password: "{{ user_details.password' }}"
                comment: "{{ user_details.email }}"
                state: present
