@@ -1,6 +1,7 @@
 ---
-title: rennovation
 layout: default
-parent: Coding Practices
+title: rennovation
+nav_order: 5
 has_children: true
+permalink: /docs/rennovation
 ---

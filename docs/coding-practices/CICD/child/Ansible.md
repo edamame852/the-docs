@@ -165,6 +165,7 @@ has_children: true
           - Data example:
                - Data at simplest form = key-value pair
                     - Example
+                    - 
                     ```text
                          Fruit: Apple
                          Vegetable: Carrot
@@ -172,6 +173,7 @@ has_children: true
                     ```
                - Array/ Lists
                     - Example
+                    - 
                     ```text
                          Fruits:
                          - orange
@@ -183,6 +185,7 @@ has_children: true
                     ```
                - Dict/ Map
                     - Example
+                    - 
                     ```text
                          Banana:
                               Calories: 105
@@ -197,6 +200,7 @@ has_children: true
           - Let's take a up a notch, where we have list containing dicts containing lists
                - Example
                - Elements of list are Banana and Grape. Individual fruits has contains it's own nutritional descriptions 
+               - 
                ```text
                     Fruits:
                          - Banana:
@@ -222,7 +226,7 @@ has_children: true
 
           - Lab exercise:
                - Converting a dict to list
-
+               - 
                ```yaml
                     #Before
                     employee:
@@ -242,7 +246,6 @@ has_children: true
                          key2: value2
                     -    key3: value3
                          key4: value4
-
                ```
 
 
@@ -457,11 +460,12 @@ has_children: true
                tasks:
                     - lineinfile:
                          path: /etc/resolv.conf
-                         line: 'nameserver {{ dns_server }}'
+                         line: 'nameserver {% raw %}{{ dns_server }}{% endraw %}'
      ```
 
 - Example 2: Setting up multiple firewall using a longer playbook
      - original playbook:
+     - 
      ```yaml
           name: Set firewall configs
           hosts: web
@@ -485,6 +489,7 @@ has_children: true
      
 
      - Updated playbook
+     - 
      ```yaml
           name: Set firewall configs
           hosts: web
@@ -494,14 +499,14 @@ has_children: true
                permanent: true
                state: enabled
           - firewalld:
-               port: '{{ http_port }}'/tcp
+               port: {% raw %}'{{ http_port }}'{% endraw %}/tcp
                permanent: true
           - firewalld:
-               port: '{{ snmp_port }}'/udp
+               port: {% raw %}'{{ snmp_port }}'{% endraw %}/udp
                permanent: true
                state: disabled
           - firewalld:
-               source: '{{ inter_ip_range }}'/24
+               source: {% raw %}'{{ inter_ip_range }}'{% endraw %}/24
                Zone: internal
                state: enabled 
      ```
@@ -528,12 +533,12 @@ has_children: true
      - Example yaml code for explaining Jinja2 templates
      ```yaml
           # Correct
-          source: '{{ inter_ip_range }}'
+          source: {% raw %}'{{ inter_ip_range }}'{% endraw %}
           # Incorrect - missing quotes
-          source: {{ inter_ip_range }}
+          source: {% raw %}{{ inter_ip_range }}{% endraw %}
 
           # Correct - nullified rule due to in between quotes
-          source: hello {{ inter_ip_range }} world
+          source: hello {% raw %}{{ inter_ip_range }}{% endraw %} world
      ```
 
 3. Ansible Variable types
@@ -621,7 +626,8 @@ has_children: true
      - Ans: Think when you have 2 variables defined in 2 places.
           - File1: `/etc/ansible/hosts`
                - This is our base case
-               ```ini
+               - 
+               ```text
                     # ansible_host is a host variable
                     web1 ansible_host=172.20.1.100
                     web2 ansible_host=172.20.1.101
@@ -657,37 +663,37 @@ has_children: true
                               ```
                     - Scenario 1: Say I added dns_server in the inventory for web2! Then which one will be considered by Ansible ???
                     - 
-                         ```ini
-                              # ansible_host is a host variable
-                              web1 ansible_host=172.20.1.100
-                              # Note, even when you do this, ansible considers the host variables before associating with group variables!
-                              
-                              # dns_server=10.5.5.4 is a host variable! So it's prioritized
-                              web2 ansible_host=172.20.1.101     dns_server=10.5.5.4
-                              web3 ansible_host=172.20.1.102
-                              
-                              # I have a host group called web servers
-                              # I know all hosts in my group are configured under the same DNS server
-                              [web_servers]
-                              web1
-                              web2
-                              web3
-                              
-                              # So this common dns server IP was set
-                              [web_servers:vars]
-                              dns_server=10.5.5.3
-                         ```
+                    ```ini
+                         # ansible_host is a host variable
+                         web1 ansible_host=172.20.1.100
+                         # Note, even when you do this, ansible considers the host variables before associating with group variables!
+                         
+                         # dns_server=10.5.5.4 is a host variable! So it's prioritized
+                         web2 ansible_host=172.20.1.101     dns_server=10.5.5.4
+                         web3 ansible_host=172.20.1.102
+                         
+                         # I have a host group called web servers
+                         # I know all hosts in my group are configured under the same DNS server
+                         [web_servers]
+                         web1
+                         web2
+                         web3
+                         
+                         # So this common dns server IP was set
+                         [web_servers:vars]
+                         dns_server=10.5.5.3
+                    ```
                     - Then the outcome of the ansible groups would be:
                          - web1
                          ```ini
                               dns_server=10.5.5.3
                          ```
-                         - web1
+                         - web2
                          ```ini
                               # Prioritizing host variable first!
                               dns_server=10.5.5.4
                          ```
-                         - web1
+                         - web3
                          ```ini
                               dns_server=10.5.5.3
                          ```
@@ -709,12 +715,12 @@ has_children: true
                               # Prioritizing play variable!!!
                               dns_server=10.5.5.5
                          ```
-                         - web1
+                         - web2
                          ```ini
                               # Prioritizing play variable!!!
                               dns_server=10.5.5.5
                          ```
-                         - web1
+                         - web3
                          ```ini
                               # Prioritizing play variable!!!
                               dns_server=10.5.5.5
@@ -746,21 +752,23 @@ has_children: true
      ```
 - Now: We would like to add an extra command to capture the output of the first command and then pass it to the second command = solution: using the debug module
 
-     - playbook.yml
-     - 
-     ```yaml
-          # Note: Different module returns results in different format
-          ---
-          - name: Check /etc/hosts file
-            hosts: all
-            tasks:
-            - shell: cat /etc/hosts # 1st command, using the shell module
-            # Using the register directive to store the output value, don't forget to specify the variable name
-              register: result
+     - This is what playbook.yml would look like
+     - Note: Different module returns results in different format
+          - 
+          ```yaml
+               ---
+               - name: Check /etc/hosts file
+               hosts: all
+               tasks:
+               - shell: cat /etc/hosts 
+                    register: result
 
-            - debug: 
-               var: result # Specify the var in the 2nd command as var
-     ```
+               - debug: 
+                    var: {% raw %}{{ result }}{% endraw %}
+          ```
+          - `cat /etc/hosts` = 1st command, using the shell module. Using the register directive to store the output value, don't forget to specify the variable name
+          - `var: result` = # Specifies the var in the 2nd command as var
+
      - The shell module returns the output as the following
           - the `rc` paramter is 0 if the command runs successfully
           - the `delta` param indicates the time it takes to run the command into completion
@@ -784,20 +792,21 @@ has_children: true
           - Thing to consider...
                - We're only interested in the contents of the `/etc/hosts` file, we're only interested in the contents of `stdout` and `stdout_lines`
                - We can update our playbook's second part !!
-               - UPDATED playbook.yml
-               ```yaml
-                    # Note: Different module returns results in different format
-                    ---
-                    - name: Check /etc/hosts file
-                    hosts: all
-                    tasks:
-                         - shell: cat /etc/hosts # 1st command, using the shell module
-                    # Using the register directive to store the output value, don't forget to specify the variable name
-                           register: result
+                    - UPDATED playbook.yml
+                    - 
+                    ```yaml
+                         # Note: Different module returns results in different format
+                         ---
+                         - name: Check /etc/hosts file
+                         hosts: all
+                         tasks:
+                              - shell: cat /etc/hosts # 1st command, using the shell module
+                         # Using the register directive to store the output value, don't forget to specify the variable name
+                              register: result
 
-                         - debug: 
-                           var: result.stdout # Specify the var in the 2nd command as var
-               ```
+                              - debug: 
+                              var: result.stdout # Specify the var in the 2nd command as var
+                    ```
 
                - Scope of the registered variable `result` for web1 and web2
                     - web1
@@ -813,6 +822,7 @@ has_children: true
                     - Since it's under the host scope, they can still be used in the next play if required
 
                     - So this playbook.yaml is valid
+                    - 
                     ```yaml
                          # Note: Different module returns results in different format
                          ---
@@ -836,6 +846,7 @@ has_children: true
 - Side quest: Another way to visualize the contents of /etc/hosts without using the module
      - Solution: passing the `-v` option while triggering the playbook
      - playbook.yaml
+     - 
      ```yaml
           ---
           - name: Check /etc/hosts file
@@ -871,14 +882,15 @@ has_children: true
      ```
 
      - And we also have this playbook
-     ```yaml
-          ---
-          - name: printing dns server
-            hosts: all
-            tasks:
-            - debug:
-               msg: "{{ dns_server }}"
-     ```
+          - 
+          ```yaml
+               ---
+               - name: printing dns server
+               hosts: all
+               tasks:
+               - debug:
+                    msg: {% raw %}"{{ dns_server }}"{% endraw %}
+          ```
      - Question... Does the dns_server (defined within web2 in the inventory) variable work for the other hosts, aka web1 and web3 ? Since they don't have any pre-defined dns_server params in in the inventory ?
      - Ans:  NO, and if you return these, they will return `VARIABLE IS NOT DEFINED!`. Since the variable is defined under the host scope only
 
@@ -889,6 +901,7 @@ has_children: true
                     
                - 2 - Play scope (defined on playbook.yaml)
                     - Example playbook
+                    - 
                     ```yaml
                          ---
                          - name: Play1
@@ -906,6 +919,7 @@ has_children: true
                               var: ntp_server # variable not avaliable in 2nd play, since scope of variable ntp_server is only within the 2st play
                     ```
                     - Output
+                    - 
                     ```bash
                          PLAY [Play1] ***************************************
 
@@ -920,7 +934,6 @@ has_children: true
                          ok: [web1] => {
                               "ntp_server": "VARIABLE IS NOT DEFINED!"
                          }
-
                     ```
                - 3 - Global scope (as extra variables)
                 - Example: 
@@ -933,19 +946,21 @@ has_children: true
      - Revist: Variable Scopes = 
           - host variables associated with each host
           - For example, when this inventory file is ran
-          ```ini
-               web1 ansible_host=172.20.1.100
-               web2 ansible_host=172.20.1.101 dns_server=10.5.5.4
-               web3 ansible_host=172.20.1.102
-          ```
+               - 
+               ```ini
+                    web1 ansible_host=172.20.1.100
+                    web2 ansible_host=172.20.1.101 dns_server=10.5.5.4
+                    web3 ansible_host=172.20.1.102
+               ```
           - And we also have this playbook
+          - 
           ```yaml
                ---
                - name: printing dns server
                hosts: all
                tasks:
                - debug:
-                    msg: "{{ dns_server }}"
+                    msg: {% raw %}"{{ dns_server }}"{% endraw %}
           ```
           - It creates 3 streams of sub-processes when playbook starts sourcing from the inventory file
                - web1
@@ -960,24 +975,25 @@ has_children: true
 
      - One of the great magic variables: `hostvars`, can get variables defined on a different host
           - And we can update this playbook with `hostvars` by sourcing the var directly from web2 to be used in other hosts!
+          - 
           ```yaml
                ---
                - name: printing dns server
                hosts: all
                tasks:
                - debug:
-                    msg: "{{ hostvars['web2'].dns_server }}"
+                    msg: {% raw %}"{{ hostvars['web2'].dns_server }}"{% endraw %}
           ```
-          - Other common (default) magic variables
-               - ` hostvars['web2'].ansible_host ` = to get hostname or IP of the other host
+          - Other common (default) magic variables:
+               - `hostvars['web2'].ansible_host` = to get hostname or IP of the other host
                - If facts are gathered... you can access additional facts about other hosts: Any facts can be retrived like this 
-                    - ` hostvars['web2'].ansible_facts.architecture `
-                    - ` hostvars['web2'].ansible_facts.devices `
-                    - ` hostvars['web2'].ansible_facts.mounts `
-                    - ` hostvars['web2'].ansible_facts.processor `
+                    - `hostvars['web2'].ansible_facts.architecture`
+                    - `hostvars['web2'].ansible_facts.devices`
+                    - `hostvars['web2'].ansible_facts.mounts`
+                    - `hostvars['web2'].ansible_facts.processor`
           - Note: Magic variables can be accessed using brackets or single quotes!
-               - ` hostvars['web2']['ansible_facts']['architecture'] `
-               - ` hostvars['web2']['ansible_facts']['devices'] `
+               - `hostvars['web2']['ansible_facts']['architecture']`
+               - `hostvars['web2']['ansible_facts']['devices']`
 
 
      - Another useful magic variable: `groups`, which returns all hosts under a given group
@@ -1001,14 +1017,13 @@ has_children: true
           ```
 
           - If we use `groups`
+          - 
           ```yaml
-
-               msg: '{{ groups['americas'] }}'
-
+               msg: {% raw %}'{{ groups['americas'] }}'{% endraw %}
           ```
 
           - The output would be 
-
+          - 
           ```bash
                web1
                web2
@@ -1016,6 +1031,7 @@ has_children: true
 
      - Magic variable `group_names` is the other way around, it returns all the groups that the current host is a part of 
           - in `/etc/ansible/hosts`
+          - 
           ```ini
                web1 ansible_host=172.20.1.100
                web2 ansible_host=172.20.1.101
@@ -1035,14 +1051,13 @@ has_children: true
           ```
 
           - If we use `groups_names`
+          - 
           ```yaml
-
-               msg: '{{ groups_names }}' # On host web1
-
+               msg: {% raw %}'{{ groups_names }}'{% endraw %} # On host web1
           ```
 
           - The output would be the following when you trigger a play
-
+          - 
           ```bash
                web_servers
                americas
@@ -1051,6 +1066,7 @@ has_children: true
 
      - Magic variable `inventory_hostname` gives you the name configured for the host in the inventory file and not the host name or FQDN
           - in `/etc/ansible/hosts`
+          - 
           ```ini
                web1 ansible_host=172.20.1.100
                web2 ansible_host=172.20.1.101
@@ -1070,10 +1086,9 @@ has_children: true
           ```
 
           - If we use `inventory_hostname`
+          - 
           ```yaml
-
-               msg: '{{ inventory_hostname }}' # On host web1
-
+               msg: {% raw %}'{{ inventory_hostname }}'{% endraw %} # On host web1
           ```
 
           - The output would be the following
@@ -1105,6 +1120,7 @@ has_children: true
 - Example 1: using ansible to print a message
 
      - playbook.yaml
+     - 
      ```yaml
           ---
           - name: Print Hello Message
@@ -1135,6 +1151,7 @@ has_children: true
      - You can adjust the playbook this way to print all the facts!
 
      - updated playbook.yaml
+     - 
      ```yaml
           ---
           - name: Print Hello Message
@@ -1145,6 +1162,7 @@ has_children: true
      ```
 
      - This is the output that should entail about the host's IP, system bit (64/32), flavor, DNS server configs, CPU process chip type,  
+     - 
      ```bash
           PLAY [Reset nodes to previous state] *********************************
 
@@ -1219,6 +1237,7 @@ has_children: true
 - Example 2: Assume you don't want any gathered facts, so you wish to disable athering facts
      - You can do so via `gather_facts: no`
      - playbook example:
+     - 
      ```yaml
           ---
           - name: Print Hello Message
@@ -1230,6 +1249,7 @@ has_children: true
      ```
 
      - output would be only but a single task
+     - 
      ```bash
           PLAY [Print Hello Message] ******************************
 
@@ -1255,7 +1275,6 @@ has_children: true
           gathering      = implicit # Meaning ansible defaults to gathering facts 
 
           # if set to "explicit", it's default to not gather facts but can be regather via the playbook (i.e. gather_facts: yes)
-
      ```
 
      - Scenario: What happens if you have CONFLICTING setup for the playbook as well as the .cfg file ?
@@ -1265,6 +1284,7 @@ has_children: true
 
      - Example to explain what it means...
           - playbook example:
+          - 
           ```yaml
                ---
                - name: Print Hello Message
@@ -1356,7 +1376,7 @@ has_children: true
 4. Which of the following formats is used to call a variable in an Ansible playbook?
      - Ans: 
      ```text
-          This is my answer is this ---> '{{ my_answer }}'
+          This is my answer is this ---> {% raw %}'{{ my_answer }}'{% endraw %}
      ```
 
 5. Question + Setup; The playbook located at /home/bob/playbooks/playbook.yaml is designed to add a name server entry in the sample file /tmp/resolv.conf on localhost. The name server information is already defined as a variable named nameserver_ip within the /home/bob/playbooks/inventory file.
@@ -1376,7 +1396,7 @@ Note: You need not to execute this playbook as of now.
           - name: 'Add nameserver in resolv.conf file'
                lineinfile:
                path: /tmp/resolv.conf
-               line: 'nameserver {{  nameserver_ip  }}'
+               line: 'nameserver {% raw %}{{  nameserver_ip  }}{% endraw %}'
           - name: 'Disable SNMP Port'
                firewalld:
                port: '160-161'
@@ -1399,10 +1419,10 @@ Note: You need not to execute this playbook as of now.
           - name: 'Add nameserver in resolv.conf file'
                lineinfile:
                path: /tmp/resolv.conf
-               line: 'nameserver {{  nameserver_ip  }}'
+               line: 'nameserver {% raw %}{{  nameserver_ip  }}{% endraw %}'
           - name: 'Disable SNMP Port'
                firewalld:
-               port: '{{ snmp_port }}'
+               port: {% raw %}'{{ snmp_port }}'{% endraw %}
                permanent: true
                state: disabled 
 
@@ -1460,9 +1480,9 @@ Add three new variables named car_model, country_name, and title under the play 
                country_name: USA
                title: 'System Engineer'
           tasks:
-               - command: 'echo "My car is {{ car_model }}"'
-               - command: 'echo "I live in the {{ country_name }}"'
-               - command: 'echo "I work as a {{ title }}"'
+               - command: 'echo "My car is {% raw %}{{ car_model }}{% endraw %}"'
+               - command: 'echo "I live in the {% raw %}{{ country_name }}{% endraw %}"'
+               - command: 'echo "I work as a {% raw %}{{ title }}{% endraw %}"'
      ```
      - inventory file = NO CHANGE
      - Then run the playbook:
@@ -1517,7 +1537,7 @@ Right now the list of packages to be installed is hardcoded in the playbook. Upd
           tasks:
           - name: Install applications
                yum:
-               name: "{{ item }}"
+               name: {% raw %}"{{ item }}"{% endraw %}
                state: present
                with_items:
                - vim
@@ -1555,14 +1575,15 @@ Right now the list of packages to be installed is hardcoded in the playbook. Upd
           tasks:
           - name: Install applications
                yum:
-               name: "{{ item }}"
+               name: {% raw %}"{{ item }}"{% endraw %}
                state: present
                with_items:
-               - "{{ app_list[0] }}"
-               - "{{ app_list[1] }}"
-               - "{{ app_list[2] }}"
+               - {% raw %}"{{ app_list[0] }}"{% endraw %}
+               - {% raw %}"{{ app_list[1] }}"{% endraw %}
+               - {% raw %}"{{ app_list[2] }}"{% endraw %}
      ```
      - This is the right answer
+     - 
      ```bash
           -bash-5.1$ cat app_install.yaml 
           ---
@@ -1571,10 +1592,10 @@ Right now the list of packages to be installed is hardcoded in the playbook. Upd
           tasks:
           - name: Install applications
                yum:
-               name: "{{ item }}"
+               name: {% raw %}"{{ item }}"{% endraw %}
                state: present
                with_items:
-               - "{{ app_list }}"
+               - {% raw %}"{{ app_list }}"{% endraw %}
      ```
 
 
@@ -1585,6 +1606,7 @@ Right now the list of packages to be installed is hardcoded in the playbook. Upd
 Right now the user details is hardcoded in the playbook. Update the /home/bob/playbooks/user_setup.yaml playbook to replace the hardcoded values to use the values from the user_details variable defined in the inventory file. Once updated, please run the playbook once to make sure it works fine.
 
 - Current setup:
+- 
 ```bash
      -bash-5.1$ cat inventory 
      localhost ansible_connection=local nameserver_ip=8.8.8.8 snmp_port=160-161
@@ -1611,40 +1633,42 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
 ```
 
 - Updated setup:
-```bash
-     -bash-5.1$ cat user_setup.yaml 
-     ---
-     - hosts: all
-     become: yes
-     tasks:
-     - name: Set up user
-          user:
-          name: "{{ user_details['username'] }}"
-          password: "{{ user_details['password'] }}"
-          comment: "{{ user_details['email'] }}"
-          state: present
-     -bash-5.1$ ansible-playbook -i inventory user_setup.yaml 
+     - 
+     ```bash
+          -bash-5.1$ cat user_setup.yaml 
+          ---
+          - hosts: all
+          become: yes
+          tasks:
+          - name: Set up user
+               user:
+               name: {% raw %}"{{ user_details['username'] }}"{% endraw %}
+               password: {% raw %}"{{ user_details['password'] }}"{% endraw %}
+               comment: {% raw %}"{{ user_details['email'] }}"{% endraw %}
+               state: present
+          -bash-5.1$ ansible-playbook -i inventory user_setup.yaml 
 
-     PLAY [all] **********************************************************************************************************************************************************
+          PLAY [all] **********************************************************************************************************************************************************
 
-     TASK [Gathering Facts] **********************************************************************************************************************************************
-     ok: [localhost]
-     ok: [node02]
-     ok: [node01]
+          TASK [Gathering Facts] **********************************************************************************************************************************************
+          ok: [localhost]
+          ok: [node02]
+          ok: [node01]
 
-     TASK [Set up user] **************************************************************************************************************************************************
-     [WARNING]: The input password appears not to have been hashed. The 'password' argument must be encrypted for this module to work properly.
-     changed: [localhost]
-     changed: [node02]
-     changed: [node01]
+          TASK [Set up user] **************************************************************************************************************************************************
+          [WARNING]: The input password appears not to have been hashed. The 'password' argument must be encrypted for this module to work properly.
+          changed: [localhost]
+          changed: [node02]
+          changed: [node01]
 
-     PLAY RECAP **********************************************************************************************************************************************************
-     localhost                  : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
-     node01                     : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
-     node02                     : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0 
-```
+          PLAY RECAP **********************************************************************************************************************************************************
+          localhost                  : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+          node01                     : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+          node02                     : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0 
+     ```
 
 - Answer with dot notation... Actually works better in ansible-playbook
+     - 
      ```bash
           -bash-5.1$ cat user_setup.yaml 
           ---
@@ -1753,45 +1777,47 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
      - `host` param = indicates which host to run it with, is always set against a play level
 
           - For the example playbook.yaml. It's set to run on host = localhost
-          ```yaml
                - 
-                    name: Play1
-                    hosts: localhost # the host is defined at play level
-                    # This could be anything from the inventory file
+               ```yaml
+                    - 
+                         name: Play1
+                         hosts: localhost # the host is defined at play level
+                         # This could be anything from the inventory file
 
-                    tasks:
-                         - name: Task 1 - Execute command 'date'
-                         command: date
-                         - name: Task 2 - Execute script on server
-                         script: test_script.sh
-                         - name: Task 3 - Install httpd service/ pacakge
-                         yum:
-                              name: httpd
-                              state: present
-                         - name: Task 4 - Start web server # using the service module
-                         service:
-                              name: httpd
-                              state: started
-          ```
+                         tasks:
+                              - name: Task 1 - Execute command 'date'
+                              command: date
+                              - name: Task 2 - Execute script on server
+                              script: test_script.sh
+                              - name: Task 3 - Install httpd service/ pacakge
+                              yum:
+                                   name: httpd
+                                   state: present
+                              - name: Task 4 - Start web server # using the service module
+                              service:
+                                   name: httpd
+                                   state: started
+               ```
           - inventory. Be sure to customize this first before you trigger any runbooks
-          ```ini
-               localhost
-               
-               server1.company.com
-               server2.company.com
+               - 
+               ```ini
+                    localhost
+                    
+                    server1.company.com
+                    server2.company.com
 
-               [mail]
-               server3.company.com
-               server4.comapny.com
+                    [mail]
+                    server3.company.com
+                    server4.comapny.com
 
-               [db]
-               server5.company.com
-               server6.company.com
+                    [db]
+                    server5.company.com
+                    server6.company.com
 
-               [web]
-               server7.comapny.com
-               server8.company.com
-          ```
+                    [web]
+                    server7.comapny.com
+                    server8.company.com
+               ```
 
      - Modules in ansible playbook
           - Different actions run by tasks are known as **Ansible modules** (e.g. command, script, yum, service)
@@ -1817,33 +1843,34 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
                - = dry-run mode = Ansible executing the playbook without making any changes on the host
                - Allows to see the upcoming changes WITHOUT actually applying it
                - Example: installing nginx on web server called `install_nginx.yaml`
-               ```yaml
-                    ---
+                    - 
+                    ```yaml
+                         ---
 
-                    - hosts: webservers
-                      tasks:
-                        - name: Ensure nginx is installed
-                          apt: 
-                              name: nginx
-                              state: present
-                          become: yes
-               ```
+                         - hosts: webservers
+                         tasks:
+                         - name: Ensure nginx is installed
+                              apt: 
+                                   name: nginx
+                                   state: present
+                              become: yes
+                    ```
 
                - If you run `ansible-playbook install_nginx.yaml --check`, the output would be the following
-               ```bash
-                    - PLAY [webservers] **********************
+                    - 
+                    ```bash
+                         - PLAY [webservers] **********************
 
-                      TASK [Gathering Facts] *************************
-                      ok:[webserver1]
+                         TASK [Gathering Facts] *************************
+                         ok:[webserver1]
 
-                      TASK [Ensure nginx is installed] *************************
-                      changed:[webserver1]
+                         TASK [Ensure nginx is installed] *************************
+                         changed:[webserver1]
 
-                      PLAY RECAP
-                      **************************************
-                      webserver1: ok=2 changed=1 unreachable=0 failed=0 skipped=0 rescued=0 ignored=0
-
-               ```
+                         PLAY RECAP
+                         **************************************
+                         webserver1: ok=2 changed=1 unreachable=0 failed=0 skipped=0 rescued=0 ignored=0
+                    ```
                - The output shows that ansible COULD change the state of the webserver
                > Note: not all Ansible modules support check mode, unsupported check mode in tasks could be SKIPPED when you run the playbook
 
