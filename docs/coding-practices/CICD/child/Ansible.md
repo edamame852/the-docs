@@ -759,14 +759,13 @@ has_children: true
 
             - debug: 
                var: result # Specify the var in the 2nd command as var
-
      ```
      - The shell module returns the output as the following
           - the `rc` paramter is 0 if the command runs successfully
           - the `delta` param indicates the time it takes to run the command into completion
           - the `stdout` param to indicate the standard out of the commands
           - 
-          ```json
+          ```text
                ok:[web2] => {
                     "output" : {
                          "ansible_facts": {
