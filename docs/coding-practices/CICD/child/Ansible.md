@@ -747,6 +747,7 @@ has_children: true
 - Now: We would like to add an extra command to capture the output of the first command and then pass it to the second command = solution: using the debug module
 
      - playbook.yml
+     - 
      ```yaml
           # Note: Different module returns results in different format
           ---
