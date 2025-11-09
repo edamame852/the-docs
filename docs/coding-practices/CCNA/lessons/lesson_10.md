@@ -61,4 +61,27 @@ Lesson 9 - CCNA Fast Track (June, 2025). We left off at page 163. It ends at the
 ## Simulation 42
 
 ## Simulation 31
+- Topology: ![](../../../../../assets/images/ccna/simulation/simulation_31.png)
+- 
+| Device      | Interface        | IP Address        |
+| ----------- | -----------      | -----------       |
+| R1          | Loopback 0       | 10.1.1.1/32       |
+| R2          | Loopback 0       | 10.2.2.2/32       |
+| R3          | Loopback 0       | 10.3.3.3/32       |
+| SW101       | Loopback 0       | 10.101.1.1/32     |
+| SW101       | VLAN 101         | 10.101.101.101/24 |
 
+
+- Tasks:
+    - Task 1: Refer to the diagram. Configure OSPF area 0 with process ID 1 on R1, R2 and R3 and SW101. Use a **single command** under the OSPD process to achieve this
+    - Solution:Perform all the following on R1, R2, R3 and SW101
+    - 
+    ```text
+        en
+        config t
+        router ospf 1
+        network 10.0.0.0 0.255.255.255 area 0
+        end
+        copy run start
+    ```
+    - Task 2:
