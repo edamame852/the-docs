@@ -59,6 +59,24 @@ Lesson 9 - CCNA Fast Track (June, 2025). We left off at page 163. It ends at the
 
 # Simulation
 ## Simulation 42
+- Topology: ![](../../../../../assets/images/ccna/simulation/simulation_42.png)
+
+- Tasks:
+    - Overall layout, all physical cabling is in place. R2 and R3 are inaccessible. Config OSPF routing for the network and ensure R1 has joined area 0 WITHOUT using network statements!
+    - Task 1:
+        - Configure OSPF on R1 iwth process ID and router ID only as the following...
+            - Using process ID 33
+            - Use e0/1 IP as the router ID
+
+        - Solution:
+            - on R1:
+            ```text
+                en
+                sh run
+            ``` 
+            - This will help get the router ID
+
+
 
 ## Simulation 31
 - Topology: ![](../../../../../assets/images/ccna/simulation/simulation_31.png)
@@ -73,15 +91,52 @@ Lesson 9 - CCNA Fast Track (June, 2025). We left off at page 163. It ends at the
 
 
 - Tasks:
-    - Task 1: Refer to the diagram. Configure OSPF area 0 with process ID 1 on R1, R2 and R3 and SW101. Use a **single command** under the OSPD process to achieve this
-    - Solution:Perform all the following on R1, R2, R3 and SW101
-    - 
-    ```text
-        en
-        config t
-        router ospf 1
-        network 10.0.0.0 0.255.255.255 area 0
-        end
-        copy run start
-    ```
-    - Task 2:
+    - Task 1: Refer to the diagram. Configure OSPF area 0 with process ID 1 on R1, R2 and R3 and SW101. Use a **single command** under the OSPD process to achieve this.
+        - Solution: Perform all the following on R1, R2, R3 and SW101
+        - 
+        ```text
+            en
+            config t
+            router ospf 1
+            network 10.0.0.0 0.255.255.255 area 0
+            end
+            copy run start
+        ```
+        - Explanation: Note that all IP starts with 10.x.x.x, hence we can use the wildcard mask of 0.255.255.255 to off set it. Hence `router ospf 1` + `network 10.0.0.0 0.255.255.255 area 0`
+
+    - Task 2: Configure SW 101 so that it's always gonna be the DR for the VLAN 101 network. Note, there should be no BDR. Two things to be careful about.
+        - First, don't use the neighbor command under the OSPF process to achieve this. (i.e. `ospf` has been banned)
+        - Second, no config changes can be performed on SW 101 (no touching SW 101)
+        - Solution: Perform on R1, R2 and R3 using priority, with ints facing SW101
+            - For R1
+            ```text
+                en
+                config t
+                int e0/2
+                ip ospf priority 0
+                end
+                copy run start
+            ```
+            - For R2
+            ```text
+                en
+                config t
+                int e0/1
+                ip ospf priority 0
+                end
+                copy run start
+            ```
+            - For R3
+            ```text
+                en
+                config t
+                int e0/0
+                ip ospf priority 0
+                end
+                copy run start
+            ```
+        - Explanation:
+            - Doing `ip ospf priority 0` on all R1, R2 and R3 facing SW101 will ensure SW101 is always the DR since it has the highest priority (default is 1). Therefore eliminating the need to configure DR and BDR. `pirority 0` means it cannot be elected as DR or BDR = giving up on DR and BDR chances.
+            - Had neighbor command been allowed, we could have configured SW101 as DR directly using neighbor command under OSPF process.
+            - Recall in page 155 where we can do things like `sh ip ospf int g0/0` or `sh ip ospf neighbor` to verify the DR and BDR status. For refernce click [here](../lesson_8/#104-configuring-ospf-broadcast-on-cicso-router) 
+
