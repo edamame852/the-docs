@@ -1703,6 +1703,8 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
      ```
 
 ## Section 5: Ansible Playbook
+
+### Section 5.1 - Ansible Playbooks
 1. Idea of Ansible playbook = set of instruction you provide ansible to work its magic
      - Playbook extensiveness
           - A single playbook could be running a set/ series of command on multiple servers (i.e. restarting servers in a particualr order)
@@ -1828,7 +1830,8 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
      - Syntax to run it would be: `ansible-playbook playbook.yml` aka `ansible-playbook <playbook file name>`
      - To know more, run `ansible-playbook --help`
 
-4. Verifying a playbook
+### Section 5.2 - Verifying Playbooks
+1. Verifying a playbook
      - Real life example: Writing an platbook and using it directly on production, but there was a bug in the code. Instead of updating software, it auto shuts down all services on the server = significant down time 
      - Hence, please for the love of god, verify your playbook. Espically for prod envs, it's a cruical practice = rehersal to help rectify any errors or unexpected behaviors in a controlled place
      - Without verification = harder and more time consuming to resolve and risk seeing unforeseen issues, such as 
@@ -1914,4 +1917,132 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
                - Explaination:
                     - the `+` symbol shows that `client_max_body_size 100M` would be added to the file
 
-          - 3 - Syntax check mode 
+          - 3 - Syntax check mode: (i.e. `--syntax-check`)
+               - It checks syntax of playbook for any errors, quick way to catch syntax error that could cause playbook to fail during execution
+               - Quick way for you to catch errors before running the playbook on your hosts!
+               - For example, I have configure_nginx.yml
+               ```yaml
+                    ---
+
+                    - hosts: webservers
+                      tasks:
+                        -  name: Ensure the configuration line is present
+                           lineinfile:
+                              path: /etc/nginx/nginx.conf
+                              line: 'client_max_body_size 100M;'
+                           become: yes
+               ```
+               - Run syntax check with the command
+               ```bash
+                    ansible-playbook configure_nginx.yaml --syntax-check
+               ```
+               - Output would be 
+               ```bash
+                    - PLAY [webservers] **********************
+
+                    TASK [Ensure the configuration line is present] ***************
+                    ok: [webserver1]
+
+                    PLAY RECAP
+                    **************************************
+
+                    webserver1: ok=1 changed=0 unreachable=0 failed=0 skipped=0 rescued=0 ignored=0
+               ```
+
+               - Let's introde a syntax error in the playbook = removing the `:` before `lineinfile` in the task section
+               ```yaml
+                    ---
+
+                    - hosts: webservers
+                      tasks:
+                        -  name: Ensure the configuration line is present
+                           lineinfile 
+                              path: /etc/nginx/nginx.conf
+                              line: 'client_max_body_size 100M;'
+                           become: yes
+               ```
+               - Running the syntax check again
+               ```bash
+                    ansible-playbook configure_nginx.yaml --syntax-check
+               ```
+               - Output would be
+               ```bash
+                    ERROR! Syntax Error while loading YAML.
+                         did not find expected key
+                    The error appears to be in '/path/to/configure_nginx.yaml': line 5, column 9, but may
+                    be elsewhere in the file depending on the exact syntax problem.
+                    The offending line appears to be:
+                         lineinfile
+                              path: /etc/nginx/nginx.conf
+                              ^ here
+               ```
+
+### Section 5.3 - Ansible Init
+- Previous, we talked about the following...
+     - Importance of playbook verification in Ansible via `--check`, `--diff`, and `--syntax-check` modes to ensure ansible playbooks behave as expected before actual execution.
+- Let's take it up a notch: `ansible` was already embedded into the company's infra, multiple playbooks are already written. As infra complextiy grows, playbook complexity grows
+     - Need a way to ensure consistency and quality across all playbooks
+     - Enter `ansible-lint` = a tool to analyze ansible playbooks, roles, collections for potential errors, bugs, style errors and suspicious constructs. Kinda like having a seasoned Ansible metor helping you out
+
+- Example of using `ansible-lint`, say I have this file `style_example.yaml`
+     - Some tasks to install and config nginx. WITH STYLING issues
+     ```yaml
+          - name: Style example Playbook
+            hosts: localhost
+            tasks:
+              - name: Ensure nginx is installed & started
+                apt:
+                  name: nginx
+                  state: latest
+                  update_cache: yes
+              - name: Enable nginx service at boot
+          service:
+               name: nginx
+               enabled: yes
+               state: started
+          - name: Copy nginx config file
+            copy:
+               src: /path/to/nginx.conf
+               dest: /etc/nginx/nginx.conf
+            notify:
+              - Restart nginx service
+          
+          handlers:
+               - name: Restart nginx service
+                 service:
+                   name: nginx
+                   state: restarted
+     ```
+     - Issues!
+          - some tasks has 2 spaces of identation, some have 4
+          - taskd name are also inconsistenet (some consise, some took sentence like approach)
+     - Running `ansible-lint style_example.yaml` would give the following output
+     ```bash
+          [WARNING]: incorrect identation: expcted 2 but found 4 (syntax/identification)
+          style_example.yaml:6
+
+          [WARNING]: command should not contain whitespace (blacklisted:['apt']) (commands)
+          style_example.yaml:6
+
+          [WARNING]: Use shell only when shell functionality is required (deprecated in favor of 'cmd') (commands)
+          style_example.yaml:6
+
+          [WARNING]: command should not contain whitespace (blacklisted:['service']) (commands)
+          style_example.yaml:12
+
+          [WARNING]: 'name' should be present for all tasks (task-name-missing) (tasks)
+          style_example.yaml:14
+     ```
+     - Conclusion: ansible catches all style related issues and provides us with warnings (e.g. incorrect identation, missing name attribute, use of blacklisted commands (deprecated apt and service modules)). Please use `ansible-lint` to refine your playbook 
+
+### Section 5.4 - Coding exercises, Ansible Playbook
+
+1. Setting the ground
+- 
+```text
+     In this lab exercise you will use below hosts. Please note down some details about these hosts as given below:
+
+     `student-node` - This host will act as an Ansible master node where you will create `playbooks`, `inventory`, `role` file etc and you'll be running your playbooks from this host itself.
+
+     `node01` and `node02` - These two hosts will act as Ansible managed nodes where the tasks defined in the playbooks will be executed.
+```

@@ -49,7 +49,7 @@ Lesson 9 - CCNA Fast Track (June, 2025). We left off at page 163. It ends at the
 ```
 
 - On R2, privilage mode `ssh -l user1 192.168.1.1` (i.e. Trying to access R1 from R2 via ssh) and enter the password and it should work :D
-
+ 
 # 14. IPv6
 
 ## 14.1 Overview 
@@ -64,7 +64,7 @@ Lesson 9 - CCNA Fast Track (June, 2025). We left off at page 163. It ends at the
 - Tasks:
     - Overall layout, all physical cabling is in place. R2 and R3 are inaccessible. Config OSPF routing for the network and ensure R1 has joined area 0 WITHOUT using network statements!
     - Task 1:
-        - Configure OSPF on R1 iwth process ID and router ID only as the following...
+        - Need to configure OSPF on R1 iwth process ID and router ID only as the following...
             - Using process ID 33
             - Use e0/1 IP as the router ID
 
@@ -74,7 +74,60 @@ Lesson 9 - CCNA Fast Track (June, 2025). We left off at page 163. It ends at the
                 en
                 sh run
             ``` 
-            - This will help get the router ID
+            - This will help get the router ID and all the ip address of the connected interfaces!
+            - Returns the following output
+            - 
+            ```text
+                interface Loopback 0
+                    ip address 10.11.11.11 255.255.255.255
+                !
+                interface Ethernet0/0
+                    ip address 10.0.22.1 255.255.255.252
+                    duplex auto
+                !
+                interface Ethernet0/1
+                    ip address 10.0.33.1 255.255.255.248
+                    duplex auto
+                !
+                interface Ethernet0/2
+                    no ip address
+                    duplex auto
+                !
+            ```
+            - This means that the IP address for the int e0/1 is `10.0.33.1`. So we should configure ospf on that IP ! Note: `ospf 33` the process ID is then 33
+            - Continuing on R1
+            - 
+            ```text
+                en
+                config t
+                router ospf 33
+                router-id 10.0.33.1
+                end
+                copy run start
+            ```
+            > Note: page 155 is for OSPF unification and page 159 is for clearing OSPF process
+
+    - Task 2: Need to configure 2 things...
+        - One, configure R1 to establish neighbor adjacencies with R2 and R3. DO NOT USE the network statements under the OSPF process
+        - Two, Config R1 to ALWAYS be the DR for area 0!
+        - Solution:
+            - on R1
+            ```text
+                en
+                config t
+
+                int e0/0
+                ip ospf 33 area 0
+                ip ospf priority 255
+
+                int e0/1
+                ip ospf 33 area 0
+                ip ospf priority 255
+
+                end
+                copy run start
+            ```
+        - Explanation: the `255` is merely to make R1 the DR always since it is the highest priority (default is 1). Hence R2 and R3 will be BDR and DROTHER respectively. `255` is the max priority value!
 
 
 
