@@ -18,8 +18,9 @@ grand_parent: Coding Practices
 # Setting up
 ## Setting up maven in ubuntu
 1. Install maven using `apt`
+- 
 ``` bash
-sudo apt update && sudo apt install maven 
+    sudo apt update && sudo apt install maven 
 ```
 Enter sudo password, Type Y if needed
 
@@ -39,18 +40,20 @@ Try `wget https://download.oracle.com/java/22/latest/jdk-22_linux-x64_bin.deb`
 1. `sudo crontab -l` check what crontab is running
 2. `sudo crontab -e` and add the following lines
 3. 
+- 
 ```bash
-## Check MacOS sudo crontab log with this command:
-## sudo log show --predicate 'process == "cron"' --info
+    ## Check MacOS sudo crontab log with this command:
+    ## sudo log show --predicate 'process == "cron"' --info
 
-## Clear Disk Cache (sudo purge)
-* * * * * sudo purge
+    ## Clear Disk Cache (sudo purge)
+    * * * * * sudo purge
 
-## Cler RAM Cache (every hour)
-0 * * * * rm -rf ~/Lib/Caches/*
+    ## Clear RAM Cache (every hour)
+    0 * * * * rm -rf ~/Lib/Caches/*
 ```
 
 4. Extra: You can use this bash script to check the logs for running your crontabs
+- 
 ```bash
-sudo log show --predicate 'process == "cron"' --info
+    sudo log show --predicate 'process == "cron"' --info
 ```

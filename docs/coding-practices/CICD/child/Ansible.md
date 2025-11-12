@@ -2035,7 +2035,7 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
      ```
      - Conclusion: ansible catches all style related issues and provides us with warnings (e.g. incorrect identation, missing name attribute, use of blacklisted commands (deprecated apt and service modules)). Please use `ansible-lint` to refine your playbook 
 
-### Section 5.4 - Coding exercises, Ansible Playbook
+### Section 5.4 - Lab: Coding exercises, Ansible Playbook
 
 1. Setting the ground
 - 
@@ -2044,5 +2044,254 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
 
      `student-node` - This host will act as an Ansible master node where you will create `playbooks`, `inventory`, `role` file etc and you'll be running your playbooks from this host itself.
 
-     `node01` and `node02` - These two hosts will act as Ansible managed nodes where the tasks defined in the playbooks will be executed.
+     `node01` - This host will act as an Ansible client/ remote host where you will setup or install some stuff using Ansible playbooks. Below are the SSH credentials for this host:
+
+     User: `bob`
+     Password: `caleston123`
+
+     `node02` - This host will also act as an Ansible client/ remote host where you will setup or install some stuff using Ansible playbooks. Below are the SSH credentials for this host:
+
+     User: `bob`
+     Password: `caleston123`
+
+     Note: Please type `exit` or `logout` on the terminal or press `CTRL+d` to log out from a specific node.
 ```
+
+2. Which of the following formats is the Ansible Playbook written in ? Ans: YAML
+
+3. How many Ansible plays are present in the following playbook
+- 
+```yaml
+     ---
+     - name: Setup apache
+       hosts: webserver
+       tasks:
+         - name: Install httpd
+           yum:
+             name: httpd
+             state: installed
+         - name: Start httpd service
+           service:
+             name: httpd
+             state: started
+
+     - name: Setup tomcat
+       hosts: appserver
+       tasks:
+         - name: Install tomcat not httpd
+           yum:
+             name: tomcat
+             state: installed
+         - name: Start service
+           service:
+             name: tomcat
+             state: started
+```
+- Ans: 2 plays
+
+4. How many tasks under the Setup apache play ? Ans: 2
+
+5. If we use the following inventory, on which hosts will Ansible install the `httpd` paackage using the given playbook ?
+- inventory.ini
+```ini
+[webserver]
+web1
+web2
+
+[appserver]
+app1
+app2
+app3
+```
+
+- playbook.yaml
+```yaml
+     ---
+     - name: Setup apache
+       hosts: webserver
+       tasks:
+         - name: Install httpd
+           yum:
+             name: httpd
+             state: installed
+
+     - name: Setup tomcat
+       hosts: appserver
+       tasks:
+         - name: Install tomcat not httpd
+           yum:
+             name: tomcat
+             state: installed
+```
+
+- Ans: web1 and web2 only
+
+
+6. Which of the following commands can you run to run an Ansible playbook named `install.yaml` ?
+- option A: `ansible-playbook install.yaml`
+- option B: `ansible-play run install.yaml`
+- option C: `ansible-playbook -p install.yaml`
+- option D: `ansible-playbook -i install.yaml`
+
+- Ans: Option A
+
+7. A sample playbook named `update_service.yml` is show below and it's suppose to update a service on your servers
+
+- 
+```yaml
+     - hosts: all
+       tasks:
+           - name: Install a new package
+             apt:
+                name: new_package
+                state: present
+           - name: Update the service
+             service:
+               name: my_service
+               state: restarted 
+           - name: Check service status
+             service:
+               name: my_service
+               state: started
+```
+
+- Which command would you use to run `update_service.yml` playbook in check mode ?
+- option A: `ansible update_service.yml`
+- option B: `ansible-play update_service.yml --check`
+- option C: `ansible-playbook update_service.yml`
+- option D: `ansible-playbook --check update_service.yml`
+
+- Ans: Option B
+
+8. Consider again the same sample playbook named `update_service.yml` shown below
+- 
+```yaml
+     - hosts: all
+       tasks:
+           - name: Install a new package
+             apt:
+                name: new_package
+                state: present
+           - name: Update the service
+             service:
+               name: my_service
+               state: restarted 
+           - name: Check service status
+             service:
+               name: my_service
+               state: started
+```  
+
+- Let's suppose you have already ran this playbook on your server. Now, once your run this playbook in check mode against the same server, which tasks would result in a changed status?
+
+- option A: Installing a new packge
+- option B: Updating the service
+- option C: Checking the service status
+- option D: All of the above tasks
+
+- Ans: option B
+     - Explanation: `Update the service` would be marked as changed because restarting a service is a change in state. The rest of the tasks are already ran on the server, since package is present and already installed and the service was already started.
+
+
+9. Let's look at a new playbook named `configure_database.yml` that modifies a config file on all database servers, the yaml is the file shown below:
+
+- 
+```yaml
+     - hosts: all
+       tasks:
+         - name: Set max_connections in db config
+           lineinfile:
+               path: /etc/postgresql/12/main/postgresql.conf
+               line: 'max_connections = 500'
+
+        - name: Set listen address
+          lineinfile:
+               path: /etc/postgresql/12/main/postgresql.conf
+               line: 'listen_addresses = "*"'
+```
+
+- Which command would you use to run `configure_database.yml` playbook in diff and check mode ?
+
+- option A: `ansible-playbook configure_database.yml --diff`
+- option B: `ansible-playbook configure_database.yml --check`
+- option C: `ansible-playbook configure_database.yml --check --diff`
+- option D: `ansible-playbook --diff --check configure_database.yml`
+
+- Ans: option C
+
+10. Consider again the same exact playbook `configure_database.yml` shown above:
+
+- To check the `configure_database.yml` for syntax errors, which command would you use?
+
+- option A: `ansible-playbook configure_database.yml`
+- option B: `ansible-playbook configure_database.yml --syntax`
+- option C: `ansible-playbook --syntax-check configure_database.yml`
+- option D: `ansible configure_database.yml --syntax-check`
+
+- Ans: option C
+
+11. You have the following Ansible playbook named `database_setup.yml`, you're suppose to setup a PostgreSQL db on your server, but before deploying it, you want to ensure that it adheres to the best practices and doesn't have any style-related issues:
+
+This is the initial content of the playbook:
+- 
+```yaml
+     - name: Database setup playbook
+       hosts: db_servers
+       tasks:
+         - name: Ensure PostgreSQL is installed
+           apt:
+             name: postgresql
+             state: latest
+             update_cache: yes
+
+         - name: Start PostgreSQL service
+           service:
+             name: postgresql
+             state: started
+
+         - copy:
+             src: /path/to/ph_hba.conf
+             dest: /etc/postgresql/12/main/postgresql.conf
+           notify:
+             - Restart PostgreSQL
+```
+
+- Which command would you use to run `ansible-lint` on the `database_setup.yml` playbook?
+
+- option A: `ansible database_setup.yml --lint`
+- option B: `ansible-lint database_setup.yml`    
+- option C: `ansible-playbook database_setup.yml --lint`
+- option D: `lint-ansible database_setup.yml`
+
+- Ans: option B 
+
+12. After running the same `database_setup.yml` playbook through `ansible-lint`, what might you expect to see in the output?
+
+- option A: Incorrect identition
+- option B: Depreciated module usage (i.e. apt)
+- option C: Missing name attribute in tasks
+- option D: Use of blacklisted command
+
+- Ans: A & C (since `copy` is indented incorrectly and missing name attribute in the last task)
+
+13. After you've been given feedback from your `ansible-lint` about potential issues in your hypotetical `webserver_setup.yml` playbook. The feedback mentions issues with indentation, deprecated modules and missing `name` attributes.
+
+Which of the following is NOT a recommended action based on the feedback ?
+
+- Option A: Correcting the indentiation in the playbook
+- Option B: Replacing deprecated modules with their recommended alternatives (i.e. new counterparts)
+- Option C: Ignoring feedback and proceeding with playbook executions
+- Option D: Adding 'name' attributes to tasks that are missing them
+
+- Ans: Option C, ignoring is not an option!
+
+14. If `ansible-lint` provides no output after checking a playbook, what does it indicate ?
+- Option A: The playbook has syntax errors
+- Option B: Playbook is empty
+- Option C: playbook adheres to best practices and has no styled issues
+- Option D: ansible-lint failed to check the playbook
+
+- Ans: Option C, best practice has been reached!
+
+15. Update the name of the play in `/home/bob/playbooks/playbook.yaml` playbook to excute a datecommand on localhost
+
