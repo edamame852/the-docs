@@ -2232,7 +2232,7 @@ app3
 
 11. You have the following Ansible playbook named `database_setup.yml`, you're suppose to setup a PostgreSQL db on your server, but before deploying it, you want to ensure that it adheres to the best practices and doesn't have any style-related issues:
 
-This is the initial content of the playbook:
+- This is the initial content of the playbook:
 - 
 ```yaml
      - name: Database setup playbook
@@ -2293,5 +2293,451 @@ Which of the following is NOT a recommended action based on the feedback ?
 
 - Ans: Option C, best practice has been reached!
 
-15. Update the name of the play in `/home/bob/playbooks/playbook.yaml` playbook to excute a datecommand on localhost
+15. Update the name of the play in `/home/bob/playbooks/playbook.yaml` playbook to excute a date command on localhost
 
+- Solution:
+- 
+```bash
+     [bob@student-node playbooks]$ ls
+     ansible.cfg  inventory  playbook.yaml
+     [bob@student-node playbooks]$ cat playbook.yaml 
+     ---
+     - hosts: localhost
+     become: yes
+     tasks:
+     - name: 'Execute a date command'
+          command: date       
+
+     [bob@student-node playbooks]$ vi playbook.yaml 
+     [bob@student-node playbooks]$ cat playbook.yaml 
+     ---
+     - hosts: localhost
+     become: yes
+     tasks:
+     - name: 'Execute a date command on localhost'
+          command: date       
+
+     [bob@student-node playbooks]$ ansible-playbook -i inventory playbook.yaml
+
+     PLAY [localhost] ***************************************************************************************************************************************************
+
+     TASK [Gathering Facts] *********************************************************************************************************************************************
+     ok: [localhost]
+
+     TASK [Execute a date command on localhost] *************************************************************************************************************************
+     changed: [localhost]
+
+     PLAY RECAP *********************************************************************************************************************************************************
+     localhost                  : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0 
+```
+
+16. Update the playbook /home/bob/playbooks/playbook.yaml to add a task name Task to display hosts file for the existing task.
+
+- 
+```bash
+     [bob@student-node playbooks]$ ls
+     ansible.cfg  inventory  playbook.yaml
+     [bob@student-node playbooks]$ cat playbook.yaml 
+     ---
+     - name: 'Execute a command to display hosts file on localhost'
+     hosts: localhost
+     become: yes
+     tasks:
+     - command: 'cat /etc/hosts'       
+     [bob@student-node playbooks]$ vi playbook.yaml
+     [bob@student-node playbooks]$ cat playbook.yaml 
+     ---
+     - name: 'Execute a command to display hosts file on localhost'
+     hosts: localhost
+     become: yes
+     tasks:
+     - name: Task to display hosts file
+          command: 'cat /etc/hosts'      
+     [bob@student-node playbooks]$ ansible-playbook -i inventory playbook.yaml 
+
+     PLAY [Execute a command to display hosts file on localhost] ********************************************************************************************************
+
+     TASK [Gathering Facts] *********************************************************************************************************************************************
+     ok: [localhost]
+
+     TASK [Task to display hosts file] **********************************************************************************************************************************
+     changed: [localhost]
+
+     PLAY RECAP *********************************************************************************************************************************************************
+     localhost                  : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+```
+
+17. We have reset the playbook /home/bob/playbooks/playbook.yaml, now update it to add another task. The new task must execute the command cat /etc/resolv.conf and set its name to Task to display nameservers.
+
+- Solution:
+- 
+```bash
+     [bob@student-node playbooks]$ cat playbook.yaml 
+     ---
+     - name: 'Execute two commands on localhost'
+     hosts: localhost
+     become: yes
+     tasks:
+     - name: 'Execute a date command'
+          command: date       
+     [bob@student-node playbooks]$ vi playbook.yaml 
+     [bob@student-node playbooks]$ cat playbook.yaml 
+     ---
+     - name: 'Execute two commands on localhost'
+     hosts: localhost
+     become: yes
+     tasks:
+     - name: 'Execute a date command'
+          command: date       
+     - name: 'Task to display nameservers'
+          command: cat /etc/resolv.conf
+     [bob@student-node playbooks]$ ansible-playbook -i inventory playbook.yaml 
+
+     PLAY [Execute two commands on localhost] ***************************************************************************************************************************
+
+     TASK [Gathering Facts] *********************************************************************************************************************************************
+     ok: [localhost]
+
+     TASK [Execute a date command] **************************************************************************************************************************************
+     changed: [localhost]
+
+     TASK [Task to display nameservers] *********************************************************************************************************************************
+     changed: [localhost]
+
+     PLAY RECAP *********************************************************************************************************************************************************
+     localhost                  : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0 
+```
+
+18. So far, we have been running all tasks on localhost. We would now like to run these tasks on node01, this host is already defined in /home/bob/playbooks/inventory file. Update the playbook /home/bob/playbooks/playbook.yaml to run the tasks on the node01 host.
+
+- Solution:
+
+- 
+```bash
+     [bob@student-node playbooks]$ cat playbook.yaml 
+     ---
+     - name: 'Execute two commands on node01'
+     hosts: localhost
+     become: yes
+     tasks:
+     - name: 'Execute a date command'
+          command: date
+     - name: 'Task to display hosts file'
+          command: 'cat /etc/hosts'
+     [bob@student-node playbooks]$ vi playbook.yaml 
+     [bob@student-node playbooks]$ cat playbook.yaml 
+     ---
+     - name: 'Execute two commands on node01'
+     hosts: node01
+     become: yes
+     tasks:
+     - name: 'Execute a date command'
+          command: date
+     - name: 'Task to display hosts file'
+          command: 'cat /etc/hosts'
+     [bob@student-node playbooks]$ ansible-playbook -i inventory playbook.yaml 
+
+     PLAY [Execute two commands on node01] ******************************************************************************************************************************
+
+     TASK [Gathering Facts] *********************************************************************************************************************************************
+     ok: [node01]
+
+     TASK [Execute a date command] **************************************************************************************************************************************
+     changed: [node01]
+
+     TASK [Task to display hosts file] **********************************************************************************************************************************
+     changed: [node01]
+
+     PLAY RECAP *********************************************************************************************************************************************************
+     node01                     : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+```
+
+19. Refer to the /home/bob/playbooks/inventory file. We would like to run the /home/bob/playbooks/playbook.yaml on all servers defined under web_nodes group.
+
+
+Note: Use the group name in playbook as defined in the inventory file.
+
+- Solution:
+
+- 
+```bash
+     [bob@student-node playbooks]$ cat inventory 
+     node01 ansible_host=node01 ansible_ssh_pass=caleston123
+     node02 ansible_host=node02 ansible_ssh_pass=caleston123
+     [web_nodes]
+     node01
+     node02
+
+     [bob@student-node playbooks]$ cat playbook.yaml 
+     ---
+     - name: 'Execute two commands on web_nodes'
+     hosts: node01
+     become: yes
+     tasks:
+     - name: 'Execute a date command'
+          command: date
+     - name: 'Task to display hosts file'
+          command: 'cat /etc/hosts'
+     [bob@student-node playbooks]$ vi playbook.yaml 
+     [bob@student-node playbooks]$ cat playbook.yaml 
+     ---
+     - name: 'Execute two commands on web_nodes'
+     hosts: web_nodes
+     become: yes
+     tasks:
+     - name: 'Execute a date command'
+          command: date
+     - name: 'Task to display hosts file'
+          command: 'cat /etc/hosts'
+     [bob@student-node playbooks]$ ansible-playbook -i inventory playbook.yaml 
+
+     PLAY [Execute two commands on web_nodes] ***************************************************************************************************************************
+
+     TASK [Gathering Facts] *********************************************************************************************************************************************
+     ok: [node01]
+     ok: [node02]
+
+     TASK [Execute a date command] **************************************************************************************************************************************
+     changed: [node01]
+     changed: [node02]
+
+     TASK [Task to display hosts file] **********************************************************************************************************************************
+     changed: [node01]
+     changed: [node02]
+
+     PLAY RECAP *********************************************************************************************************************************************************
+     node01                     : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+     node02                     : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+```
+
+20. Update the /home/bob/playbooks/playbook.yaml to add a new play named Execute a command on node02, and a task under it to execute cat /etc/hosts command on node02 host, name the task Task to display hosts file on node02.
+
+- Solution:
+
+- 
+```bash
+     [bob@student-node playbooks]$ cat playbook.yaml 
+     ---
+     - name: 'Execute two commands on node01'
+     hosts: node01
+     become: yes
+     tasks:
+     - name: 'Execute a date command'
+          command: date
+     - name: 'Task to display hosts file on node01'
+          command: 'cat /etc/hosts'
+     [bob@student-node playbooks]$ vi playbook.yaml 
+     [bob@student-node playbooks]$ cat playbook.yaml 
+     ---
+     - name: 'Execute two commands on node01'
+     hosts: node01
+     become: yes
+     tasks:
+     - name: 'Execute a date command'
+          command: date
+     - name: 'Task to display hosts file on node01'
+          command: 'cat /etc/hosts'
+     [bob@student-node playbooks]$ vi playbook.yaml 
+     [bob@student-node playbooks]$ cat playbook.yaml 
+     ---
+     - name: 'Execute two commands on node01'
+     hosts: node01
+     become: yes
+     tasks:
+     - name: 'Execute a date command'
+          command: date
+     - name: 'Task to display hosts file on node01'
+          command: 'cat /etc/hosts'
+
+     - name: 'Execute two commands on node02'
+     hosts: node02
+     become: yes
+     tasks:
+     - name: 'Task to display hosts file on node02'
+          command: 'cat /etc/hosts'
+     [bob@student-node playbooks]$ ansible-playbook -i inventory playbook.yaml 
+
+     PLAY [Execute two commands on node01] ******************************************************************************************************************************
+
+     TASK [Gathering Facts] *********************************************************************************************************************************************
+     ok: [node01]
+
+     TASK [Execute a date command] **************************************************************************************************************************************
+     changed: [node01]
+
+     TASK [Task to display hosts file on node01] ************************************************************************************************************************
+     changed: [node01]
+
+     PLAY [Execute two commands on node02] ******************************************************************************************************************************
+
+     TASK [Gathering Facts] *********************************************************************************************************************************************
+     ok: [node02]
+
+     TASK [Task to display hosts file on node02] ************************************************************************************************************************
+     changed: [node02]
+
+     PLAY RECAP *********************************************************************************************************************************************************
+     node01                     : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+     node02                     : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0  
+```
+
+### Section 5.5 - Conditionals
+
+1. Start with an example: I have 2 playbooks that does the same thing (i.e. to install nginx on the host)
+
+- playbook1.yaml
+- 
+```yaml
+     ---
+     - name: Install NGINX
+       hosts: debian_hosts
+       tasks:
+       - name: Install NGINX on Debian
+         apt:
+           name: nginx
+           state: present
+```
+
+- playbook2.yaml
+- 
+```yaml
+     ---
+     - name: Install NGINX
+       hosts: redhat_hosts
+       tasks:
+       - name: Install NGINX on Redhat
+         yum:
+           name: nginx
+```
+
+- As we know, different OS flavors (i.e distros) use different package managers (i.e. apt for debian based, yum for redhat based).
+- We want to create a single playbook that can handle both types of distros, or better yet, any distro
+
+- Solution: use conditionals in ansible playbook but using the `when` conditional statement with syntax `when: << condition >>`, only when the condition is true the task is run. You can also use `or`, `and` to combine multiple conditions
+
+- unified_playbook.yaml
+- with `ansible_os_family` as the built-in variable to determine the OS family of the host
+- 
+```yaml
+     ---
+     - name: Install NGINX
+       hosts: all
+       tasks:
+       - name: Install NGINX on Debian
+         apt:
+           name: nginx
+           state: present
+         when: ansible_os_family == "Debian" and ansible_distribution_version == "16.04"
+       - name: Install NGINX on Redhat
+           yum:
+             name: nginx
+             state: present
+         when: ansible_os_family == "RedHat" or ansible_os_family == "SUSE"
+```
+
+2. Using Conditions in a loop
+- Say we have a list of packages to install
+- using it in a loop involves creating an array, in this example, we'll have an array called `packages` with property `required` to indicate if the package is required to be installed. Combined with the loop directive under the `{% raw %}"{{ packages }}"{% endraw %}` syntax
+
+- 
+```yaml
+     ---
+     - name: Insatll softwares
+       hosts: all
+       vars:
+         packages:
+           - name: nginx
+             requireed: True
+           - name: mysql
+             required: True
+           - name: apache
+             required: False
+       tasks:
+       - name: Install {% raw %}"{{ item.name }}"{% endraw %} on Debian 
+         apt:
+           name: {% raw %}"{{ item.name }}"{% endraw %}
+           state: present
+         loop: {% raw %}"{{ packages }}"{% endraw %}
+         when: item.required == True
+```
+
+- To help you visualize better, the loop is actually just 3 seperate tasks!
+     - Task 1
+     - 
+     ```yaml
+          - name: Install {% raw %}"{{ item.name }}"{% endraw %} on Debian
+            vars:
+              item:
+                name: nginx
+                required: True
+            apt:
+              name: {% raw %}"{{ item.name }}"{% endraw %}
+              state: present 
+            when: item.required == True
+     ```
+     - Task 2
+     - 
+     ```yaml
+          - name: Install {% raw %}"{{ item.name }}"{% endraw %} on Debian
+            vars:
+              item:
+                name: mysql
+                required: True
+            apt:
+              name: {% raw %}"{{ item.name }}"{% endraw %}
+              state: present 
+            when: item.required == True
+     ```
+     - Task 3
+     - 
+     ```yaml   
+          - name: Install {% raw %}"{{ item.name }}"{% endraw %} on Debian
+            vars:
+              item:
+                name: apache
+                required: False
+            apt:
+              name: {% raw %}"{{ item.name }}"{% endraw %}
+              state: present 
+            when: item.required == True
+     ```
+
+3. Using conditions and registers
+- Using conditionals based on the output of a previous task
+
+- Example playbook
+- 
+```yaml
+     ---
+     - name: Check status of a service and email if its down
+       hosts: localhost
+       tasks:
+         - command: service httpd status # 1st task - check service status
+           register: service_status
+         - mail: # 2nd task - sends the email
+             to: admin@comapny.com
+             subject: Service Alert
+             body: Httpd Service is down
+```
+- We've learned before that the `register` directive captures the output of a task and stores it in a variable (i.e. `service_status` here)
+
+- updated playbook
+- 
+```yaml
+     ---
+     - name: Check status of a service and email if its down
+       hosts: localhost
+       tasks:
+         - command: service httpd status # 1st task - check service status
+           register: result # Logs and saves the result
+           register: service_status
+         - mail: # 2nd task - sends the email
+             to: admin@comapny.com
+             subject: Service Alert
+             body: Httpd Service is down
+             when: result.stdout.find('down') != -1 # sends emails if stdout has the keyword down in it. If stdout doesn't have down, it reutrns minus one !!
+```
+
+- `result.stdout.find('down') != -1` checks if the string 'down' is present in the standard output of the previous command. If found, it returns the index (0 or greater), if not found, it returns -1. So the condition ensures that the email task only runs when the service is down.
+
+### Section 5.6 (ch.27) - Ansible Conditionals based on facts, variables, re-use

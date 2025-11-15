@@ -54,6 +54,12 @@ Lesson 9 - CCNA Fast Track (June, 2025). We left off at page 163. It ends at the
 
 ## 14.1 Overview 
 - IPv6 = latest verion of IP (= Internet Protocol)
+- IPv6 is 128 bits long (vs IPv4 which is 32 bits long)
+- 128 buts is more than enough for global unique IP addresses (since number of IPv6 address is 2^128 = 340 undecillion addresses)
+
+## 14.2 IPv6 Addressing Representation
+- IPv6 has 32 hexadecimal digits
+- Recall our [calcip.com](https://www.calcip.com/) 4 hexes * 8 groups = 32 hex digits (note 1 hex = 4 bit)
 
 # Lab 5: NAT, SSH, ACL
 
