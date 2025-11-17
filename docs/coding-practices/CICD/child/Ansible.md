@@ -2741,3 +2741,62 @@ Note: Use the group name in playbook as defined in the inventory file.
 - `result.stdout.find('down') != -1` checks if the string 'down' is present in the standard output of the previous command. If found, it returns the index (0 or greater), if not found, it returns -1. So the condition ensures that the email task only runs when the service is down.
 
 ### Section 5.6 (ch.27) - Ansible Conditionals based on facts, variables, re-use
+
+1. Real life example in a company (Secnario 1)
+- Company has a fleet of servers with different OS distros (i.e. ubuntu 18.04, centos7, redhat, suse and some on windows server 2019)
+- Task: Automate web app deployment across all servers
+- Playbook needs to perform different actions for different servers
+
+- For ubuntu:
+     - 
+     ```yaml
+          - name: Installing nginx on ubuntu 18.04
+              apt:
+                name: nginx=1.18.0
+                state: present
+              when: ansible_facts['os_family'] == 'Debian' and ansible_facts['distribution_major_version'] == '18'
+     ```
+     - Note: our inventory only has basic info about the hosts (i.e. IP, hostname), no OS info
+     - Hence why we're sourcing these info from ansible facts!
+
+2. Recall ansible facts 
+     - = System-specific variables
+     - Containing info about the servers during playbook execution
+
+3. Deploying config files (Secnario 2)
+- 
+```yaml
+     - name: Deploy configuration files
+       template: 
+         src: {% raw %}"{{ app_env}}_config.j2"{% endraw %}
+         dest: "/etc/myapp/config.conf"
+       vars:
+         app_env: production # You can use this var to deploy the appropriate config file based on the environment. Ideas of using conditionals here!
+```
+
+4. Installing required packages (Secnario 3)
+- 
+```yaml
+     - name: Install required packages
+         apt:
+           name:
+             - package1
+             - package2
+           state: present
+     - name: Create necessary directories and set permissions
+     .
+     .
+     .
+     # We only want to start the web app in the prod env
+     - name: Start web app service
+         service:
+           name: myapp
+           state: started
+         when: enviornment == 'production' # idea of reuse
+```
+- These are great examples that shows ansible facts, variables and reuse could help simplify tasks and complex requirements mkaing playbooks more efficient and managable
+
+### Section 5.7 (ch.28) - Coding lab for Ansible Conditionals
+ 
+
+          
