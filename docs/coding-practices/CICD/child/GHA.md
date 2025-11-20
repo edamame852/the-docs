@@ -1,5 +1,5 @@
 ---
-title: github_action
+title: GHA - Github Action
 layout: default
 parent: CICD
 grand_parent: Coding Practices

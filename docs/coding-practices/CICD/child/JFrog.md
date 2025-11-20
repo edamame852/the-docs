@@ -1,5 +1,5 @@
 ---
-title: jfrog_cicd
+title: JFrog
 layout: default
 parent: CICD
 grand_parent: Coding Practices

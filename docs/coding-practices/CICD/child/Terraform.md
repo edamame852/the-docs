@@ -1,5 +1,5 @@
 ---
-title: terraform_ansible
+title: Terraform
 layout: default
 parent: CICD
 grand_parent: Coding Practices

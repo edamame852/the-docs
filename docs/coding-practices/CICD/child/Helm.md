@@ -1,5 +1,5 @@
 ---
-title: ArgoCD & HelmCharts
+title: Helm
 layout: default
 parent: CICD
 grand_parent: Coding Practices
