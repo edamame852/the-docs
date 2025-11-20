@@ -2068,39 +2068,40 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
 
 3. How many Ansible plays are present in the following playbook
 - This is an example of how you can configure apache and tomcat servers using Ansible playbook
-- 
-```yaml
-     ---
-     - name: Setup apache
-       hosts: webserver
-       tasks:
-         - name: Install httpd
-           yum:
-             name: httpd
-             state: installed
-         - name: Start httpd service
-           service:
-             name: httpd
-             state: started
+     - 
+     ```yaml
+          ---
+          - name: Setup apache
+          hosts: webserver
+          tasks:
+          - name: Install httpd
+               yum:
+               name: httpd
+               state: installed
+          - name: Start httpd service
+               service:
+               name: httpd
+               state: started
 
-     - name: Setup tomcat
-       hosts: appserver
-       tasks:
-         - name: Install tomcat not httpd
-           yum:
-             name: tomcat
-             state: installed
-         - name: Start service
-           service:
-             name: tomcat
-             state: started
-```
+          - name: Setup tomcat
+          hosts: appserver
+          tasks:
+          - name: Install tomcat not httpd
+               yum:
+               name: tomcat
+               state: installed
+          - name: Start service
+               service:
+               name: tomcat
+               state: started
+     ```
 - Ans: 2 plays
 
 4. How many tasks under the Setup apache play ? Ans: 2
 
 5. If we use the following inventory, on which hosts will Ansible install the `httpd` paackage using the given playbook ?
 - inventory.ini
+- 
 ```ini
 [webserver]
 web1
@@ -2113,6 +2114,7 @@ app3
 ```
 
 - playbook.yaml
+- 
 ```yaml
      ---
      - name: Setup apache
@@ -2145,23 +2147,24 @@ app3
 
 7. A sample playbook named `update_service.yml` is show below and it's suppose to update a service on your servers
 
-- 
-```yaml
-     - hosts: all
-       tasks:
-           - name: Install a new package
-             apt:
-                name: new_package
-                state: present
-           - name: Update the service
-             service:
-               name: my_service
-               state: restarted 
-           - name: Check service status
-             service:
-               name: my_service
-               state: started
-```
+- Here's the content of the playbook
+     - 
+     ```yaml
+          - hosts: all
+          tasks:
+               - name: Install a new package
+               apt:
+                    name: new_package
+                    state: present
+               - name: Update the service
+               service:
+                    name: my_service
+                    state: restarted 
+               - name: Check service status
+               service:
+                    name: my_service
+                    state: started
+     ```
 
 - Which command would you use to run `update_service.yml` playbook in check mode ?
 - option A: `ansible update_service.yml`
@@ -2172,7 +2175,7 @@ app3
 - Ans: Option B
 
 8. Consider again the same sample playbook named `update_service.yml` shown below
-- 
+- Here:'s the content of the playbook:
 ```yaml
      - hosts: all
        tasks:
@@ -2203,7 +2206,7 @@ app3
 
 9. Let's look at a new playbook named `configure_database.yml` that modifies a config file on all database servers, the yaml is the file shown below:
 
-- 
+- Trying this...
 ```yaml
      - hosts: all
        tasks:
