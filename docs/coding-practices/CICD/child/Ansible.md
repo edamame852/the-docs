@@ -2082,7 +2082,6 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
                service:
                name: httpd
                state: started
-
           - name: Setup tomcat
           hosts: appserver
           tasks:
@@ -2124,7 +2123,6 @@ app3
            yum:
              name: httpd
              state: installed
-
      - name: Setup tomcat
        hosts: appserver
        tasks:
@@ -2138,12 +2136,12 @@ app3
 
 
 6. Which of the following commands can you run to run an Ansible playbook named `install.yaml` ?
-- option A: `ansible-playbook install.yaml`
-- option B: `ansible-play run install.yaml`
-- option C: `ansible-playbook -p install.yaml`
-- option D: `ansible-playbook -i install.yaml`
+     - option A: `ansible-playbook install.yaml`
+     - option B: `ansible-play run install.yaml`
+     - option C: `ansible-playbook -p install.yaml`
+     - option D: `ansible-playbook -i install.yaml`
 
-- Ans: Option A
+     - Ans: Option A
 
 7. A sample playbook named `update_service.yml` is show below and it's suppose to update a service on your servers
 
@@ -2167,15 +2165,16 @@ app3
      ```
 
 - Which command would you use to run `update_service.yml` playbook in check mode ?
-- option A: `ansible update_service.yml`
-- option B: `ansible-play update_service.yml --check`
-- option C: `ansible-playbook update_service.yml`
-- option D: `ansible-playbook --check update_service.yml`
+     - option A: `ansible update_service.yml`
+     - option B: `ansible-play update_service.yml --check`
+     - option C: `ansible-playbook update_service.yml`
+     - option D: `ansible-playbook --check update_service.yml`
 
-- Ans: Option B
+     - Ans: Option B
 
 8. Consider again the same sample playbook named `update_service.yml` shown below
 - Here:'s the content of the playbook:
+- 
 ```yaml
      - hosts: all
        tasks:
@@ -2207,6 +2206,7 @@ app3
 9. Let's look at a new playbook named `configure_database.yml` that modifies a config file on all database servers, the yaml is the file shown below:
 
 - Trying this...
+- 
 ```yaml
      - hosts: all
        tasks:
