@@ -1921,6 +1921,7 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
                - It checks syntax of playbook for any errors, quick way to catch syntax error that could cause playbook to fail during execution
                - Quick way for you to catch errors before running the playbook on your hosts!
                - For example, I have configure_nginx.yml
+               - 
                ```yaml
                     ---
 
@@ -1937,6 +1938,7 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
                     ansible-playbook configure_nginx.yaml --syntax-check
                ```
                - Output would be 
+               - 
                ```bash
                     - PLAY [webservers] **********************
 
@@ -1950,6 +1952,7 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
                ```
 
                - Let's introde a syntax error in the playbook = removing the `:` before `lineinfile` in the task section
+               - 
                ```yaml
                     ---
 
@@ -1962,10 +1965,12 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
                            become: yes
                ```
                - Running the syntax check again
+               - 
                ```bash
                     ansible-playbook configure_nginx.yaml --syntax-check
                ```
                - Output would be
+               - 
                ```bash
                     ERROR! Syntax Error while loading YAML.
                          did not find expected key
@@ -1986,6 +1991,7 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
 
 - Example of using `ansible-lint`, say I have this file `style_example.yaml`
      - Some tasks to install and config nginx. WITH STYLING issues
+     - 
      ```yaml
           - name: Style example Playbook
             hosts: localhost
@@ -2017,6 +2023,7 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
           - some tasks has 2 spaces of identation, some have 4
           - taskd name are also inconsistenet (some consise, some took sentence like approach)
      - Running `ansible-lint style_example.yaml` would give the following output
+     - 
      ```bash
           [WARNING]: incorrect identation: expcted 2 but found 4 (syntax/identification)
           style_example.yaml:6
@@ -2060,6 +2067,7 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
 2. Which of the following formats is the Ansible Playbook written in ? Ans: YAML
 
 3. How many Ansible plays are present in the following playbook
+- This is an example of how you can configure apache and tomcat servers using Ansible playbook
 - 
 ```yaml
      ---
@@ -2768,7 +2776,7 @@ Note: Use the group name in playbook as defined in the inventory file.
 ```yaml
      - name: Deploy configuration files
        template: 
-         src: {% raw %}"{{ app_env}}_config.j2"{% endraw %}
+         src: {% raw %}"{{ app_env }}_config.j2"{% endraw %}
          dest: "/etc/myapp/config.conf"
        vars:
          app_env: production # You can use this var to deploy the appropriate config file based on the environment. Ideas of using conditionals here!
@@ -2797,6 +2805,6 @@ Note: Use the group name in playbook as defined in the inventory file.
 - These are great examples that shows ansible facts, variables and reuse could help simplify tasks and complex requirements mkaing playbooks more efficient and managable
 
 ### Section 5.7 (ch.28) - Coding lab for Ansible Conditionals
- 
+
 
           
