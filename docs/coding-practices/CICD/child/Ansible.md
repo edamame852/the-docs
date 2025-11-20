@@ -1721,26 +1721,27 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
                - Shutting down or restarts
 
      - Simple Playbook example: (FYI, goal of this play is to run a set of task on a local host, one after the other)
-     ```yaml
-          - 
-               name: Play1
-               hosts: localhost # the host is defined at play level
-               # This could be anything from the inventory file
+     - 
+          ```yaml
+               - 
+                    name: Play1
+                    hosts: localhost # the host is defined at play level
+                    # This could be anything from the inventory file
 
-               tasks:
-                    - name: Task 1 - Execute command 'date'
-                      command: date
-                    - name: Task 2 - Execute script on server
-                      script: test_script.sh
-                    - name: Task 3 - Install httpd service/ pacakge
-                      yum:
-                         name: httpd
-                         state: present
-                    - name: Task 4 - Start web server # using the service module
-                      service:
-                         name: httpd
-                         state: started
-     ```
+                    tasks:
+                         - name: Task 1 - Execute command 'date'
+                         command: date
+                         - name: Task 2 - Execute script on server
+                         script: test_script.sh
+                         - name: Task 3 - Install httpd service/ pacakge
+                         yum:
+                              name: httpd
+                              state: present
+                         - name: Task 4 - Start web server # using the service module
+                         service:
+                              name: httpd
+                              state: started
+          ```
 
      - Let's slightly modify this playbook and split it up into 2 sections = Now 2 plays
           - 
@@ -2809,5 +2810,189 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
 
 ### Section 5.7 (ch.28) - Coding lab for Ansible Conditionals
 
+1. Setting the ground
+     - In this lab exercise you will use below hosts. Please note down some details about these hosts as given below 
+     - 
+          ```text
+               student-node :- This host will act as an Ansible master node where you will create playbooks, inventory, roles etc and you will be running your playbooks from this host itself.
 
-          
+
+               node01 :- This host will act as an Ansible client/remote host where you will setup/install some stuff using Ansible playbooks. Below are the SSH credentials for this host:
+
+
+               User: bob
+               Password: caleston123
+
+
+               node02 :- This host will also act as an Ansible client/remote host where you will setup/install some stuff using Ansible playbooks. Below are the SSH credentials for this host:
+
+
+               User: bob
+               Password: caleston123
+
+
+               Note: Please type exit or logout on the terminal or press CTRL + d to log out from a specific node.
+          ```
+2. Which of the following Ansible built-in variable populates the flavour of the operating system?
+
+     - options:
+          - `ansible_host`
+          - `ansible_os_family`
+          - `ansible_os`
+          - `ansible_family`
+     - Ans: `ansible_os_family`
+
+3. Which keyword is used to define a condition in an Ansible playbook?
+
+     - options:
+          - `if`
+          - `state`
+          - `when`
+          - `while`
+     - Ans: `when`
+
+4. Which keyword is used to define a condition in an Ansible playbook?
+
+     - This is the playbook
+          - 
+               ```yaml
+                    ---
+                    - name: Install package
+                    hosts: app1
+                    tasks:
+                    - name: Install
+                         package:
+                         name: vim
+                         state: present
+                         when: ansible_os_family != "RedHat"
+               ```
+     - Ans: Note: The playbook will fail because the `when` condition is incorrectly indented. It should be at the same level as the `package` module, not inside it.
+
+5. There is a playbook named nginx.yaml under `/home/bob/playbooks` directory. It is starting nginx service on all hosts defined in `/home/bob/playbooks/inventory` inventory file. Use the when condition to run this task only on `node02` host.
+
+     - Method: Updated the "nginx.yaml" playbook to use the "when condition" to run the task only on "node02" host?
+
+     - Solution:
+     - 
+          ```bash
+               [bob@student-node ~]$ ls
+               playbooks
+               [bob@student-node ~]$ cd playbooks/
+               [bob@student-node playbooks]$ ls
+               age.yaml  ansible.cfg  inventory  nameserver.yaml  nginx.yaml
+               [bob@student-node playbooks]$ cat nginx.yaml 
+               ---
+               -  name: 'Execute a script on all web server nodes'
+               hosts: all
+               become: yes
+               tasks:
+                    -  service: 'name=nginx state=started'
+                    
+               [bob@student-node playbooks]$ vi nginx.yaml 
+               [bob@student-node playbooks]$ cat nginx.yaml 
+               ---
+               -  name: 'Execute a script on all web server nodes'
+               hosts: all
+               become: yes
+               tasks:
+                    -  service: 'name=nginx state=started'
+                    when: ansible_hostname == "node02"
+          ```
+
+6. The playbook under `/home/bob/playbooks/age.yaml` , has a variable defined called age. The two tasks attempt to print if I am a child or an Adult. Use the when conditional to print if I am a child or an Adult based on whether my age is < 18 (Child) or >= 18 (Adult).
+
+     - solution:
+     - 
+          ```bash
+               [bob@student-node playbooks]$ ls
+               age.yaml  ansible.cfg  inventory  nameserver.yaml  nginx.yaml
+               [bob@student-node playbooks]$ cat age.yaml 
+               ---
+               - name: 'Am I an Adult or a Child?'
+               hosts: localhost
+               vars:
+               age: 25
+               tasks:
+               - name: I am a Child
+                    command: 'echo "I am a Child"'
+                    
+               - name: I am an Adult
+                    command: 'echo "I am an Adult"'
+               [bob@student-node playbooks]$ vi age.yaml 
+               [bob@student-node playbooks]$ cat age.yaml 
+               ---
+               - name: 'Am I an Adult or a Child?'
+               hosts: localhost
+               vars:
+               age: 25
+               tasks:
+               - name: I am a Child
+                    command: 'echo "I am a Child"'
+                    when: vars.age < 18      
+               - name: I am an Adult
+                    command: 'echo "I am an Adult"'
+                    when: vars.age >= 18
+          ```
+
+7. Playbook /home/bob/playbooks/nameserver.yaml attempts to add an entry in /etc/resolv.conf file to add a new nameserver.
+
+
+     - The first task in the playbook is using the shell module to display the existing contents of /etc/resolv.conf file and the second one is adding a new line containing the name server details into the file. However, when this playbook is run multiple times, it keeps adding new entries of same line into the resolv.conf file. To resolve this issue, update the playbook as per details mentioned below.
+
+
+     - Add a register directive to store the output of the first task to a variable called command_output
+
+     - Then add a conditional to the second task to check if the output already contains the name server (10.0.250.10). Use command_output.stdout.find(<IP>) == -1
+
+
+     - Note: 
+          - a. A better way to do this would be to use the lineinfile module. This is just for practice.
+
+          - b.shell and command modules are similar in a way that they are used to execute a command on the system. However, shell executes the command inside a shell giving us access to environment variables and redirection using >>.
+
+     - Solution:
+
+          - 
+               ```bash
+                    [bob@student-node playbooks]$ ls
+                    age.yaml  ansible.cfg  inventory  nameserver.yaml  nginx.yaml
+                    [bob@student-node playbooks]$ cat nameserver.yaml 
+                    ---
+                    - name: 'Add name server entry if not already entered'
+                    hosts: localhost
+                    become: yes
+                    tasks:
+                    - shell: 'cat /etc/resolv.conf'
+                    
+                    - shell: 'echo "nameserver 10.0.250.10" >> /etc/resolv.conf'
+                    [bob@student-node playbooks]$ vi nameserver.yaml 
+                    [bob@student-node playbooks]$ cat nameserver.yaml 
+                    ---
+                    - name: 'Add name server entry if not already entered'
+                    hosts: localhost
+                    become: yes
+                    tasks:
+                    - shell: 'cat /etc/resolv.conf'
+                         register: command_output
+
+                    - shell: 'echo "nameserver 10.0.250.10" >> /etc/resolv.conf'
+                         when: command_output.stdout.find("10.0.250.10") == -1
+                    
+                    [bob@student-node playbooks]$ ansible-playbook -i inventory nameserver.yaml --check
+
+                    PLAY [Add name server entry if not already entered] ****************************************************************************************************************
+
+                    TASK [Gathering Facts] *********************************************************************************************************************************************
+                    ok: [localhost]
+
+                    TASK [shell] *******************************************************************************************************************************************************
+                    skipping: [localhost]
+
+                    TASK [shell] *******************************************************************************************************************************************************
+                    skipping: [localhost]
+
+                    PLAY RECAP *********************************************************************************************************************************************************
+                    localhost                  : ok=1    changed=0    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0   
+               ```
+### Section 5.8 (ch.29) - xxx
+1. 
