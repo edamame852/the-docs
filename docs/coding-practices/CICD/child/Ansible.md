@@ -2046,24 +2046,24 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
 ### Section 5.4 - Lab: Coding exercises, Ansible Playbook
 
 1. Setting the ground
-- 
-```text
-     In this lab exercise you will use below hosts. Please note down some details about these hosts as given below:
+     - 
+          ```text
+               In this lab exercise you will use below hosts. Please note down some details about these hosts as given below:
 
-     `student-node` - This host will act as an Ansible master node where you will create `playbooks`, `inventory`, `role` file etc and you'll be running your playbooks from this host itself.
+               `student-node` - This host will act as an Ansible master node where you will create `playbooks`, `inventory`, `role` file etc and you'll be running your playbooks from this host itself.
 
-     `node01` - This host will act as an Ansible client/ remote host where you will setup or install some stuff using Ansible playbooks. Below are the SSH credentials for this host:
+               `node01` - This host will act as an Ansible client/ remote host where you will setup or install some stuff using Ansible playbooks. Below are the SSH credentials for this host:
 
-     User: `bob`
-     Password: `caleston123`
+               User: `bob`
+               Password: `caleston123`
 
-     `node02` - This host will also act as an Ansible client/ remote host where you will setup or install some stuff using Ansible playbooks. Below are the SSH credentials for this host:
+               `node02` - This host will also act as an Ansible client/ remote host where you will setup or install some stuff using Ansible playbooks. Below are the SSH credentials for this host:
 
-     User: `bob`
-     Password: `caleston123`
+               User: `bob`
+               Password: `caleston123`
 
-     Note: Please type `exit` or `logout` on the terminal or press `CTRL+d` to log out from a specific node.
-```
+               Note: Please type `exit` or `logout` on the terminal or press `CTRL+d` to log out from a specific node.
+          ```
 
 2. Which of the following formats is the Ansible Playbook written in ? Ans: YAML
 
@@ -2994,5 +2994,218 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
                     PLAY RECAP *********************************************************************************************************************************************************
                     localhost                  : ok=1    changed=0    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0   
                ```
-### Section 5.8 (ch.29) - xxx
+
+### Section 5.8 (ch.29) - Loops
+1. Example for creating a playbook to create users in a system of a target system (but what if we have a lot of users to create??)
+
+     - 
+          ```yaml
+               - 
+                    name: Create users
+                    hosts: localhost
+                    tasks:
+                      - user: name=joe       state=present
+                      - user: name=alice     state=present
+                      - user: name=bob       state=present
+                      .
+                      .
+                      .
+          ``` 
+          - This way of duplicating lines is one way of doing things...but not elegant nor efficient
+     - Better approach: use loops (using a single task loop to loop through a list of users) by using the `loop` directive along with the `item` syntax
+          - 
+               ```yaml
+                    - 
+                    name: Create users
+                    hosts: localhost
+                    tasks:
+                      - user: name={% raw %}'{{ item }}'{% endraw %}       state=present
+                        loop:
+                          - joe
+                          - alice
+                          - bob
+                          .
+                          .
+                          .
+               ```
+          - Playbook is much more organized with reduced repetition
+               - To visualize it better...
+
+               - It's the equivalent of stating...
+               - 
+                    ```yaml
+                         -
+                           name: Create users
+                           hosts: localhost
+                           tasks:
+
+                           - var:       item=joe
+                             users:     name={% raw %}'{{ item }}'{% endraw %}
+                                         state=present
+                           - var:       item=alice
+                             users:     name={% raw %}'{{ item }}'{% endraw %}
+                                         state=present
+                           - var:       item=bob
+                             users:     name={% raw %}'{{ item }}'{% endraw %}
+                                         state=present
+                         .
+                         .
+                         .
+                    ```
+               - In essence, the loop directive breaks down into 10 or more tasks, where each task has a variable item, which the value is set to each item in the loop.
+               - Note: our loop now is an array of string values
+
+2. Taking looping up a notch, iterating through 2 items
+     - You would think this is the approach to take right?
+     - 
+               ```yaml
+                    - 
+                         name: Create users
+                         hosts: localhost
+                         tasks:
+                         - user: name={% raw %}'{{ item }}'{% endraw %}       state=present
+                         loop:
+                              - joe    1010
+                              - alice  1011
+                              - bob    1012
+                              .
+                              .
+                              .
+               ```
+          - But how does one pass 2 values into an array ? Solution: Just pass in an array of dictionaries (key-value pairs), each dict would have 2 key-value paris
+
+          - 
+               ```yaml
+                    - 
+                         name: Create users
+                         hosts: localhost
+                         tasks:
+                         - user: name={% raw %}'{{ item.name }}'{% endraw %}       uid={% raw %}'{{ item.uid }}'{% endraw %}    state=present
+                         loop:
+                              - name: joe
+                              uid: 1010
+                              - name: alice
+                              uid: 1011
+                              - name: bob
+                              uid: 1012
+                              .
+                              .
+                              .
+               ```
+          - Which is equivalent to...
+          - 
+               ```yaml
+                    - 
+                         name: Create users
+                         hosts: localhost
+                         tasks:
+                         - var:
+                             item:
+                               name: joe
+                               uid: 1010
+                           user: name='{% raw %}{{ item.name }}{% endraw %}'       uid='{% raw %}{{ item.uid }}{% endraw %}'    state=present
+                         - var:
+                             item:
+                               name: alice
+                               uid: 1011
+                           user: name='{% raw %}{{ item.name }}{% endraw %}'       uid='{% raw %}{{ item.uid }}{% endraw %}'    state=present
+                         - var:
+                             item:
+                               name: bob
+                               uid: 1012    
+                           user: name='{% raw %}{{ item.name }}{% endraw %}'       uid='{% raw %}{{ item.uid }}{% endraw %}'    state=present
+                         .
+                         .
+                         .
+               ```
+
+3. Array of dictionary can be expressed in different formats!
+     - So this works too btw
+     - 
+          ```yaml
+               - 
+                    name: Create users
+                    hosts: localhost
+                    tasks:
+                    - user: name={% raw %}'{{ item.name }}'{% endraw %}       uid={% raw %}'{{ item.uid }}'{% endraw %}    state=present
+                    loop:
+                         - { name: joe,   uid: 1010 }
+                         - { name: alice, uid: 1011 }
+                         - { name: bob,   uid: 1012 }
+                         .
+                         .
+                         .
+          ```
+
+4. Another way to loop without using `loop`, we can use the `with_*` directive, which is the more traditional way of doing things. In the past we only have `with_*` whereas the `loop` directive is a more recent addition to ansible. `loop` is more recommended nowadays
+
+     - 
+          ```yaml
+               - 
+                    name: Create users
+                    hosts: localhost
+                    tasks:
+                    - user: name={% raw %}'{{ item.name }}'{% endraw %}       uid={% raw %}'{{ item.uid }}'{% endraw %}    state=present
+                    with_items:
+                         - { name: joe,   uid: 1010 }
+                         - { name: alice, uid: 1011 }
+                         - { name: bob,   uid: 1012 }
+                         .
+                         .
+                         .
+          ```
+
+     - Or to just loop a list of strings
+     - 
+          ```yaml
+               - 
+                    name: Create users
+                    hosts: localhost
+                    tasks:
+                    - user: name={% raw %}'{{ item }}'{% endraw %}       state=present
+                      with_items:
+                         - joe
+                         - alice
+                         - bob
+                         . 
+                         .
+                         .
+          ```
+
+5. The `with` directive offers many more usages. Consider them as with plugins, lookup plugins that are basically custom scripts that can do specific things
+     -Such as `with_url`, `with_file`, `with_items`, `with_mongodb` etc
+     - 
+          ```yaml
+               - 
+                    name: View Config Files
+                    hosts: localhost
+                    tasks:
+                    - debug: var=item
+                      with_file:
+                         - "/etc/hosts"
+                         - "/etc/resolv.conf"
+                         - "/etc/ntp.conf"
+                         .
+                         .
+                         .
+          ```
+      - 
+          ```yaml
+               - 
+                    name: Checking multiple mongodbs
+                    hosts: localhost
+                    tasks:
+                    - debug: mag="DB={{ item.database }} PID={{ item.pid }}"
+                      with_mongodb:
+                         - database: dev
+                           connection_string: "mongodb://dev.mongo/"
+                         - database: prod
+                           connection_string: "mongodb://prod.mongo/"
+                         .
+                         .
+                         .
+          ```
+### Section 5.9 (ch.30) - Coding Exercise: Ansible Loops
+
 1. 
+     - Question 1: 
