@@ -1704,7 +1704,7 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
 
 ## Section 5: Ansible Playbook
 
-### Section 5.1 - Ansible Playbooks
+### Section 5.1 (ch.22) - Ansible Playbooks
 1. Idea of Ansible playbook = set of instruction you provide ansible to work its magic
      - Playbook extensiveness
           - A single playbook could be running a set/ series of command on multiple servers (i.e. restarting servers in a particualr order)
@@ -1831,7 +1831,7 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
      - Syntax to run it would be: `ansible-playbook playbook.yml` aka `ansible-playbook <playbook file name>`
      - To know more, run `ansible-playbook --help`
 
-### Section 5.2 - Verifying Playbooks
+### Section 5.2 (ch.23)- Verifying Playbooks
 1. Verifying a playbook
      - Real life example: Writing an platbook and using it directly on production, but there was a bug in the code. Instead of updating software, it auto shuts down all services on the server = significant down time 
      - Hence, please for the love of god, verify your playbook. Espically for prod envs, it's a cruical practice = rehersal to help rectify any errors or unexpected behaviors in a controlled place
@@ -1983,7 +1983,7 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
                               ^ here
                ```
 
-### Section 5.3 - Ansible Init
+### Section 5.3 (ch.24) - Ansible Init
 - Previous, we talked about the following...
      - Importance of playbook verification in Ansible via `--check`, `--diff`, and `--syntax-check` modes to ensure ansible playbooks behave as expected before actual execution.
 - Let's take it up a notch: `ansible` was already embedded into the company's infra, multiple playbooks are already written. As infra complextiy grows, playbook complexity grows
@@ -2043,7 +2043,7 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
      ```
      - Conclusion: ansible catches all style related issues and provides us with warnings (e.g. incorrect identation, missing name attribute, use of blacklisted commands (deprecated apt and service modules)). Please use `ansible-lint` to refine your playbook 
 
-### Section 5.4 - Lab: Coding exercises, Ansible Playbook
+### Section 5.4 (ch.25) - Lab: Coding exercises, Ansible Playbook
 
 1. Setting the ground
      - 
@@ -2593,7 +2593,7 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
                node02                     : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0  
           ```
 
-### Section 5.5 - Conditionals
+### Section 5.5 (ch.26) - Conditionals
 
 1. Start with an example: I have 2 playbooks that does the same thing (i.e. to install nginx on the host)
 
@@ -3209,3 +3209,11 @@ Right now the user details is hardcoded in the playbook. Update the /home/bob/pl
 
 1. 
      - Question 1: 
+
+
+## Section 6: Ansible Modules
+
+### Section 6.1 (ch.31) - Ansible Modules Introduction
+
+1. What is a Ansible module?
+     - There are differnt types of ansible modules, that are categorized into differnt groups based on their functionality  

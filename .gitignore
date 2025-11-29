@@ -31,3 +31,8 @@ node_modules
 
 # Don't include tmux client logs
 tmux-*.log
+
+# Don't include .pem key for AWS EC2 instance
+*.pem
+# Also ignoring these deploy key pairs for github action
+deploy_key*
