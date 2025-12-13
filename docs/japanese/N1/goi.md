@@ -4,14 +4,20 @@ layout: default
 parent: N1
 grand_parent: japanese
 ---
+# Conjunctions / Connectives
+- 1. あるいは vs それとも = or
+     - ref: Instagram - todaimae_japanese
+     - あるいは = または = か = Used in normal statement
+     - それとも = Used in Question statements
 
 # Idioms
 
 ## Reference from @sakijapaneselesson on instagram
-- 1. 尻しりに火ひがつく = Under a lot stress and forced to take action quickly
+- 1. 尻しりに火がつく = Under a lot stress and forced to take action quickly
 - 2. 借りてきた猫 = A loud guy/extrovert becoming quiet/introvert in unfamiliar places
      - Literal meaning: Cat that was borrowed from somewhere else
-- 3. 顔かおから火ひが出でる = embarrassing af
+     - てきた = based on the present situation, how things have changed from before until now. (= before and current state different)
+- 3. 顔から火が出でる = embarrassing af
 - 4. 釘を刺す = Remind/ warn someone to fulfill their promises/ not doing wrong deeds.
 - 5. 匙(さじ)を投げる = Giving up on something cuz unachievable
 - 6. 顔に泥を塗る = To bring shame/ to embarrass someone

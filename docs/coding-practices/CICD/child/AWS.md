@@ -62,7 +62,7 @@ has_children: true
         - others: NOTHING
 4. Connect via: `ssh -i dev01.pem ubuntu@3.25.177.133`. Done.
 
-## Setting up CICD for EC2
+## Setting up CICD for EC2 deployment
 1. I am NOT using `git clone`...wtf...
 2. Instead of using the personal `dev01.pem` key, Create a new deploy key ! 
     -  Do this on your local machine
@@ -81,3 +81,96 @@ has_children: true
             drwxr-x--- 4 ubuntu ubuntu 4096 Nov 29 18:31 ..
             -rw------- 1 ubuntu ubuntu  500 Nov 29 18:34 authorized_keys
         ```
+
+4. Add the `deploy_key` (the private one) to the Github Organization's secrets
+
+5. Ensure you have ansible installed on your dev machine locally.
+    - If not follow these steps:
+        - Step 1: Create ansible sub-dirs: `mkdir -p fastapi-deploy/{group_vars,inventory,roles}&&cd fastapi-deploy`
+        - Step 2: Install ansible via pip `python3 -m pip install --user ansible`
+        - Step 3: Set up the items to be installed onto EC2 using ansible found under the `ansible/` directory
+
+6. Setup your dockerfile
+
+7. setup your main.py for source code
+
+8. setup your requirements.txt
+
+9. And commit the following code to the main branch
+
+    - 
+    ```yaml
+    name: Deploy FastAPI
+
+    on:
+        push:
+            branches: [ main, dev ]
+
+    jobs:
+        build-and-deploy:
+            runs-on: ubuntu-latest
+            steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v3
+
+            - name: Write SSH deploy key
+              run: |
+                mkdir -p ~/.ssh
+                echo "${{ secrets.DEPLOY_KEY_DEV }}" > ~/.ssh/deploy_key
+                chmod 600 ~/.ssh/deploy_key
+                echo -e "Host ${{ vars.DEPLOY_HOST_DEV }}\n  HostName ${{ vars.DEPLOY_HOST_DEV }}\n  User ${{ vars.DEPLOY_USER_DEV || 'ubuntu' }}\n  IdentityFile ~/.ssh/deploy_key\n  StrictHostKeyChecking no" >> ~/.ssh/config
+
+            - name: Currently NOT IN USE - Login to Docker Hub (optional)
+            if: env.DOCKERHUB_USERNAME
+            uses: docker/login-action@v3
+            with:
+                username: ${{ secrets.DOCKERHUB_USERNAME }}
+                password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+            - name: Build → Stream → Deploy to EC2 (zero registry, zero downtime)
+              env:
+                HOST: ${{ vars.DEPLOY_HOST_DEV }}
+                USER: ${{ vars.DEPLOY_USER_DEV }}
+                DEBUG_TOKEN: ${{ secrets.JWT_DEV_TOKEN }}
+                SUPABASE_URL: ${{ vars.DEV_SUPABASE_URL }}
+              run: |
+                set -euo pipefail
+
+                echo "Building Docker image..."
+                docker buildx create --use --name mybuilder || true
+                docker buildx build --load --platform linux/amd64 -t myfastapi:latest .
+
+                echo "Deploying to ${HOST}..."
+                docker save myfastapi:latest | gzip | ssh -i ~/.ssh/deploy_key \
+                -o StrictHostKeyChecking=no \
+                -o ServerAliveInterval=60 \
+                -o LogLevel=ERROR \
+                ${USER}@${HOST} \
+                "gunzip | docker load && \
+                docker rm -f fastapi || true && \
+                docker run -d \
+                    --name fastapi \
+                    --restart unless-stopped \
+                    -p 127.0.0.1:8000:8000 \
+                    -e DEBUG_TOKEN='${DEBUG_TOKEN}' \
+                    -e SUPABASE_URL='${SUPABASE_URL}' \
+                    myfastapi:latest \
+                    uvicorn src.main:app --host 0.0.0.0 --port 8000 && \
+                echo 'DEPLOYED SUCCESSFULLY! Open http://${HOST} now' && \
+                echo 'Swagger: http://${HOST}/docs'"
+
+                echo ""
+                echo "LIVE → http://${HOST}"
+                echo "Docs → http://${HOST}/docs"
+    ```
+
+
+## Set up auth flow with supabase.com
+1. Head over to [superbase](https://supabase.com/), signed up with Github Auth --> create new org
+2. Password for Supabase --> ******** (for PosgreDB access)
+3. Copy down also these 2 vars from the superbase:
+    - `anon` key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl3Z2pua2p0d2F4Y3NwYWhsa2lrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ0NzE4NDksImV4cCI6MjA4MDA0Nzg0OX0.LDc08qC9o1keOCFKZw0oLkUamblGhCiQgHRGaoFEw30
+    - `superbase_url`: 'https://ywgjnkjtwaxcspahlkik.supabase.co'
