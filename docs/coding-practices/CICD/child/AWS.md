@@ -119,9 +119,9 @@ has_children: true
             - name: Write SSH deploy key
               run: |
                 mkdir -p ~/.ssh
-                echo "${{ secrets.DEPLOY_KEY_DEV }}" > ~/.ssh/deploy_key
+                {% raw %} echo "${{ secrets.DEPLOY_KEY_DEV }}" > ~/.ssh/deploy_key {% endraw %}
                 chmod 600 ~/.ssh/deploy_key
-                echo -e "Host ${{ vars.DEPLOY_HOST_DEV }}\n  HostName ${{ vars.DEPLOY_HOST_DEV }}\n  User ${{ vars.DEPLOY_USER_DEV || 'ubuntu' }}\n  IdentityFile ~/.ssh/deploy_key\n  StrictHostKeyChecking no" >> ~/.ssh/config
+                {% raw %} echo -e "Host ${{ vars.DEPLOY_HOST_DEV }}\n  HostName ${{ vars.DEPLOY_HOST_DEV }}\n  User ${{ vars.DEPLOY_USER_DEV || 'ubuntu' }}\n  IdentityFile ~/.ssh/deploy_key\n  StrictHostKeyChecking no" >> ~/.ssh/config {% endraw %}
 
             - name: Currently NOT IN USE - Login to Docker Hub (optional)
             if: env.DOCKERHUB_USERNAME
