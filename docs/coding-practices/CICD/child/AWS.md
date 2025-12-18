@@ -9,7 +9,7 @@ has_children: true
 # AWS Cluster
 
 ## Setting up AWS (EC2 instance)
-1. Sign in [AWS Console] (https://ap-southeast-2.signin.aws.amazon.com/oauth?client_id=arn%3Aaws%3Asignin%3A%3A%3Aconsole%2Fcanvas&code_challenge=gGu1DVgqrgSSy_zRNOZ1Zb8Ws-Rdy9c7vUInfp4AudA&code_challenge_method=SHA-256&response_type=code&redirect_uri=https%3A%2F%2Fconsole.aws.amazon.com%2Fconsole%2Fhome%3FhashArgs%3D%2523%26isauthcode%3Dtrue%26nc2%3Dh_si%26src%3Dheader-signin%26state%3DhashArgsFromTB_ap-southeast-2_d8d10bc6ff71f544) 
+1. Sign in [AWS Console](https://ap-southeast-2.signin.aws.amazon.com/oauth?client_id=arn%3Aaws%3Asignin%3A%3A%3Aconsole%2Fcanvas&code_challenge=gGu1DVgqrgSSy_zRNOZ1Zb8Ws-Rdy9c7vUInfp4AudA&code_challenge_method=SHA-256&response_type=code&redirect_uri=https%3A%2F%2Fconsole.aws.amazon.com%2Fconsole%2Fhome%3FhashArgs%3D%2523%26isauthcode%3Dtrue%26nc2%3Dh_si%26src%3Dheader-signin%26state%3DhashArgsFromTB_ap-southeast-2_d8d10bc6ff71f544) 
 
 - Note: Account ID = 2131-5779-2220
 
