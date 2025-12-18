@@ -100,71 +100,71 @@ has_children: true
 
     - 
     ```yaml
-    name: Deploy FastAPI
+        name: Deploy FastAPI
 
-    on:
-        push:
-            branches: [ main, dev ]
+        on:
+            push:
+                branches: [ main, dev ]
 
-    jobs:
-        build-and-deploy:
-            runs-on: ubuntu-latest
-            steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
+        jobs:
+            build-and-deploy:
+                runs-on: ubuntu-latest
+                steps:
+                - name: Checkout code
+                uses: actions/checkout@v4
 
-            - name: Set up Docker Buildx
-              uses: docker/setup-buildx-action@v3
+                - name: Set up Docker Buildx
+                uses: docker/setup-buildx-action@v3
 
-            - name: Write SSH deploy key
-              run: |
-                mkdir -p ~/.ssh
-                {% raw %} echo "${{ secrets.DEPLOY_KEY_DEV }}" > ~/.ssh/deploy_key {% endraw %}
-                chmod 600 ~/.ssh/deploy_key
-                {% raw %} echo -e "Host ${{ vars.DEPLOY_HOST_DEV }}\n  HostName ${{ vars.DEPLOY_HOST_DEV }}\n  User ${{ vars.DEPLOY_USER_DEV || 'ubuntu' }}\n  IdentityFile ~/.ssh/deploy_key\n  StrictHostKeyChecking no" >> ~/.ssh/config {% endraw %}
+                - name: Write SSH deploy key
+                run: |
+                    mkdir -p ~/.ssh
+                    {% raw %} echo "${{ secrets.DEPLOY_KEY_DEV }}" > ~/.ssh/deploy_key {% endraw %}
+                    chmod 600 ~/.ssh/deploy_key
+                    {% raw %} echo -e "Host ${{ vars.DEPLOY_HOST_DEV }}\n  HostName ${{ vars.DEPLOY_HOST_DEV }}\n  User ${{ vars.DEPLOY_USER_DEV || 'ubuntu' }}\n  IdentityFile ~/.ssh/deploy_key\n  StrictHostKeyChecking no" >> ~/.ssh/config {% endraw %}
 
-            - name: Currently NOT IN USE - Login to Docker Hub (optional)
-            if: env.DOCKERHUB_USERNAME
-            uses: docker/login-action@v3
-            with:
-                username: ${{ secrets.DOCKERHUB_USERNAME }}
-                password: ${{ secrets.DOCKERHUB_TOKEN }}
+                - name: Currently NOT IN USE - Login to Docker Hub (optional)
+                if: env.DOCKERHUB_USERNAME
+                uses: docker/login-action@v3
+                with:
+                    username: {% raw %} ${{ secrets.DOCKERHUB_USERNAME }} {% endraw %}
+                    password: {% raw %} ${{ secrets.DOCKERHUB_TOKEN }} {% endraw %}
 
-            - name: Build → Stream → Deploy to EC2 (zero registry, zero downtime)
-              env:
-                HOST: ${{ vars.DEPLOY_HOST_DEV }}
-                USER: ${{ vars.DEPLOY_USER_DEV }}
-                DEBUG_TOKEN: ${{ secrets.JWT_DEV_TOKEN }}
-                SUPABASE_URL: ${{ vars.DEV_SUPABASE_URL }}
-              run: |
-                set -euo pipefail
+                - name: Build → Stream → Deploy to EC2 (zero registry, zero downtime)
+                env:
+                    HOST: {% raw %} ${{ vars.DEPLOY_HOST_DEV }} {% endraw %}
+                    USER: {% raw %} ${{ vars.DEPLOY_USER_DEV }} {% endraw %}
+                    DEBUG_TOKEN: {% raw %} ${{ secrets.JWT_DEV_TOKEN }} {% endraw %}
+                    SUPABASE_URL: {% raw %} ${{ vars.DEV_SUPABASE_URL }} {% endraw %}
+                run: |
+                    set -euo pipefail
 
-                echo "Building Docker image..."
-                docker buildx create --use --name mybuilder || true
-                docker buildx build --load --platform linux/amd64 -t myfastapi:latest .
+                    echo "Building Docker image..."
+                    docker buildx create --use --name mybuilder || true
+                    docker buildx build --load --platform linux/amd64 -t myfastapi:latest .
 
-                echo "Deploying to ${HOST}..."
-                docker save myfastapi:latest | gzip | ssh -i ~/.ssh/deploy_key \
-                -o StrictHostKeyChecking=no \
-                -o ServerAliveInterval=60 \
-                -o LogLevel=ERROR \
-                ${USER}@${HOST} \
-                "gunzip | docker load && \
-                docker rm -f fastapi || true && \
-                docker run -d \
-                    --name fastapi \
-                    --restart unless-stopped \
-                    -p 127.0.0.1:8000:8000 \
-                    -e DEBUG_TOKEN='${DEBUG_TOKEN}' \
-                    -e SUPABASE_URL='${SUPABASE_URL}' \
-                    myfastapi:latest \
-                    uvicorn src.main:app --host 0.0.0.0 --port 8000 && \
-                echo 'DEPLOYED SUCCESSFULLY! Open http://${HOST} now' && \
-                echo 'Swagger: http://${HOST}/docs'"
+                    echo "Deploying to ${HOST}..."
+                    docker save myfastapi:latest | gzip | ssh -i ~/.ssh/deploy_key \
+                    -o StrictHostKeyChecking=no \
+                    -o ServerAliveInterval=60 \
+                    -o LogLevel=ERROR \
+                    ${USER}@${HOST} \
+                    "gunzip | docker load && \
+                    docker rm -f fastapi || true && \
+                    docker run -d \
+                        --name fastapi \
+                        --restart unless-stopped \
+                        -p 127.0.0.1:8000:8000 \
+                        -e DEBUG_TOKEN='${DEBUG_TOKEN}' \
+                        -e SUPABASE_URL='${SUPABASE_URL}' \
+                        myfastapi:latest \
+                        uvicorn src.main:app --host 0.0.0.0 --port 8000 && \
+                    echo 'DEPLOYED SUCCESSFULLY! Open http://${HOST} now' && \
+                    echo 'Swagger: http://${HOST}/docs'"
 
-                echo ""
-                echo "LIVE → http://${HOST}"
-                echo "Docs → http://${HOST}/docs"
+                    echo ""
+                    echo "LIVE → http://${HOST}"
+                    echo "Docs → http://${HOST}/docs"
     ```
 
 
