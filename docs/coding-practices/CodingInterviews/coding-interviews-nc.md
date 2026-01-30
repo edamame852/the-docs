@@ -14,9 +14,11 @@ parent: Coding Practices
 
 ---
 
-# LeetCode
+# LeetCode [here](https://neetcode.io/)
+
 
 ## Algorithms and Data Structures for Beginners
+Note: Please log in with non-incsw Gmail account
 ### Lesson 2 - LeetCode Questions
 1. Easy - Remove Duplicates From Sorted Array <a href=https://leetcode.com/problems/remove-duplicates-from-sorted-array/description> (Q.26) </a>
 - original input: `[0,0,1,1,1,2,2,3,3,4]`
@@ -92,11 +94,20 @@ class Solution:
         return L_idx
 ```
 
+3. ? - Remove Duplicates From unsorted Array
+- original input: `[2,0,1,6,3,1,2,11,3,3,4]`
+- excepted output: `[0,1,2,3,4]`
+
+
 ## Question from Citadel
 
 1. Find Maximum sub-array
 
-Answer: using Kadane's algorithim
+Aka: maximum segment sum problem
+
+Answer: using Kadane's algorithim = Greedy Algorithm
+
+Reference document: https://www.geeksforgeeks.org/dsa/largest-sum-contiguous-subarray/ 
 
 ```python
 # Step 1 : Define 2 input params
@@ -124,6 +135,30 @@ def max_sub_array(arr:list, target:int):
     else:
         return []
 
+```
+
+another way of solving this
+
+O(n^2) Time and O(1) Space. Not the best way but straightforward
+```python
+def maxSubarraySum(arr):
+    res = arr[0] # Initialize result, value of the first element in list/input array. Aka the current max.
+  
+    # Outer loop for starting point of subarray
+    for i in range(len(arr)):
+        currSumFromOuterLoop = 0
+      
+        # Inner loop for ending point of subarray
+        for j in range(i, len(arr)):
+            currSumFromOuterLoop = currSumFromOuterLoop + arr[j]
+            # Update res if currSum is greater than res
+            res = max(res, currSumFromOuterLoop)
+          
+    return res
+
+if __name__ == "__main__":
+    arr = [2, 3, -8, 7, -1, 2, 3]
+    print(maxSubarraySum(arr))
 ```
 
 2. Greping from txt file with lines of input (e.g. ... )

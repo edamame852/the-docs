@@ -1,5 +1,5 @@
 ---
-title: Helm
+title: Helm and Argo CD
 layout: default
 parent: CICD
 grand_parent: Coding Practices
@@ -29,60 +29,6 @@ Cons of Helm: Harder to debug due to templates logics all wrapped up in go and c
 
 ## File structure of Argo CD
 please draw a bash tree with the following inputs
-
-hk-infra/
-     - argocd/
-          - common/ (it's a library)
-               - templates/
-                    - _deployment.yaml
-                    - _helpers.tpl
-                    - _ingress.yaml
-                    - _service.yaml
-                    - _serviceaccount.yaml
-                    - _util.yaml
-               - Chart.yaml 
-          - feed-api/charts
-               - config/ (it's a library)
-                    - templates/
-                    - Chart.yaml
-               - dev/charts/
-                    - hk/
-                         - templates/
-                              - configmap.yaml
-                              - deployment.yaml
-                              - ingress.yaml
-                              - service.yaml
-                              - serviceaccount.yaml
-                         - Charts
-                         - values-hk-dev.yaml
-                    - us/
-                         - templates/
-                              - configmap.yaml
-                              - deployment.yaml
-                              - ingress.yaml
-                              - service.yaml
-                              - serviceaccount.yaml
-                         - Charts
-                         - values-us-dev.yaml
-               - prod/charts/
-                    - hk/
-                         - templates/
-                              - configmap.yaml
-                              - deployment.yaml
-                              - ingress.yaml
-                              - service.yaml
-                              - serviceaccount.yaml
-                         - Charts
-                         - values-hk-prod.yaml
-                    - us/
-                         - templates/
-                              - configmap.yaml
-                              - deployment.yaml
-                              - ingress.yaml
-                              - service.yaml
-                              - serviceaccount.yaml
-                         - Charts
-                         - values-us-prod.yaml
 
 ```bash
 hk-infra/

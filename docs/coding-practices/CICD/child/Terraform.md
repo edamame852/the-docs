@@ -5,7 +5,25 @@ parent: CICD
 grand_parent: Coding Practices
 has_children: true
 ---
-# Basic Terminologies
+# Terraform
+Background:
+    - IaC: Infra as Code - referring to ansible and terraform
+
+## Common Commands for Terraform CLI
+1. `terraform init` - initialize terraform in the working directory
+2. `terraform plan` - preview changes to be applied
+3. `terraform apply` - apply changes to the infra
+4. `terraform destroy` - destroy the infra managed by terraform
+
+## Example Workflow for spinning up EC2 instance on AWS using Terraform
+1. Create a new directory for your terraform project (e.g. BACKEND)
+2. Inside the directory, create a main.tf file and add your terraform configuration code. Place it under `terraform/aws/` directory for reference.
+3. Create a new .yaml workflow file under .github/workflows (e.g. terraform-deploy.yml)
+4. Create a new .yaml workflow file under .github/workflows (e.g. terraform-deploy.yml)
+
+# Old Stuff
+
+## Basic Terminologies
 1. OCS: VM instance created on private cloud based on Openstack (self-managed)
 2. VCS: VM instance created on private cloud based on VMWare (Global Tech Service team managed)
     - IMAGE: OS template (e.g. CentOS, Red Hat OS)
@@ -27,9 +45,9 @@ has_children: true
             - consistent execution: 
     - Terraform: Provisioning infra from data center (i.e. VM) = an open source tool by HashiCorp
 
-# Setting up VCS terraform & ansible
+## Setting up VCS terraform & ansible
 
 
-# Setting up OCS w/ terraform & ansible
+## Setting up OCS w/ terraform & ansible
 1. in project, create new .yml workflow under .github.workflows
 2. 
