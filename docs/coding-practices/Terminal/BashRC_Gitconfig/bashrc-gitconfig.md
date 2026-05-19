@@ -1,5 +1,5 @@
 ---
-title: Non-SNS
+title: .bashrc and .gitconfig
 layout: default
 parent: Terminal 
 grand_parent: Coding Practices
