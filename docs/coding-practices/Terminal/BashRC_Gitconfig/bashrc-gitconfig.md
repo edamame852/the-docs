@@ -1,5 +1,5 @@
 ---
-title: .bashrc and .gitconfig
+title: .bashrc, .gitconfig, sudo settings
 layout: default
 parent: Terminal 
 grand_parent: Coding Practices
