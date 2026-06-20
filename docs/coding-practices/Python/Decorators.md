@@ -1,5 +1,5 @@
 ---
-title: Decorators
+title: Decorators `@`
 layout: default
 parent: Python 
 grand_parent: Coding Practices

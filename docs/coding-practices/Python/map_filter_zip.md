@@ -54,6 +54,10 @@ grand_parent: Coding Practices
 
     even_numbers = list(filter(is_even, numbers))
 ```
+
+### lambda function on filter
+
+
 ## zip(): combining iterables
 ```python
     names = ['Alice', 'Bob', 'Charlie']

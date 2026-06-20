@@ -252,3 +252,20 @@ fortunately for me, the cicd rendering takes no more than 2 mins.
 [Template README]: https://github.com/just-the-docs/just-the-docs-template/blob/main/README.md
 [GitHub Pages / Actions workflow]: https://github.blog/changelog/2022-07-27-github-pages-custom-github-actions-workflows-beta/
 [use the template]: https://github.com/just-the-docs/just-the-docs-template/generate
+
+
+## tags
+
+  ┌───────────────┬────────┐
+  │      Tag      │ Color  │
+  ├───────────────┼────────┤
+  │ {:.note}      │ Yellow │
+  ├───────────────┼────────┤
+  │ {:.warning}   │ Red    │
+  ├───────────────┼────────┤
+  │ {:.important} │ Blue   │
+  ├───────────────┼────────┤
+  │ {:.highlight} │ Green  │
+  ├───────────────┼────────┤
+  │ {:.new}       │ Purple │
+  └───────────────┴────────┘
