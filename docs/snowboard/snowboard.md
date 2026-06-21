@@ -3,7 +3,6 @@ layout: default
 title: snowboard
 nav_order: 12
 has_children: true
-permalink: /docs/medical
 ---
 
 # Snowboarding
