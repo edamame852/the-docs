@@ -47,7 +47,11 @@ jobs:
         mkdir -p _data
         python3 -c "
         import os, json
-        data = json.loads(os.environ['NAME_DATA'])
+        raw = os.environ['NAME_DATA']
+        try:
+            data = json.loads(raw)
+        except json.JSONDecodeError:
+            data = json.loads(raw.replace('\n', '').replace('\r', '').strip())
         with open('_data/private.yml', 'w') as f:
             for k, v in data.items():
                 f.write(f'{k}: \"{v}\"\n')
