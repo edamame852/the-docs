@@ -42,6 +42,13 @@ jobs:
       id: pages
       uses: actions/configure-pages@v5
 
+    - name: Inject private name data
+      run: |
+        mkdir -p _data
+        printf '%s' "$NAME_DATA" > _data/private.yml
+      env:
+        NAME_DATA: ${{ secrets.NAME }}
+
     # Remove to check workflow
     - name: Build with Jekyll
       # Outputs to the './_site' directory by default

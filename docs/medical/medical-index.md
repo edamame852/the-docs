@@ -43,7 +43,7 @@ permalink: /docs/medical
 - Heart need prof to see, mid May fam back for visit
 
 # Case 5: Lung, large tumor (not adenocarcinoma/ squamous carcinoma), This is small-cell carcinoma (endocrine shit) (neo-endocrine - nuero related)
-- Consulted Amy, Dr. Yu, another consultant
+- Consulted {{ site.data.private[6] }}, {{ site.data.private[16] }}, another consultant
 - very high grade = chur cancer (an epithelial)
 - chemical therapy, not operable 
 - 40's men
@@ -107,36 +107,36 @@ Permanent Marker - post-dissect
 - In the event of mis-frozen section, unfrozen then paraffin sample, the stain resolution will also decrease
 
 # Current colleagues
-1. Josh - HKU Med, 1st deg - Bio, volunteered to help type Path. report, Added on IG (200 cases that day)
-2. Kevin - from Mainland, PhD (30+), ex-surgeon ~3 years
-3. Prof Gary "Tse" - dai lo that buys lunch. Mostly in N. hospital but comes in PWH often, breast specialist
+1. {{ site.data.private[1] }} - HKU Med, 1st deg - Bio, volunteered to help type Path. report, Added on IG (200 cases that day)
+2. {{ site.data.private[2] }} - from Mainland, PhD (30+), ex-surgeon ~3 years
+3. {{ site.data.private[3] }} - dai lo that buys lunch. Mostly in N. hospital but comes in PWH often, breast specialist
     - PWH has no breast service
-4. Prof. To Ka Fai - senior, prof, grin taunt Joanne, likes coming back Sun.  
+4. {{ site.data.private[4] }} - senior, prof, grin taunt Joanne, likes coming back Sun.  
     - Helping with University Pathology Service
     - Works in office almost everyday (~11am showup until 8-9pm)
     - Looks at shit reel during afternoon
-5. Maribel - Tell Kevin to dictate
-6. Amy - medical staff boss
-7. Ronald - go back to N. hospital, sometimes still in PWH. Is a teacher
-8. Vivian - roommate, same room, worked in PWH ACP for 1 year, now in Kong Wah
-9. Pensi - senior d person, in same room. Most yo, eat with mico-bi. Just finished spec exam
-10. Justin T - Josh's roommate, 29 years old (2 years above J.)
-11. Hannah - QM anthro transferred here
-12. Alice - New comer, worked in Tuen Mun Pedi 2 yrs, not very social with the group. Vaso-vagoed during dissection
-13. Angela - +7-8 than Joanne, Was pregnant, 0.5 < kid year old < 1, was anesthesia
-14. Irene - did frozen section, was studying in Macau, now exchange in HK. 
-15. Lak Mari - Sri Lankan, came to HK Oct-Nov 2024 
-16. Dr.Yu - over 60, work until May 2025 (never mind), current p.t.
+5. {{ site.data.private[5] }} - Tell {{ site.data.private[2] }} to dictate
+6. {{ site.data.private[6] }} - medical staff boss
+7. {{ site.data.private[7] }} - go back to N. hospital, sometimes still in PWH. Is a teacher
+8. {{ site.data.private[8] }} - roommate, same room, worked in PWH ACP for 1 year, now in Kong Wah
+9. {{ site.data.private[9] }} - senior d person, in same room. Most yo, eat with mico-bi. Just finished spec exam
+10. {{ site.data.private[10] }} - {{ site.data.private[1] }}'s roommate, 29 years old (2 years above J.)
+11. {{ site.data.private[11] }} - QM anthro transferred here
+12. {{ site.data.private[12] }} - New comer, worked in Tuen Mun Pedi 2 yrs, not very social with the group. Vaso-vagoed during dissection
+13. {{ site.data.private[13] }} - +7-8 than Joanne, Was pregnant, 0.5 < kid year old < 1, was anesthesia
+14. {{ site.data.private[14] }} - did frozen section, was studying in Macau, now exchange in HK. 
+15. {{ site.data.private[15] }} - Sri Lankan, came to HK Oct-Nov 2024 
+16. {{ site.data.private[16] }} - over 60, work until May 2025 (never mind), current p.t.
     - No more surgical pathology (cut things, biweekly)
         - Autopsy (NO, it's under surgical Pathology)
     - Cytology (YES, weekly)
     - Molecular (= Besides H&E, chemical stain (anti-body stain), FISH, Gene sequencing) (Maybe he doesn't do it)
     - Teaching
     - Gyne specialist
-17. Jonathan - a let-go surgeon (contract w/ surg expired), have kids (40+), suspected 03' grad. 
-18. Prof. Vernent Lai - prof, 70 yera old, kinda French
+17. {{ site.data.private[17] }} - a let-go surgeon (contract w/ surg expired), have kids (40+), suspected 03' grad. 
+18. {{ site.data.private[18] }} - prof, 70 yera old, kinda French
     - Helping with University Pathology Service
-19. Prof. Ng - PWH, but no regular duty, brain specialist. Will join meeting.
+19. {{ site.data.private[19] }} - PWH, but no regular duty, brain specialist. Will join meeting.
 
 
 
