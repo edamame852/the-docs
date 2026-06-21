@@ -45,8 +45,14 @@ jobs:
     - name: Inject private name data
       run: |
         mkdir -p _data
-        echo "$NAME_DATA" > _data/private.yml
-        echo "=== private.yml contents ===" && cat _data/private.yml
+        python3 -c "
+        import os, json
+        data = json.loads(os.environ['NAME_DATA'])
+        with open('_data/private.yml', 'w') as f:
+            for k, v in data.items():
+                f.write(f'{k}: \"{v}\"\n')
+        "
+        cat _data/private.yml
       env:
         NAME_DATA: ${{ secrets.NAME }}
 
