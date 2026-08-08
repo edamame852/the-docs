@@ -17,7 +17,7 @@ grand_parent: Coding Practices
 <img src="../../logos/VPC_1.jpg" alt="VPC A Logo" width="400"> <img 
   src="../../logos/VPC_2.png" alt="VPC B Logo" width="200">
 
-# VPC = Virtual Private Cloud
+# VPC = Virtual Private Cloud (A type of 虛擬網路區域)
 - What does it do? 
     > **Network Isolation**: VPC allows you to create a logically isolated network within the AWS cloud, providing control over your network environment.
     {:.note}
