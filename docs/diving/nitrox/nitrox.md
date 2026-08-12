@@ -28,6 +28,7 @@ has_children: true
 | 22m   | 37 mins    |  60 mins    |  70 mins    | 
 
 - DCI (Decompression sickness) rate of normal air is the same as nitrox diving, nitrox also does NOT reduce the risk for narcosis
+Jon waz here too...plz don't die while diving
 
 ## Gears
 
