@@ -16,10 +16,18 @@ grand_parent: Coding Practices
 
 ---
 
-# VI
-- = Text Editor
+# Vi 
+- = Original Text Editor (Vi stands for Visual Editor)
+- Created by Bill Joy in 1976 (late 70s)
+- Vim (Vi IMproved aka `vim`), created by Bram Moolean in 1991 (early 90s) with improvements
+    - Now has syntax highlighting
+    - Allows search and replace with regrex
+    - support for customization and plugins
+    - avaliable on all platforms (Linux, Windows, MacOS, etc)
 
 ## Shortcuts!
+
+### Line
 1. Start of line vervus EOL / End of line : 
     - End of line (EOL)
         - `$` or `g_`: Jumps to (second to) last char of the current line
@@ -44,6 +52,8 @@ grand_parent: Coding Practices
     - Insert Mode --> `Ctrl + o` --> `$`
     - Note: `Ctrl+o` allows user to temp switch over to normal mode for one single command only
 
+
+### File
 3. Top of the file vs the end of the file
 
     - First line of file (you have 4 options, they're all doing the same thing)
