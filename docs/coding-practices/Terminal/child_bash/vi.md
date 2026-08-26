@@ -1,7 +1,7 @@
 ---
 title: vi
 layout: default
-parent: Terminal 
+parent: Terminal (bash, zsh...) 
 grand_parent: Coding Practices
 ---
 

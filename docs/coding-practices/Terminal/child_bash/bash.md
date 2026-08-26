@@ -1,7 +1,7 @@
 ---
 title: bash commands (ls, grep, find)
 layout: default
-parent: Terminal 
+parent: Terminal (bash, zsh...)  
 grand_parent: Coding Practices
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: crontab and ubuntu
 layout: default
-parent: Terminal 
+parent: Terminal (bash, zsh...) 
 grand_parent: Coding Practices
 ---
 # Personal Notes or My Attempts
