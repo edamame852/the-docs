@@ -19,3 +19,4 @@ nav_order: 2
 | 2 | test | Cell 1, Row 2 | Cell 2, Row 2 | Cell 3, Row 2 | Cell 4, Row 2 |
 
 # China Southern ()
+- A350 has 1-2-1 for business! [ref](https://youtu.be/xmLCYxzDn5Y?si=38NNX93zTmaUrExE&t=156)
