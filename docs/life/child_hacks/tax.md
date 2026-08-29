@@ -65,6 +65,8 @@ title: Tax hacks
      - Q10: If we are homeowners in Hong Kong, do we still quality for housing exclusion or no. Does it need to be rental, being a HK home owner would still be pay rateable values (RVs) to the HK Inland revenue department.
           - Ans:
 
+     - Q11: I'd like to know all the mentioned forms and the methods you used and which sections it belongs to in your document
+
 1. Terminologies (Skills/Rules)
      - FEIE = Foreign Earned Income Exclusion 
           - Amount changes every year
@@ -122,7 +124,7 @@ title: Tax hacks
 2. Forms
      - Form 1040: every year for US nationals (citizens and residents)
      - Form 1116: (Foreign tax credit): Standard deduction (personal deductions) happens here
-     - Form 2555: Foreign residence, FEIE, calculate your housing exclusion 
+     - Form 2555: Foreign residence, FEIE, calculate your housing exclusion (Part VI)
           - always calculate your housing exclusion first then FEIE applies to what's left
      - FBAR? :
      - Form 114: FinCEN (to report any foreign account over 10,000 USD)
@@ -160,7 +162,7 @@ title: Tax hacks
           - You can apply standard deduction (-32000 USD/year for being married)
           - Federal tax is now 0.
 
-5. Ms. Wife Future 2046 (in HKD)
+5. Ms. Wife Future 2046 (in HKD) assuming homeowner, non-rental
      - First, assuming filing as MFJ, both as FEIE claims
      ```
                     USD income	     FEIE	claims/deductibles            Remaining
@@ -266,7 +268,8 @@ title: Tax hacks
                               = 3,600 USD                                              
                          ```
 
-               - Eighth: Use housing exclusion to clean up the rest
+               - Eighth: Use housing exclusion to clean up the rest (INCORRECT, hosuing exclusion needs to be applied before FEIE!)
+                    - IGNORE THIS PART FOR NOW
                     - HK has high-cost housing exclusion scheme from IRS
                     - Cap at 114,300 on 21264 USD base.
                     - Removing the rest of the 3600 USD per year
