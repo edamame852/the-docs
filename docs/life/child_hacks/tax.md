@@ -3,7 +3,7 @@ layout: default
 parent: Life Hacks
 title: Tax hacks
 ---
-# Non-SNS
+# US TAX
 {: .no_toc }
 
 ## Table of contents
@@ -33,28 +33,28 @@ title: Tax hacks
      - Q7: So does it mean that MFJ always prevails in the 1M wife and 2M wife scenario? Or it is not.
           - Ans: **basically YES**
           - TLDR bro
-          ```
-               Short answer: yes for federal in both the HK$1M and HK$2M cases — but not for a universal reason, and there's one scenario where it can flip. Let me be precise, because "MFJ always prevails" is almost true here but not axiomatically.
+               ```
+                    Short answer: yes for federal in both the HK$1M and HK$2M cases — but not for a universal reason, and there's one scenario where it can flip. Let me be precise, because "MFJ always prevails" is almost true here but not axiomatically.
 
-               Why MFJ wins in both your scenarios specifically:
+                    Why MFJ wins in both your scenarios specifically:
 
-               The thing people fear about MFJ is the stacking rule — that pooling your $102,564 exclusion onto hers raises her stacking platform to $235,464 and pushes her leftover income into higher brackets. That's real. But MFJ simultaneously hands you a much wider bracket structure and a double-size standard deduction ($32,200 vs. $16,100). In both your scenarios, the bracket/deduction advantage outweighs the stacking penalty:
+                    The thing people fear about MFJ is the stacking rule — that pooling your $102,564 exclusion onto hers raises her stacking platform to $235,464 and pushes her leftover income into higher brackets. That's real. But MFJ simultaneously hands you a much wider bracket structure and a double-size standard deduction ($32,200 vs. $16,100). In both your scenarios, the bracket/deduction advantage outweighs the stacking penalty:
 
-               HK$1M wife	HK$2M wife
-               MFJ result	~$0 (income under ceiling)	~$0 after FTC + housing
-               MFS result	~$0, but she loses your unused exclusion room and gets narrower brackets	Higher tentative tax risk; MFS brackets compress hard, and MFS bars several credits
-               Winner	MFJ	MFJ
-               The subtlety — MFS's hidden platform advantage: Under MFS, her stacking platform would be only her own $132,900, not $235,464. A lower platform means her leftover income stacks at slightly lower rates. So in pure stacking terms, MFS helps. But MFS brackets are exactly half-width, hit the 32/35% brackets far sooner, deny you the ability to "absorb" her income under your unused headroom, and disqualify various credits. In your numbers, those MFS penalties swamp the platform benefit — so MFJ still wins.
+                    HK$1M wife	HK$2M wife
+                    MFJ result	~$0 (income under ceiling)	~$0 after FTC + housing
+                    MFS result	~$0, but she loses your unused exclusion room and gets narrower brackets	Higher tentative tax risk; MFS brackets compress hard, and MFS bars several credits
+                    Winner	MFJ	MFJ
+                    The subtlety — MFS's hidden platform advantage: Under MFS, her stacking platform would be only her own $132,900, not $235,464. A lower platform means her leftover income stacks at slightly lower rates. So in pure stacking terms, MFS helps. But MFS brackets are exactly half-width, hit the 32/35% brackets far sooner, deny you the ability to "absorb" her income under your unused headroom, and disqualify various credits. In your numbers, those MFS penalties swamp the platform benefit — so MFJ still wins.
 
-               Where MFJ could actually lose: MFS starts to pull ahead only in edgier situations — e.g., if one spouse has huge US-source or investment income that would get dragged into high joint brackets, if there's an income-driven student loan repayment plan keying off joint AGI, or if one spouse has liability/audit exposure you want to wall off. None of those apply to a two-salary HK expat couple, which is why MFJ dominates for you.
+                    Where MFJ could actually lose: MFS starts to pull ahead only in edgier situations — e.g., if one spouse has huge US-source or investment income that would get dragged into high joint brackets, if there's an income-driven student loan repayment plan keying off joint AGI, or if one spouse has liability/audit exposure you want to wall off. None of those apply to a two-salary HK expat couple, which is why MFJ dominates for you.
 
-               Bottom line
+                    Bottom line
 
-               On the housing question: $21,264 is the floor you must pay yourself, $114,300 is the ceiling the IRS will count, and only the ~$93,036 gap between them is excludable — stacked on top of the FEIE. On filing status: MFJ prevails in both your HK$1M and HK$2M scenarios, because the wider brackets and doubled standard deduction beat the stacking penalty — but that's a result of your specific numbers, not an iron law, and it can flip if large US-source or investment income ever enters the picture.
+                    On the housing question: $21,264 is the floor you must pay yourself, $114,300 is the ceiling the IRS will count, and only the ~$93,036 gap between them is excludable — stacked on top of the FEIE. On filing status: MFJ prevails in both your HK$1M and HK$2M scenarios, because the wider brackets and doubled standard deduction beat the stacking penalty — but that's a result of your specific numbers, not an iron law, and it can flip if large US-source or investment income ever enters the picture.
 
-               As always, educational rather than personalized advice — the housing proration (if either of you qualifies for fewer than 365 days) and the MFJ-vs-MFS election are both worth a cross-border CPA's confirmation before filing.
+                    As always, educational rather than personalized advice — the housing proration (if either of you qualifies for fewer than 365 days) and the MFJ-vs-MFS election are both worth a cross-border CPA's confirmation before filing.
 
-          ```
+               ```
 
      - Q8: Can I ask if the stacking rule ONLY applies when FEIE fails to cover all?
           - Ans:
