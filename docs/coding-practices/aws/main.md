@@ -14,3 +14,4 @@ nav_order: 1
 
 ---
 
+AWS Study guide: [掌学兔 (GOOL (incsw))](https://zhangxuetu.online/) 

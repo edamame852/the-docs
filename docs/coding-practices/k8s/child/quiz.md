@@ -7,8 +7,22 @@ has_children: true
 ---
 
 
-# QUIZ Questions
+# QUIZ Questions (From k8s quiz Aug 18, 2025)
 
+30. The application pods must be started after db service is ready. Which of the following are possible actions to accomplish this is in k8s?
+    - Options:
+        - Implement a liveness probe which checks if the db service is ready
+        - Deploy the application container with the `--wait` arguments in the pod definition
+        - Implement a readiness probe which checks if the db service is ready
+        - Create an init container which waits unti the db service is ready
+        - Update the entrypoint script of the container to sleep for a fixed time being starting the application
+
+    - Correct ans:
+        - Implement a readiness probe which checks if the db service is ready
+        - Create an init container which waits unti the db service is ready
+    > Gist: k8s has 2 types of probes: liveness probe and readiness probe. Liveness probe checks if the container is alive and should be restarted if it fails. Readiness probe checks if the container is ready to serve traffic. Init containers are special containers that run
+    > Commands are: `kubectl get pods`, `kubectl describe pod <pod-name>`
+    > Concept: [Livesness vs Rediness](https://www.youtube.com/watch?v=y6rU_q2tdz4&t=9s)
 32. 
 
 
