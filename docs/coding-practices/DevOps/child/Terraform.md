@@ -9,6 +9,9 @@ has_children: true
 Background:
     - IaC: Infra as Code - referring to ansible and terraform
 
+## Certificates
+[Hashicorp IBM Certificate](https://developer.hashicorp.com/certifications/signin)
+
 ## Common Commands for Terraform CLI
 1. `terraform init` - initialize terraform in the working directory
 2. `terraform plan` - preview changes to be applied
