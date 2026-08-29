@@ -162,7 +162,7 @@ title: Tax hacks
           - You can apply standard deduction (-32000 USD/year for being married)
           - Federal tax is now 0.
 
-5. Ms. Wife Future 2046 (in HKD) assuming homeowner, non-rental
+5. Ms. Wife Future 2046 (in HKD) assuming non-homeowner, non-rental (need to write one for a mortage)
      - First, assuming filing as MFJ, both as FEIE claims
      ```
                     USD income	     FEIE	claims/deductibles            Remaining
