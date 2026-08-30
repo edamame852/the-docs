@@ -44,3 +44,14 @@ jobs:
 {:.note }
 > Explanation: npm installed pagecrypt, and encrpts post .md rendered html. The triple for loop is required since I want to encrpt my aow,nitrox and owd dirs (aka: _site/docs/diving/aow/aow/index.html). For that, I had to loop through the dir and subdirs to get there.
 > The format is `sudo npx pagecrypt "$file" "$file" "$MY_GITHUB_ACTION_PASSWORD" --force`
+
+
+## GHA - Breakdown of different sections
+1. `jobs` - a job is a set of steps that execute on the same runner
+2. `runs-on` - specifies the type of machine to run the job on (e.g., ubuntu-latest)
+3. `steps` - a sequence of tasks that will be executed as part of the job
+4. `run` - specifies the command to run in the step
+5. `env` - defines environment variables that can be used in the step
+6. `secrets` - a way to store sensitive information (like passwords) securely in GitHub Actions. You can access them using `${{ secrets.SECRET_NAME }}`
+7. `permissions` - defines the permissions for the job, such as read/write access to contents, actions, checks, etc.
+8. `if` - a conditional statement that determines whether a step or job should run based on the evaluation of an expression
