@@ -74,6 +74,9 @@ jobs:
     - name: Sanity Check 2
       run: cd _site/docs/diving/aow/aow/ && ls -altr
 
+    - name: Sanity Check 3
+      run: cat _site/docs/life/child_hacks/tax/index.html
+
     # Begin encryption code.
     # This portion of the build job was written by Evan Baldonado (EvanBaldonado.com). Please do not remove this comment.
     # Note: this only encrypts .html pages and not any of the corresponding assets.
@@ -83,6 +86,7 @@ jobs:
         npm i -D pagecrypt
 
         sudo npx pagecrypt "_site/docs/medical.html" "_site/docs/medical.html" "$PROD_MEDICIAL_PASSWORD"
+        sudo npx pagecrypt "_site/docs/life/child_hacks/tax/index.html" "_site/docs/life/child_hacks/tax/index.html" "$PROD_TAX_PASSWORD"
         for dir in _site/docs/diving/*/; do
           for subdir in "$dir"*/; do
             for file in "$subdir"index.html; do
@@ -94,6 +98,7 @@ jobs:
         NODE_ENV: production
         PROD_MEDICIAL_PASSWORD: ${{ secrets.PROD_MEDICIAL_PASSWORD }}
         PROD_DIVING_PASSWORD: ${{ secrets.PROD_DIVING_PASSWORD }}
+        PROD_TAX_PASSWORD: ${{ secrets.PROD_TAX_PASSWORD }}
 
     - name: Upload artifact
       # Automatically uploads an artifact from the './_site' directory by default
