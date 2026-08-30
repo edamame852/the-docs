@@ -85,12 +85,18 @@ jobs:
         chmod 777 -R _site/
         npm i -D pagecrypt
 
-        sudo npx pagecrypt "_site/docs/medical.html" "_site/docs/medical.html" "$PROD_MEDICIAL_PASSWORD"
-        sudo npx pagecrypt "_site/docs/life/child_hacks/tax/index.html" "_site/docs/life/child_hacks/tax/index.html" "$PROD_TAX_PASSWORD"
+        # Encrypt an HTML file in place: encrypt <file> <password>
+        encrypt() { sudo npx pagecrypt "$1" "$1" "$2"; }
+
+        # Normal Encryption flow
+        encrypt "_site/docs/medical.html" "$PROD_MEDICIAL_PASSWORD"
+        encrypt "_site/docs/life/child_hacks/tax/index.html" "$PROD_TAX_PASSWORD"
+
+        # Dive pages are organized in a 2-level directory structure, so we need to loop through the directories to encrypt the index.html files.
         for dir in _site/docs/diving/*/; do
           for subdir in "$dir"*/; do
             for file in "$subdir"index.html; do
-              sudo npx pagecrypt "$file" "$file" "$PROD_DIVING_PASSWORD"
+              encrypt "$file" "$PROD_DIVING_PASSWORD"
             done
           done
         done
