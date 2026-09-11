@@ -47,8 +47,15 @@ Cluster
 │         ├── Container(s)
 │         └── Service(s)
 │
-└── Node(s) = worker node (physical/virtual), 2 types of nodes: Master (control plane) node & worker node
+└── Node(s) = worker machine (i.e. VM) (physical/virtual), 2 types of nodes: Master (control plane) node & worker node
 ```
+
+
+
+# Common Questions
+1. Explain the hierarcial levels of Clusters, node, ns (namespaces), pods and containers 
+    - Ans:
+        - Cluster contains nodes (physical layer) and namespaces (logical layer). Namespaces contain pods (and other objects), and pods contain containers
 
 # QUIZ Questions
 
