@@ -19,7 +19,12 @@ nav_order: 3
         - Voice 2000 mins per years
         - The Point 144 points expires Sept 30, 2026
 
-    6. Home wifi - 1010 []
+    6. Home wifi - 1010 [Cut off date 10th]
+        - The Club rewards: 1336 points
+        - Contaract start: Jan 29, 2026 (36 months)
+        - (also AC) Number: 9873 3191
+        - email: miltonycchow
+        -  
 
 - News/Entertatinment subscribtion 
     7. SubStar - [USD 6.8 per month] [54.4 HKD] [Renews every 12th] [HSBC VISA Signiture 3007]
