@@ -20,3 +20,8 @@ nav_order: 2
 
 # China Southern ()
 - A350 has 1-2-1 for business! [ref](https://youtu.be/xmLCYxzDn5Y?si=38NNX93zTmaUrExE&t=156)
+- Personal exp:
+    - Don't sit at the last row, too more light from the kitchen pantry
+    - Don't order their seafood meal, their peas and salads are trash
+    - Order their normal stuff: Beef, fish (Those are acceptable)
+    - Don't order their garlic bread / french bread (it's trash)
