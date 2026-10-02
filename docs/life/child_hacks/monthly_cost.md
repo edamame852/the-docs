@@ -1,13 +1,13 @@
 ---
 layout: default
 parent: Life Hacks
-title: Monthly Cost
+title: Monthly Billings
 nav_order: 3
 ---
 
 # Monthly Cost
 
-- Estimated cost in HKD: 
+- Estimated cost in HKD in total: 
 
 - Apple Subscriptions (total per month: 226.9167 HKD):
     1. Slopes: Ski and Snowboard [HKD 188 per year] [HKD 15.66667 per month] [Renews every Jan 3, 2027] [MASTERCARD 2014]

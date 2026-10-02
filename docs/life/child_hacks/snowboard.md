@@ -37,3 +37,12 @@ Basics:
 6. Flat
     - Not super well with anything but very prediable. Stable at high speeds 
     - Sections: Nose, Flat (Stable and playful), Tail
+
+
+# Tricks
+## Ollies
+### Tips for a steezier Ollie [from ig jordanleese__]()
+1. Shoulders stacks over SB (no counter rotation, in line with SB)
+2. Practice popping off tail
+3. Bring up feet in the air as well (back foot up, front foot ninja kick out)
+4. Down both knees, shift weight to front leg (feeling bend from tail), Up
