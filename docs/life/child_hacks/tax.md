@@ -13,6 +13,8 @@ title: Tax hacks
 {:toc}
 
 ---
+
+## Tax filing (income tax)
 0. Questions & Answers (Q&A)
      - Q1: is US standard deduction overlapping with HK deduction and FEIE scheme? Will US standard deduction be cut short if HK already has basic allowance?
           - Ans: No, FEIE and deduction comes AFTER the HK tax calculations. Hong Kong's basic allowance never reduces your US standard deduction — they're independent systems
